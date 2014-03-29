@@ -28,11 +28,6 @@
 
 goog.provide('Blockly.FieldDropdown');
 
-goog.require('Blockly.Field');
-goog.require('goog.dom');
-goog.require('goog.style');
-goog.require('goog.ui.Menu');
-goog.require('goog.ui.MenuItem');
 
 
 /**

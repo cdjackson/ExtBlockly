@@ -37,10 +37,6 @@
 
 goog.provide('Blockly.Realtime');
 
-goog.require('goog.array');
-goog.require('goog.dom');
-goog.require('goog.style');
-goog.require('rtclient');
 
 /**
  * URL for progress indicator.

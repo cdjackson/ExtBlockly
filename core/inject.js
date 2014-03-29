@@ -26,8 +26,6 @@
 
 goog.provide('Blockly.inject');
 
-goog.require('Blockly.Css');
-goog.require('goog.dom');
 
 
 /**

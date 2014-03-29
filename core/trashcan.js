@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.Trashcan');
 
-goog.require('goog.Timer');
 
 
 /**

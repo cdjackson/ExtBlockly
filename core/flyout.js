@@ -26,8 +26,6 @@
 
 goog.provide('Blockly.Flyout');
 
-goog.require('Blockly.Block');
-goog.require('Blockly.Comment');
 
 
 /**

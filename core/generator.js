@@ -27,7 +27,6 @@
 
 goog.provide('Blockly.Generator');
 
-goog.require('Blockly.Block');
 
 
 /**

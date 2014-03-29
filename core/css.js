@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.Css');
 
-goog.require('goog.cssom');
 
 
 /**

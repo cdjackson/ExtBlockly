@@ -27,8 +27,6 @@
 
 goog.provide('Blockly.Mutator');
 
-goog.require('Blockly.Bubble');
-goog.require('Blockly.Icon');
 
 
 /**

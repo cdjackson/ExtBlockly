@@ -26,8 +26,6 @@
 
 goog.provide('Blockly.BlockSvg');
 
-goog.require('goog.userAgent');
-
 
 /**
  * Class for a block's SVG representation.

@@ -26,8 +26,6 @@
 
 goog.provide('Blockly.Comment');
 
-goog.require('Blockly.Bubble');
-goog.require('Blockly.Icon');
 
 
 /**

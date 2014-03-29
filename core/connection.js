@@ -27,7 +27,6 @@
 goog.provide('Blockly.Connection');
 goog.provide('Blockly.ConnectionDB');
 
-goog.require('Blockly.Workspace');
 
 
 /**

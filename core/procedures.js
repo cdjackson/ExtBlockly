@@ -26,11 +26,7 @@
 
 goog.provide('Blockly.Procedures');
 
-// TODO(scr): Fix circular dependencies
-// goog.require('Blockly.Block');
-goog.require('Blockly.FieldVariable');
-goog.require('Blockly.Names');
-goog.require('Blockly.Workspace');
+
 
 
 /**

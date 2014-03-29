@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.Bubble');
 
-goog.require('Blockly.Workspace');
 
 
 /**

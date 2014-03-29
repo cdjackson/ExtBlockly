@@ -26,22 +26,6 @@
 
 goog.provide('Blockly.Block');
 
-goog.require('Blockly.BlockSvg');
-goog.require('Blockly.Blocks');
-goog.require('Blockly.Comment');
-goog.require('Blockly.Connection');
-goog.require('Blockly.ContextMenu');
-goog.require('Blockly.Input');
-goog.require('Blockly.Msg');
-goog.require('Blockly.Mutator');
-goog.require('Blockly.Warning');
-goog.require('Blockly.Workspace');
-goog.require('Blockly.Xml');
-goog.require('goog.Timer');
-goog.require('goog.array');
-goog.require('goog.asserts');
-goog.require('goog.string');
-
 
 /**
  * Unique ID counter for created blocks.
