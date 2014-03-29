@@ -49,7 +49,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
 
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   // Android can't (in 2014) display "▾", so use "▼" instead.
-  var arrowChar = goog.userAgent.ANDROID ? '\u25BC' : '\u25BE';
+  var arrowChar = Ext.is.Android ? '\u25BC' : '\u25BE';
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(
       Blockly.RTL ? arrowChar + ' ' : ' ' + arrowChar));

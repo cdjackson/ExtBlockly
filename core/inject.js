@@ -327,7 +327,7 @@ Blockly.createDom_ = function(container) {
  * @private
  */
 Blockly.init_ = function() {
-  if (goog.userAgent.WEBKIT) {
+  if (Ext.isWebKit) {
     /* HACK:
      WebKit bug 67298 causes control points to be included in the reported
      bounding box.  Detect if this browser suffers from this bug by drawing a
@@ -366,7 +366,7 @@ Blockly.init_ = function() {
     // with non-Blockly elements.
     document.addEventListener('mouseup', Blockly.onMouseUp_, false);
     // Some iPad versions don't fire resize after portrait to landscape change.
-    if (goog.userAgent.IPAD) {
+    if (Ext.is.Tablet) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
         Blockly.fireUiEvent(window, 'resize');
       });

@@ -91,7 +91,7 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
  * @private
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function() {
-  if (goog.userAgent.MOBILE) {
+  if (Ext.is.Phone || Ext.is.Tablet) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
     var newValue = window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_);
     if (this.changeHandler_) {
@@ -153,7 +153,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
       htmlInput.oldValue_ = text;
       this.setText(text);
       this.validate_();
-    } else if (goog.userAgent.WEBKIT) {
+    } else if (Ext.isWebKit) {
       // Cursor key.  Render the source block to show the caret moving.
       // Chrome only (version 26, OS X).
       this.sourceBlock_.render();
@@ -198,7 +198,7 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   }
   // Shift by a few pixels to line up exactly.
   xy.y += 1;
-  if (goog.userAgent.WEBKIT) {
+  if (Ext.isWebKit) {
     xy.y -= 3;
   }
   div.style.left = xy.x + 'px';
