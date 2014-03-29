@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ExtJS Blockly Demo</title>
+    <script type="text/javascript" src="ext-all-debug.js"></script>
+
+    <script type="text/javascript" src="../core/blockly.js"></script>
+    <script type="text/javascript" src="../core/block.js"></script>
+    <script type="text/javascript" src="../core/block_svg.js"></script>
+    <script type="text/javascript" src="../core/blocks.js"></script>
+    <script type="text/javascript" src="../core/icon.js"></script>
+    <script type="text/javascript" src="../core/bubble.js"></script>
+    <script type="text/javascript" src="../core/comment.js"></script>
+    <script type="text/javascript" src="../core/connection.js"></script>
+    <script type="text/javascript" src="../core/contextmenu.js"></script>
+    <script type="text/javascript" src="../core/css.js"></script>
+    <script type="text/javascript" src="../core/field.js"></script>
+    <script type="text/javascript" src="../core/field_textinput.js"></script>
+    <script type="text/javascript" src="../core/field_angle.js"></script>
+    <script type="text/javascript" src="../core/field_checkbox.js"></script>
+    <script type="text/javascript" src="../core/field_colour.js"></script>
+    <script type="text/javascript" src="../core/field_dropdown.js"></script>
+    <script type="text/javascript" src="../core/field_image.js"></script>
+    <script type="text/javascript" src="../core/field_label.js"></script>
+    <script type="text/javascript" src="../core/field_variable.js"></script>
+    <script type="text/javascript" src="../core/flyout.js"></script>
+    <script type="text/javascript" src="../core/generator.js"></script>
+    <script type="text/javascript" src="../core/inject.js"></script>
+    <script type="text/javascript" src="../core/input.js"></script>
+    <script type="text/javascript" src="../core/msg.js"></script>
+    <script type="text/javascript" src="../core/mutator.js"></script>
+    <script type="text/javascript" src="../core/names.js"></script>
+    <script type="text/javascript" src="../core/procedures.js"></script>
+    <script type="text/javascript" src="../core/realtime.js"></script>
+    <script type="text/javascript" src="../core/realtime-client-utils.js"></script>
+    <script type="text/javascript" src="../core/scrollbar.js"></script>
+    <script type="text/javascript" src="../core/toolbox.js"></script>
+    <script type="text/javascript" src="../core/tooltip.js"></script>
+    <script type="text/javascript" src="../core/trashcan.js"></script>
+    <script type="text/javascript" src="../core/utils.js"></script>
+    <script type="text/javascript" src="../core/variables.js"></script>
+    <script type="text/javascript" src="../core/warning.js"></script>
+    <script type="text/javascript" src="../core/widgetdiv.js"></script>
+    <script type="text/javascript" src="../core/workspace.js"></script>
+    <script type="text/javascript" src="../core/xml.js"></script>
+
+    <script type="text/javascript" src="../blocks/colour.js"></script>
+    <script type="text/javascript" src="../blocks/lists.js"></script>
+    <script type="text/javascript" src="../blocks/logic.js"></script>
+    <script type="text/javascript" src="../blocks/loops.js"></script>
+    <script type="text/javascript" src="../blocks/math.js"></script>
+    <script type="text/javascript" src="../blocks/procedures.js"></script>
+    <script type="text/javascript" src="../blocks/text.js"></script>
+    <script type="text/javascript" src="../blocks/variables.js"></script>
+
+  <script type="text/javascript" src="../msg/js/en.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://blockly.googlecode.com/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Fixed Blockly</h1>
+
+  <p>This is a simple demo of injecting Blockly into a fixed-sized 'div' element using ExtJS.</p>
+
+  <p>&rarr; More info on <a href="http://code.google.com/p/blockly/wiki/InjectingFixedSize">injecting fixed-sized Blockly</a>...</p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <xml id="toolbox" style="display: none">
+    <block type="controls_if"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="logic_compare"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+  </xml>
+
+  <script>
+    Blockly.inject(document.getElementById('blocklyDiv'),
+        {path: '../', toolbox: document.getElementById('toolbox')});
+  </script>
+
+</body>
+</html>
