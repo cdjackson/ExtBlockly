@@ -49,7 +49,7 @@ Blockly.ScrollbarPair = function(workspace) {
 Blockly.ScrollbarPair.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onResizeWrapper_);
   this.onResizeWrapper_ = null;
-  goog.dom.removeNode(this.corner_);
+  Ext.removeNode(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
   this.oldHostMetrics_ = null;
@@ -216,7 +216,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownKnobWrapper_);
   this.onMouseDownKnobWrapper_ = null;
 
-  goog.dom.removeNode(this.svgGroup_);
+  Ext.removeNode(this.svgGroup_);
   this.svgGroup_ = null;
   this.svgBackground_ = null;
   this.svgKnob_ = null;

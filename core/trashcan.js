@@ -189,7 +189,7 @@ Blockly.Trashcan.prototype.init = function() {
  */
 Blockly.Trashcan.prototype.dispose = function() {
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    Ext.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBody_ = null;

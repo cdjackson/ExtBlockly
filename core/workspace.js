@@ -121,7 +121,7 @@ Blockly.Workspace.prototype.createDom = function() {
  */
 Blockly.Workspace.prototype.dispose = function() {
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    Ext.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBlockCanvas_ = null;

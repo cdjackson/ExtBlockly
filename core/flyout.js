@@ -134,7 +134,7 @@ Blockly.Flyout.prototype.dispose = function() {
   }
   this.workspace_ = null;
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    Ext.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBackground_ = null;
@@ -307,7 +307,7 @@ Blockly.Flyout.prototype.hide = function() {
   }
   // Delete all the background buttons.
   for (var x = 0, rect; rect = this.buttons_[x]; x++) {
-    goog.dom.removeNode(rect);
+    Ext.removeNode(rect);
   }
   this.buttons_.splice(0);
 };

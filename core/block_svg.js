@@ -287,7 +287,7 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  * Dispose of this SVG block.
  */
 Blockly.BlockSvg.prototype.dispose = function() {
-  goog.dom.removeNode(this.svgGroup_);
+  Ext.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgPath_ = null;
@@ -326,7 +326,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone) {
   var ms = (new Date()) - clone.startDate_;
   var percent = ms / 150;
   if (percent > 1) {
-    goog.dom.removeNode(clone);
+    Ext.removeNode(clone);
   } else {
     var x = clone.translateX_ +
         (Blockly.RTL ? -1 : 1) * clone.bBox_.width / 2 * percent;
@@ -376,7 +376,7 @@ Blockly.BlockSvg.connectionUiStep_ = function(ripple) {
   var ms = (new Date()) - ripple.startDate_;
   var percent = ms / 150;
   if (percent > 1) {
-    goog.dom.removeNode(ripple);
+    Ext.removeNode(ripple);
   } else {
     ripple.setAttribute('r', percent * 25);
     ripple.style.opacity = 1 - percent;

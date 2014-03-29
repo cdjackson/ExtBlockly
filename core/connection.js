@@ -361,7 +361,7 @@ Blockly.Connection.prototype.highlight = function() {
  * Remove the highlighting around this connection.
  */
 Blockly.Connection.prototype.unhighlight = function() {
-  goog.dom.removeNode(Blockly.Connection.highlightedPath_);
+  Ext.removeNode(Blockly.Connection.highlightedPath_);
   delete Blockly.Connection.highlightedPath_;
 };
 
