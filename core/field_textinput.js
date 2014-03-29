@@ -168,7 +168,8 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
  */
 Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
-  goog.asserts.assertObject(Blockly.FieldTextInput.htmlInput_);
+  if(typeof(Blockly.FieldTextInput.htmlInput_ != "object")
+    console.log("Error");
   var htmlInput = /** @type {!Element} */ (Blockly.FieldTextInput.htmlInput_);
   if (this.changeHandler_) {
     valid = this.changeHandler_(htmlInput.value);

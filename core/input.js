@@ -103,7 +103,6 @@ Blockly.Input.prototype.appendTitle = function(field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @throws {goog.asserts.AssertionError} if the field is not present.
  */
 Blockly.Input.prototype.removeField = function(name) {
   for (var i = 0, field; field = this.fieldRow[i]; i++) {
@@ -118,7 +117,7 @@ Blockly.Input.prototype.removeField = function(name) {
       return;
     }
   }
-  goog.asserts.fail('Field "%s" not found.', name);
+  console.log('Field "%s" not found.', name);
 };
 
 /**

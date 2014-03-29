@@ -89,19 +89,21 @@
  */
 Blockly.Blocks.addTemplate = function(details) {
   // Validate inputs.  TODO: Add more.
-  goog.asserts.assert(details.blockName);
-  goog.asserts.assert(Blockly.Blocks[details.blockName],
-      'Blockly.Blocks already has a field named ', details.blockName);
-  goog.asserts.assert(details.message);
-  goog.asserts.assert(details.colour && typeof details.colour == 'number' &&
-      details.colour >= 0 && details.colour < 360,
-     'details.colour must be a number from 0 to 360 (exclusive)');
+  if(details.blockName)
+    console.log("Error");
+  if(Blockly.Blocks[details.blockName])
+      console.log('Blockly.Blocks already has a field named ', details.blockName);
+  if(details.message)
+    console.log("Error")
+  if(details.colour && typeof details.colour == 'number' &&
+      details.colour >= 0 && details.colour < 360)
+     console.log('details.colour must be a number from 0 to 360 (exclusive)');
   if (details.output != 'undefined') {
-    goog.asserts.assert(!details.previousStatement,
-        'When details.output is defined, ' +
+    if(!details.previousStatement)
+        console.log('When details.output is defined, ' +
         'details.previousStatement must not be true.');
-    goog.asserts.assert(!details.nextStatement,
-        'When details.output is defined, ' +
+    if(!details.nextStatement)
+        console.log('When details.output is defined, ' +
         'details.nextStatement must not be true.');
   }
 
@@ -135,8 +137,10 @@ Blockly.Blocks.addTemplate = function(details) {
     interpArgs.push(details.text);
     if (details.args) {
       details.args.forEach(function(arg) {
-        goog.asserts.assert(arg.name);
-        goog.asserts.assert(arg.check != 'undefined');
+        if(arg.name)
+            console.log("Error")
+        if(arg.check != 'undefined')
+            console.log("Error")
         if (arg.type == 'undefined' || arg.type == Blockly.INPUT_VALUE) {
           interpArgs.push([arg.name,
                            arg.check,
@@ -144,7 +148,7 @@ Blockly.Blocks.addTemplate = function(details) {
                                : arg.align]);
         } else {
           // TODO: Write code for other input types.
-          goog.asserts.fail('addTemplate() can only handle value inputs.');
+          console.log('addTemplate() can only handle value inputs.');
         }
       });
     }

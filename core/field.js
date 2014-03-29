@@ -55,10 +55,9 @@ Blockly.Field = function(text) {
  * Clone this Field.  This must be implemented by all classes derived from
  * Field.  Since this class should not be instantiated, calling this method
  * throws an exception.
- * @throws {goog.assert.AssertionError}
  */
 Blockly.Field.prototype.clone = function() {
-  goog.asserts.fail('There should never be an instance of Field, ' +
+  console.log('There should never be an instance of Field, ' +
       'only its derived classes.');
 };
 
