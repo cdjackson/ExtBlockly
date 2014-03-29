@@ -622,11 +622,11 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     throw 'Attempt to set main workspace scroll without scrollbars.';
   }
   var metrics = Blockly.getMainWorkspaceMetrics_();
-  if (goog.isNumber(xyRatio.x)) {
+  if (Ext.isNumber(xyRatio.x)) {
     Blockly.mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x -
         metrics.contentLeft;
   }
-  if (goog.isNumber(xyRatio.y)) {
+  if (Ext.isNumber(xyRatio.y)) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }

@@ -190,7 +190,7 @@ Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
   if (!metrics) {
     return;
   }
-  if (goog.isNumber(yRatio.y)) {
+  if (Ext.isNumber(yRatio.y)) {
     this.workspace_.scrollY =
         -metrics.contentHeight * yRatio.y - metrics.contentTop;
   }
