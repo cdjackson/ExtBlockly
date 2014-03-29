@@ -24,8 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.BlockSvg');
-
 
 /**
  * Class for a block's SVG representation.

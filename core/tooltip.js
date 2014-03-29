@@ -29,8 +29,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Tooltip');
-
 
 /**
  * Is a tooltip currently showing?

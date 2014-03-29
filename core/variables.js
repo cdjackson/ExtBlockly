@@ -26,9 +26,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Variables');
-
-
 
 
 /**

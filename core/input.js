@@ -24,8 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Input');
-
 
 
 

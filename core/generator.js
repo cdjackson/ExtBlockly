@@ -25,8 +25,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Generator');
-
 
 
 /**

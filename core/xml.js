@@ -24,9 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Xml');
-
-
 
 /**
  * Encode a block tree as XML.

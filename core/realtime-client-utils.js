@@ -33,7 +33,6 @@
 /**
  * Realtime client utilities namespace.
  */
-goog.provide('rtclient');
 
 
 /**

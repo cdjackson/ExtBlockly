@@ -35,8 +35,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Realtime');
-
 
 /**
  * URL for progress indicator.

@@ -24,8 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Names');
-
 
 /**
  * Class for a database of entity names (variables, functions, etc).

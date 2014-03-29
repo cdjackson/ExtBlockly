@@ -26,8 +26,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.utils');
-
 
 /**
  * Add a CSS class to a element.

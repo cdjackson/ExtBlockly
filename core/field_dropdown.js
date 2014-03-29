@@ -26,8 +26,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldDropdown');
-
 
 
 /**

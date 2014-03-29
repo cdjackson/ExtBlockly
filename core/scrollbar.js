@@ -24,10 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Scrollbar');
-goog.provide('Blockly.ScrollbarPair');
-
-
 
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.

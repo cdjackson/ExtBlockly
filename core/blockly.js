@@ -25,7 +25,6 @@
 'use strict';
 
 // Top level object for Blockly.
-goog.provide('Blockly');
 
 
 

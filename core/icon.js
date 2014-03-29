@@ -24,7 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Icon');
 
 /**
  * Class for an icon.
