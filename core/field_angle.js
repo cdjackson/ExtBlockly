@@ -24,9 +24,6 @@
  */
 'use strict';
 
-
-
-
 /**
  * Class for an editable angle field.
  * @param {string} text The initial content of the field.
@@ -60,7 +57,7 @@ Blockly.FieldAngle = function(text, opt_changeHandler) {
   Blockly.FieldAngle.superClass_.constructor.call(this,
       text, changeHandler);
 };
-goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+Blockly.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
 /**
  * Clone this FieldAngle.

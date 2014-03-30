@@ -195,7 +195,11 @@ Blockly.Trashcan.prototype.dispose = function() {
   this.svgBody_ = null;
   this.svgLid_ = null;
   this.workspace_ = null;
-  goog.Timer.clear(this.lidTask_);
+//  goog.Timer.clear(this.lidTask_);
+    if(this.lidTask_ != 0) {
+        this.lidTask_.cancel();
+        this.lidTask_ = 0;
+    }
 };
 
 /**
@@ -258,7 +262,11 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
   if (this.isOpen == state) {
     return;
   }
-  goog.Timer.clear(this.lidTask_);
+//  goog.Timer.clear(this.lidTask_);
+    if(this.lidTask_ != 0) {
+        this.lidTask_.cancel();
+        this.lidTask_ = 0;
+    }
   this.isOpen = state;
   this.animateLid_();
 };
@@ -275,7 +283,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
       (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
   if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
-    this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 5, this);
+      this.lidTask_ = new Ext.util.DelayedTask(this.animateLid_, this);
+      this.lidTask_.delay(5);
   }
 };
 

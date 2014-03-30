@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a non-editable field.
  * @param {string} text The initial content of the field.
@@ -40,7 +38,7 @@ Blockly.FieldLabel = function(text) {
   this.size_ = {height: 25, width: 0};
   this.setText(text);
 };
-goog.inherits(Blockly.FieldLabel, Blockly.Field);
+Blockly.inherits(Blockly.FieldLabel, Blockly.Field);
 
 /**
  * Clone this FieldLabel.

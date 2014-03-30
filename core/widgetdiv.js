@@ -26,7 +26,7 @@
  */
 'use strict';
 
-
+Blockly.WidgetDiv = {};
 
 /**
  * The HTML container.  Set once by inject.js's Blockly.createDom_.
@@ -70,7 +70,7 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.owner_ = null;
     Blockly.WidgetDiv.dispose_ = null;
-    goog.dom.removeChildren(Blockly.WidgetDiv.DIV);
+    Blockly.removeChildren(Blockly.WidgetDiv.DIV);
   }
 };
 

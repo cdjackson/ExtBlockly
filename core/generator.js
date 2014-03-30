@@ -25,8 +25,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a code generator that translates the blocks into a language.
  * @param {string} name Language name of this generator.

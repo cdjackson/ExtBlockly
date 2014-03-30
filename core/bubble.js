@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for UI bubble.
  * @param {!Blockly.Workspace} workspace The workspace on which to draw the

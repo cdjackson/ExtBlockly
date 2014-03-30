@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+Blockly.Css = {};
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -38,7 +38,19 @@ Blockly.Css.inject = function() {
   // Strip off any trailing slash (either Unix or Windows).
   var path = Blockly.pathToBlockly.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, path);
-  goog.cssom.addCssText(text);
+
+    var cssNode = document.createElement('style');
+    cssNode.type = 'text/css';
+    var head = document.getElementsByTagName('head')[0];
+    head.appendChild(cssNode);
+    if (cssNode.styleSheet) {
+        // IE.
+        cssNode.styleSheet.cssText = text;
+    } else {
+        // W3C.
+        var cssTextNode = document.createTextNode(text);
+        cssNode.appendChild(cssTextNode);
+    }
 };
 
 /**
@@ -300,12 +312,6 @@ Blockly.Css.CONTENT = [
   '  padding: 0 !important;',
   '}',
 
-  /* Override the default Closure URL. */
-  '.goog-option-selected .goog-menuitem-checkbox,',
-  '.goog-option-selected .goog-menuitem-icon {',
-  '  background: url(<<<PATH>>>/media/sprites.png) no-repeat 0 0 !important;',
-  '}',
-
   /* Category tree in Toolbox. */
   '.blocklyToolboxDiv {',
   '  background-color: #ddd;',
@@ -392,256 +398,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyTreeSelected .blocklyTreeLabel {',
   '  color: #fff;',
-  '}',
-
-  /* Copied from: goog/css/colorpicker-simplegrid.css */
-  /*
-   * Copyright 2007 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /* Author: pupius@google.com (Daniel Pupius) */
-
-  /*
-    Styles to make the colorpicker look like the old gmail color picker
-    NOTE: without CSS scoping this will override styles defined in palette.css
-  */
-  '.goog-palette {',
-  '  outline: none;',
-  '  cursor: default;',
-  '}',
-
-  '.goog-palette-table {',
-  '  border: 1px solid #666;',
-  '  border-collapse: collapse;',
-  '}',
-
-  '.goog-palette-cell {',
-  '  height: 13px;',
-  '  width: 15px;',
-  '  margin: 0;',
-  '  border: 0;',
-  '  text-align: center;',
-  '  vertical-align: middle;',
-  '  border-right: 1px solid #666;',
-  '  font-size: 1px;',
-  '}',
-
-  '.goog-palette-colorswatch {',
-  '  position: relative;',
-  '  height: 13px;',
-  '  width: 15px;',
-  '  border: 1px solid #666;',
-  '}',
-
-  '.goog-palette-cell-hover .goog-palette-colorswatch {',
-  '  border: 1px solid #FFF;',
-  '}',
-
-  '.goog-palette-cell-selected .goog-palette-colorswatch {',
-  '  border: 1px solid #000;',
-  '  color: #fff;',
-  '}',
-
-  /* Copied from: goog/css/menu.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for menus created by goog.ui.MenuRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
-
-  '.goog-menu {',
-  '  background: #fff;',
-  '  border-color: #ccc #666 #666 #ccc;',
-  '  border-style: solid;',
-  '  border-width: 1px;',
-  '  cursor: default;',
-  '  font: normal 13px Arial, sans-serif;',
-  '  margin: 0;',
-  '  outline: none;',
-  '  padding: 4px 0;',
-  '  position: absolute;',
-  '  z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
-  '}',
-
-  /* Copied from: goog/css/menuitem.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for menus created by goog.ui.MenuItemRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
-
-  /**
-   * State: resting.
-   *
-   * NOTE(mleibman,chrishenry):
-   * The RTL support in Closure is provided via two mechanisms -- "rtl" CSS
-   * classes and BiDi flipping done by the CSS compiler.  Closure supports RTL
-   * with or without the use of the CSS compiler.  In order for them not
-   * to conflict with each other, the "rtl" CSS classes need to have the #noflip
-   * annotation.  The non-rtl counterparts should ideally have them as well, but,
-   * since .goog-menuitem existed without .goog-menuitem-rtl for so long before
-   * being added, there is a risk of people having templates where they are not
-   * rendering the .goog-menuitem-rtl class when in RTL and instead rely solely
-   * on the BiDi flipping by the CSS compiler.  That's why we're not adding the
-   * #noflip to .goog-menuitem.
-   */
-  '.goog-menuitem {',
-  '  color: #000;',
-  '  font: normal 13px Arial, sans-serif;',
-  '  list-style: none;',
-  '  margin: 0;',
-     /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
-  '  padding: 4px 7em 4px 28px;',
-  '  white-space: nowrap;',
-  '}',
-
-  /* BiDi override for the resting state. */
-  /* #noflip */
-  '.goog-menuitem.goog-menuitem-rtl {',
-     /* Flip left/right padding for BiDi. */
-  '  padding-left: 7em;',
-  '  padding-right: 28px;',
-  '}',
-
-  /* If a menu doesn't have checkable items or items with icons, remove padding. */
-  '.goog-menu-nocheckbox .goog-menuitem,',
-  '.goog-menu-noicon .goog-menuitem {',
-  '  padding-left: 12px;',
-  '}',
-
-  /*
-   * If a menu doesn't have items with shortcuts, leave just enough room for
-   * submenu arrows, if they are rendered.
-   */
-  '.goog-menu-noaccel .goog-menuitem {',
-  '  padding-right: 20px;',
-  '}',
-
-  '.goog-menuitem-content {',
-  '  color: #000;',
-  '  font: normal 13px Arial, sans-serif;',
-  '}',
-
-  /* State: disabled. */
-  '.goog-menuitem-disabled .goog-menuitem-accel,',
-  '.goog-menuitem-disabled .goog-menuitem-content {',
-  '  color: #ccc !important;',
-  '}',
-
-  '.goog-menuitem-disabled .goog-menuitem-icon {',
-  '  opacity: 0.3;',
-  '  -moz-opacity: 0.3;',
-  '  filter: alpha(opacity=30);',
-  '}',
-
-  /* State: hover. */
-  '.goog-menuitem-highlight,',
-  '.goog-menuitem-hover {',
-  '  background-color: #d6e9f8;',
-     /* Use an explicit top and bottom border so that the selection is visible',
-      * in high contrast mode. */
-  '  border-color: #d6e9f8;',
-  '  border-style: dotted;',
-  '  border-width: 1px 0;',
-  '  padding-bottom: 3px;',
-  '  padding-top: 3px;',
-  '}',
-
-  /* State: selected/checked. */
-  '.goog-menuitem-checkbox,',
-  '.goog-menuitem-icon {',
-  '  background-repeat: no-repeat;',
-  '  height: 16px;',
-  '  left: 6px;',
-  '  position: absolute;',
-  '  right: auto;',
-  '  vertical-align: middle;',
-  '  width: 16px;',
-  '}',
-
-  /* BiDi override for the selected/checked state. */
-  /* #noflip */
-  '.goog-menuitem-rtl .goog-menuitem-checkbox,',
-  '.goog-menuitem-rtl .goog-menuitem-icon {',
-     /* Flip left/right positioning. */
-  '  left: auto;',
-  '  right: 6px;',
-  '}',
-
-  '.goog-option-selected .goog-menuitem-checkbox,',
-  '.goog-option-selected .goog-menuitem-icon {',
-     /* Client apps may override the URL at which they serve the sprite. */
-  '  background: url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;',
-  '}',
-
-  /* Keyboard shortcut ("accelerator") style. */
-  '.goog-menuitem-accel {',
-  '  color: #999;',
-     /* Keyboard shortcuts are untranslated; always left-to-right. */
-     /* #noflip */
-  '  direction: ltr;',
-  '  left: auto;',
-  '  padding: 0 6px;',
-  '  position: absolute;',
-  '  right: 0;',
-  '  text-align: right;',
-  '}',
-
-  /* BiDi override for shortcut style. */
-  /* #noflip */
-  '.goog-menuitem-rtl .goog-menuitem-accel {',
-     /* Flip left/right positioning and text alignment. */
-  '  left: 0;',
-  '  right: auto;',
-  '  text-align: left;',
-  '}',
-
-  /* Mnemonic styles. */
-  '.goog-menuitem-mnemonic-hint {',
-  '  text-decoration: underline;',
-  '}',
-
-  '.goog-menuitem-mnemonic-separator {',
-  '  color: #999;',
-  '  font-size: 12px;',
-  '  padding-left: 4px;',
-  '}',
-
-  /* Copied from: goog/css/menuseparator.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for menus created by goog.ui.MenuSeparatorRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
-
-  '.goog-menuseparator {',
-  '  border-top: 1px solid #ccc;',
-  '  margin: 4px 0;',
-  '  padding: 0;',
   '}',
 
   ''

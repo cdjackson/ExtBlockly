@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a connection between blocks.
  * @param {!Blockly.Block} source The block establishing this connection.

@@ -135,7 +135,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
     var prototype = Blockly.Blocks[prototypeName];
     if(typeof(prototype) !== "object")
         console.log('Error: "%s" is an unknown language block.', prototypeName);
-    goog.mixin(this, prototype);
+    Blockly.mixin(this, prototype);
   }
   // Call an initialization function, if it exists.
   if (Ext.isFunction(this.init)) {
@@ -269,8 +269,9 @@ Blockly.Block.terminateDrag_ = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
-      goog.Timer.callOnce(
-          selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
+        var task = new Ext.util.DelayedTask(selected.bumpNeighbours_, selected);
+        task.delay(Blockly.BUMP_DELAY);
+
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
     }
@@ -571,7 +572,9 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
       }
     } else if (this_.workspace.trashcan && this_.workspace.trashcan.isOpen) {
       var trashcan = this_.workspace.trashcan;
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+        var task = new Ext.util.DelayedTask(trashcan.close, trashcan);
+        task.delay(100);
+
       Blockly.selected.dispose(false, true);
       // Dropping a block on the trash can will usually cause the workspace to
       // resize to contain the newly positioned block.  Force a second resize
@@ -1043,7 +1046,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
     // Remove this block from the workspace's list of top-most blocks.
     // Note that during realtime sync we sometimes create child blocks that are
     // not top level so we check first before removing.
-    if (goog.array.contains(this.workspace.getTopBlocks(false), this)) {
+    if (this.workspace.getTopBlocks(false).indexOf(this)) {
       this.workspace.removeTopBlock(this);
     }
   }
@@ -1260,13 +1263,13 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
   if (this.previousConnection) {
-    if(!this.previousConnection.targetConnection)
+    if(this.previousConnection.targetConnection)
         console.log('Must disconnect previous statement before removing connection.');
     this.previousConnection.dispose();
     this.previousConnection = null;
   }
   if (newBoolean) {
-    if(!this.outputConnection)
+    if(this.outputConnection)
         console.log('Remove output connection prior to adding previous connection.');
     if (opt_check === undefined) {
       opt_check = null;
@@ -1289,7 +1292,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
   if (this.nextConnection) {
-    if(!this.nextConnection.targetConnection)
+    if(this.nextConnection.targetConnection)
         console.log('Must disconnect next statement before removing connection.');
     this.nextConnection.dispose();
     this.nextConnection = null;
@@ -1317,13 +1320,13 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  */
 Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
   if (this.outputConnection) {
-    if(!this.outputConnection.targetConnection)
+    if(this.outputConnection.targetConnection)
         console.log('Must disconnect output value before removing connection.');
     this.outputConnection.dispose();
     this.outputConnection = null;
   }
   if (newBoolean) {
-    if(!this.previousConnection)
+    if(this.previousConnection)
         console.log('Remove previous connection prior to adding output connection.');
     if (opt_check === undefined) {
       opt_check = null;
@@ -1461,11 +1464,11 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
       }
     }
   }
-  text = goog.string.trim(text.join(' ')) || '???';
+  text = Ext.util.Format.trim(text.join(' ')) || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.
     // TODO: Handle FieldImage better.
-    text = goog.string.truncate(text, opt_maxLength);
+    text = Ext.util.Format.substr(text, 0, opt_maxLength);
   }
   return text;
 };
@@ -1542,7 +1545,7 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
     if (field instanceof Blockly.Field) {
       this.appendField(field);
     } else {
-      if(Ext.isArray(field))
+      if(!Ext.isArray(field))
         console.log("Error in addFieldToInput")
       this.appendField(field[1], field[0]);
     }
@@ -1554,16 +1557,17 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
     console.log("msg is not STRING")
   var dummyAlign = arguments[arguments.length - 1];
   if(
-      dummyAlign === Blockly.ALIGN_LEFT ||
-      dummyAlign === Blockly.ALIGN_CENTRE ||
-      dummyAlign === Blockly.ALIGN_RIGHT)
+      dummyAlign !== Blockly.ALIGN_LEFT ||
+      dummyAlign !== Blockly.ALIGN_CENTRE ||
+      dummyAlign !== Blockly.ALIGN_RIGHT) {
       console.log('Illegal final argument "%d" is not an alignment.', dummyAlign);
+  }
   arguments.length = arguments.length - 1;
 
   var tokens = msg.split(this.interpolateMsg.SPLIT_REGEX_);
   var fields = [];
   for (var i = 0; i < tokens.length; i += 2) {
-    var text = goog.string.trim(tokens[i]);
+    var text = Ext.util.Format.trim(tokens[i]);
     var input = undefined;
     if (text) {
       fields.push(new Blockly.FieldLabel(text));

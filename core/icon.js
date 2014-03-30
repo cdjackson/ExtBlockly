@@ -24,6 +24,7 @@
  */
 'use strict';
 
+Blockly.Icon = {};
 
 /**
  * Class for an icon.

@@ -35,6 +35,7 @@
  */
 'use strict';
 
+Blockly.Realtime = {};
 
 /**
  * URL for progress indicator.
@@ -338,8 +339,9 @@ Blockly.Realtime.placeBlockOnWorkspace_ = function(block, addToTop) {
     if (addToTop) {
       newBlock.workspace.addTopBlock(newBlock);
     }
+      console.log("indexof change");
     if (addToTop ||
-        goog.array.contains(Blockly.Realtime.topBlocks_, newBlock)) {
+        Blockly.Realtime.topBlocks_.indexOf[newBlock]) {
       Blockly.Realtime.moveBlock_(newBlock);
     }
   });
@@ -781,7 +783,7 @@ Blockly.Realtime.updateCollabUi_ = function() {
     return;
   }
   var collabElement = goog.dom.getElement(Blockly.Realtime.collabElementId);
-  goog.dom.removeChildren(collabElement);
+  Blockly.removeChildren(collabElement);
   var collaboratorsList = Blockly.Realtime.document_.getCollaborators();
   for (var i = 0; i < collaboratorsList.length; i++) {
     var collaborator = collaboratorsList[i];

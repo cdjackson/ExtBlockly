@@ -29,6 +29,7 @@
  * Blocks gets populated in the blocks files, possibly through calls to
  * Blocks.addTemplate().
  */
+Blockly.Blocks = {};
 
 /**
  * Create a block template and add it as a field to Blockly.Blocks with the

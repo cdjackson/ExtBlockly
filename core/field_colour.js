@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a colour input field.
  * @param {string} colour The initial colour in '#rrggbb' format.
@@ -45,7 +43,7 @@ Blockly.FieldColour = function(colour, opt_changeHandler) {
   // Set the initial state.
   this.setValue(colour);
 };
-goog.inherits(Blockly.FieldColour, Blockly.Field);
+Blockly.inherits(Blockly.FieldColour, Blockly.Field);
 
 /**
  * Clone this FieldColour.
@@ -98,7 +96,7 @@ Blockly.FieldColour.prototype.setValue = function(colour) {
  * http://docs.closure-library.googlecode.com/git/closure_goog_ui_colorpicker.js.source.html
  * @type {!Array.<string>}
  */
-Blockly.FieldColour.COLOURS = goog.ui.ColorPicker.SIMPLE_GRID_COLORS;
+Blockly.FieldColour.COLOURS = [];//goog.ui.ColorPicker.SIMPLE_GRID_COLORS;
 
 /**
  * Number of columns in the palette.

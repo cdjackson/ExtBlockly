@@ -36,7 +36,7 @@ Blockly.Warning = function(block) {
   Blockly.Warning.superClass_.constructor.call(this, block);
   this.createIcon_();
 };
-goog.inherits(Blockly.Warning, Blockly.Icon);
+Blockly.inherits(Blockly.Warning, Blockly.Icon);
 
 /**
  * Warning text (if bubble is not visible).

@@ -24,9 +24,6 @@
  */
 'use strict';
 
-
-
-
 /**
  * Class for a checkbox field.
  * @param {string} state The initial state of the field ('TRUE' or 'FALSE').
@@ -50,7 +47,7 @@ Blockly.FieldCheckbox = function(state, opt_changeHandler) {
   // Set the initial state.
   this.setValue(state);
 };
-goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
+Blockly.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
 /**
  * Clone this FieldCheckbox.

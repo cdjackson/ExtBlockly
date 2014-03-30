@@ -33,7 +33,7 @@
 /**
  * Realtime client utilities namespace.
  */
-
+var rtclient = {};
 
 /**
  * OAuth 2.0 scope for installing Drive Apps.

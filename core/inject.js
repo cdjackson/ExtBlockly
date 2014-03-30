@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Initialize the SVG document with various handlers.
  * @param {!Element} container Containing element.
@@ -33,12 +31,13 @@
  */
 Blockly.inject = function(container, opt_options) {
   // Verify that the container is in document.
-  if (!goog.dom.contains(document, container)) {
+  if (Ext.getDom(container) == null) {
     throw 'Error: container is not in current document.';
   }
+    Blockly.DIV = container;
   if (opt_options) {
     // TODO(scr): don't mix this in to global variables.
-    goog.mixin(Blockly, Blockly.parseOptions_(opt_options));
+    Blockly.mixin(Blockly, Blockly.parseOptions_(opt_options));
   }
   var startUi = function() {
     Blockly.createDom_(container);
@@ -132,7 +131,7 @@ Blockly.createDom_ = function(container) {
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
   // Closure can be trusted to create HTML widgets with the proper direction.
-  goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);
+  console.log("goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);");
 
   // Load CSS.
   Blockly.Css.inject();
@@ -254,7 +253,8 @@ Blockly.createDom_ = function(container) {
       flyout.init(Blockly.mainWorkspace, true);
       flyout.autoClose = false;
       // Insert the flyout behind the workspace so that blocks appear on top.
-      goog.dom.insertSiblingBefore(flyoutSvg, Blockly.mainWorkspace.svgGroup_);
+    Ext.DomHelper.insertBefore(Blockly.mainWorkspace.svgGroup_, flyoutSvg);
+
       var workspaceChanged = function() {
         if (Blockly.Block.dragMode_ == 0) {
           var metrics = Blockly.mainWorkspace.getMetrics();
@@ -316,8 +316,9 @@ Blockly.createDom_ = function(container) {
   Blockly.svgResize();
 
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
-  Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
+    Blockly.WidgetDiv.DIV = Ext.DomHelper.createDom({tag : 'div', id : 'blocklyWidgetDiv' });
+
+    Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
   document.body.appendChild(Blockly.WidgetDiv.DIV);
 };
 
@@ -353,8 +354,8 @@ Blockly.init_ = function() {
   Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
   Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMove_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
-  Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
-                     Blockly.onContextMenu_);
+    Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null, Blockly.onContextMenu_);
+    Blockly.bindEvent_(Blockly.DIV, 'contextmenu', null, Blockly.onContextMenu_);
 
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.

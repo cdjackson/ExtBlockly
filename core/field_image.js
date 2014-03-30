@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for an image.
  * @param {string} src The URL of the image.
@@ -60,7 +58,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt) {
          'fill-opacity': 0}, this.fieldGroup_);
   }
 };
-goog.inherits(Blockly.FieldImage, Blockly.Field);
+Blockly.inherits(Blockly.FieldImage, Blockly.Field);
 
 /**
  * Clone this FieldImage.
@@ -141,8 +139,7 @@ Blockly.FieldImage.prototype.setValue = function(src) {
     return;
   }
   this.src_ = src;
-  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-      'xlink:href', Ext.isString(src) ? src : '');
+  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', Ext.isString(src) ? src : '');
 };
 
 /**

@@ -25,7 +25,7 @@
 'use strict';
 
 // Top level object for Blockly.
-
+var Blockly = {};
 
 
 /**
@@ -62,8 +62,7 @@ Blockly.HSV_VALUE = 0.65;
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
 Blockly.makeColour = function(hue) {
-  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 256);
+    return Ext.draw.Color.fromHSL(hue, Blockly.HSV_SATURATION, Blockly.HSV_VALUE).toString();
 };
 
 /**
@@ -686,3 +685,55 @@ window['Blockly'] = Blockly;
 Blockly['getMainWorkspace'] = Blockly.getMainWorkspace;
 Blockly['addChangeListener'] = Blockly.addChangeListener;
 Blockly['removeChangeListener'] = Blockly.removeChangeListener;
+
+
+
+/**
+ * Inherit the prototype methods from one constructor into another.
+ * @param {Function} childCtor Child class.
+ * @param {Function} parentCtor Parent class.
+ */
+Blockly.inherits = function(childCtor, parentCtor) {
+    /** @constructor */
+    function tempCtor() {};
+    tempCtor.prototype = parentCtor.prototype;
+    childCtor.superClass_ = parentCtor.prototype;
+    childCtor.prototype = new tempCtor();
+    childCtor.prototype.constructor = childCtor;
+};
+
+Blockly.mixin = function(destination, source) {
+    for (var k in source) {
+        if (source.hasOwnProperty(k)) {
+            destination[k] = source[k];
+        }
+    }
+    return destination;
+}
+
+Blockly.caseInsensitiveCompare = function(str1, str2) {
+    var test1 = String(str1).toLowerCase();
+    var test2 = String(str2).toLowerCase();
+
+    if (test1 < test2) {
+        return -1;
+    } else if (test1 == test2) {
+        return 0;
+    } else {
+        return 1;
+    }
+};
+
+/**
+ * Removes all the child nodes on a DOM node.
+ * @param {Node} node Node to remove children from.
+ */
+Blockly.removeChildren = function(node) {
+    // Note: Iterations over live collections can be slow, this is the fastest
+    // we could find. The double parenthesis are used to prevent JsCompiler and
+    // strict warnings.
+    var child;
+    while ((child = node.firstChild)) {
+        node.removeChild(child);
+    }
+};

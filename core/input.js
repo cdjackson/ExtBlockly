@@ -25,8 +25,6 @@
 'use strict';
 
 
-
-
 /**
  * Class for an input with an optional field.
  * @param {number} type The type of the input.

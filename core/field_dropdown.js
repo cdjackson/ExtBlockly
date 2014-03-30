@@ -26,8 +26,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for an editable dropdown field.
  * @param {(!Array.<string>|!Function)} menuGenerator An array of options
@@ -57,7 +55,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
 };
-goog.inherits(Blockly.FieldDropdown, Blockly.Field);
+Blockly.inherits(Blockly.FieldDropdown, Blockly.Field);
 
 /**
  * Horizontal distance that a checkmark ovehangs the dropdown.
@@ -86,47 +84,67 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, null);
   var thisField = this;
 
-  function callback(e) {
-    var menuItem = e.target;
-    if (menuItem) {
-      var value = menuItem.getValue();
-      if (thisField.changeHandler_) {
-        // Call any change handler, and allow it to override.
-        var override = thisField.changeHandler_(value);
-        if (override !== undefined) {
-          value = override;
+    var menuCfg = {
+        renderTo: Blockly.WidgetDiv.DIV,
+        floating: true,
+        items:[],
+        shrinkWrap: 3,
+        minWidth: 30,
+        listeners: {
+            click: function (menu, item) {
+                if (item != null) {
+                    var value = item.getId();
+                    if (thisField.changeHandler_) {
+                        // Call any change handler, and allow it to override.
+                        var override = thisField.changeHandler_(value);
+                        if (override !== undefined) {
+                            value = override;
+                        }
+                    }
+                    if (value !== null) {
+                        thisField.setValue(value);
+                    }
+                }
+                Ext.destroy(menu);
+            }
+            //TODO: Error here. We need to destroy the menu, but the click handler fires after all others!!!
         }
-      }
-      if (value !== null) {
-        thisField.setValue(value);
-      }
-    }
-    Blockly.WidgetDiv.hideIfOwner(thisField);
-  }
+    };
 
-  var menu = new goog.ui.Menu();
+    menuCfg.renderTo = 'blocklyDiv';
+
   var options = this.getOptions_();
   for (var x = 0; x < options.length; x++) {
-    var text = options[x][0];  // Human-readable text.
-    var value = options[x][1]; // Language-neutral value.
-    var menuItem = new goog.ui.MenuItem(text);
-    menuItem.setValue(value);
-    menuItem.setCheckable(true);
-    menu.addItem(menuItem);
-    menuItem.setChecked(value == this.value_);
+    var menuItem = {};
+      menuItem.id = options[x][1];          // Language-neutral value.
+      menuItem.text = options[x][0];        // Human-readable text.
+      if(menuItem.id == this.value_)
+          menuItem.iconCls = "x-menu-item-arrow";
+//      menuItem.checked = true;
+//    console.log("menuItem.setCheckable(true);");
+      console.log("menuItem.setChecked(value == this.value_);");
+      menuCfg.items.push(menuItem);
   }
-  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
+
   // Record windowSize and scrollOffset before adding menu.
-  var windowSize = goog.dom.getViewportSize();
-  var scrollOffset = goog.style.getViewportPageOffset(document);
+    console.log("var windowSize = goog.dom.getViewportSize();");
+    var windowSize = 500;
+    console.log("var scrollOffset = goog.style.getViewportPageOffset(document);");
+    var scrollOffset = {x:200,y:200};
   var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
   var borderBBox = this.borderRect_.getBBox();
-  var div = Blockly.WidgetDiv.DIV;
-  menu.render(div);
-  var menuDom = menu.getElement();
-  Blockly.addClass_(menuDom, 'blocklyDropdownMenu');
+//  var div = Blockly.WidgetDiv.DIV;
+
+    var menu = new Ext.menu.Menu(menuCfg);
+    menu.showAt(xy.x,xy.y + borderBBox.height);
+//  menu.render(div);
+//  var menuDom = menu.getElement();
+//  Blockly.addClass_(menuDom, 'blocklyDropdownMenu');
   // Record menuSize after adding menu.
-  var menuSize = goog.style.getSize(menuDom);
+/*  console.log("var menuSize = goog.style.getSize(menuDom);");
+    var menuSize = {};
+    menuSize.width = menu.getWidth();
+    menuSize.height = 300;//menu.getHeight();
 
   // Position the menu.
   // Flip menu vertically if off the bottom.
@@ -151,8 +169,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     }
   }
   Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
-  menu.setAllowAutoFocus(true);
-  menuDom.focus();
+  console.log("menu.setAllowAutoFocus(true);");*/
+//  menuDom.focus();
 };
 
 /**
@@ -251,7 +269,7 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
   }
   this.text_ = text;
   // Empty the text element.
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+  Blockly.removeChildren(this.textElement_);
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
   if (!text) {

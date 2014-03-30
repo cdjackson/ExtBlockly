@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a variable's dropdown field.
  * @param {?string} varname The default name for the variable.  If null,
@@ -67,7 +65,7 @@ Blockly.FieldVariable = function(varname, opt_changeHandler) {
     this.setValue(Blockly.Variables.generateUniqueName());
   }
 };
-goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
+Blockly.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
 /**
  * Clone this FieldVariable.
@@ -109,7 +107,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   if (name && variableList.indexOf(name) == -1) {
     variableList.push(name);
   }
-  variableList.sort(goog.string.caseInsensitiveCompare);
+  variableList.sort(Blockly.caseInsensitiveCompare);
   variableList.push(Blockly.Msg.RENAME_VARIABLE);
   variableList.push(Blockly.Msg.NEW_VARIABLE);
   // Variables are not language-specific, use the name as both the user-facing

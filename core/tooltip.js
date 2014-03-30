@@ -29,6 +29,7 @@
  */
 'use strict';
 
+Blockly.Tooltip = {};
 
 /**
  * Is a tooltip currently showing?
@@ -256,7 +257,7 @@ Blockly.Tooltip.show_ = function() {
     return;
   }
   // Erase all existing text.
-  goog.dom.removeChildren(
+  Blockly.removeChildren(
       /** @type {!Element} */ (Blockly.Tooltip.svgText_));
   // Create new text, line by line.
   var tip = Blockly.Tooltip.element_.tooltip;

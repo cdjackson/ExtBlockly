@@ -2,9 +2,7 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.en');
-
-goog.require('Blockly.Msg');
+Blockly.Msg.en = {};
 
 Blockly.Msg.ADD_COMMENT = "Add Comment";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";

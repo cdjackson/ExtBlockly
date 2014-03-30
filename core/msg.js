@@ -28,3 +28,4 @@
  * Name space for the Msg singleton.
  * Msg gets populated in the message files.
  */
+Blockly.Msg = {};

@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for an editable text field.
  * @param {string} text The initial content of the field.
@@ -41,7 +39,7 @@ Blockly.FieldTextInput = function(text, opt_changeHandler) {
 
   this.changeHandler_ = opt_changeHandler;
 };
-goog.inherits(Blockly.FieldTextInput, Blockly.Field);
+Blockly.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
  * Clone this FieldTextInput.
@@ -168,7 +166,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
  */
 Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
-  if(typeof(Blockly.FieldTextInput.htmlInput_ != "object")
+  if(typeof(Blockly.FieldTextInput.htmlInput_) != "object")
     console.log("Error");
   var htmlInput = /** @type {!Element} */ (Blockly.FieldTextInput.htmlInput_);
   if (this.changeHandler_) {

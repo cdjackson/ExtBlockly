@@ -26,9 +26,6 @@
  */
 'use strict';
 
-
-
-
 /**
  * Class for an editable field.
  * @param {string} text The initial content of the field.
@@ -195,7 +192,7 @@ Blockly.Field.prototype.setText = function(text) {
   }
   this.text_ = text;
   // Empty the text element.
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+ Blockly.removeChildren(this.textElement_);
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
   if (!text) {

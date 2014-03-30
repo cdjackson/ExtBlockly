@@ -24,7 +24,6 @@
  */
 'use strict';
 
-
 /**
  * Class for a block's SVG representation.
  * @param {!Blockly.Block} block The underlying block object.
@@ -396,11 +395,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     return;
   }
   var hexColour = Blockly.makeColour(this.block_.getColour());
-  var rgb = goog.color.hexToRgb(hexColour);
-  var rgbLight = goog.color.lighten(rgb, 0.3);
-  var rgbDark = goog.color.darken(rgb, 0.4);
-  this.svgPathLight_.setAttribute('stroke', goog.color.rgbArrayToHex(rgbLight));
-  this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
+  var rgb = Ext.draw.Color.fromString(hexColour);
+  var rgbLight = rgb.getLighter(0.1);
+  var rgbDark = rgb.getDarker(0.1);
+  this.svgPathLight_.setAttribute('stroke', rgbLight.toString());
+  this.svgPathDark_.setAttribute('fill', rgbDark.toString());
   this.svgPath_.setAttribute('fill', hexColour);
 };
 

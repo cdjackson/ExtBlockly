@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+Blockly.Toolbox = {};
 
 
 /**
@@ -200,7 +200,7 @@ Blockly.Toolbox.clearSelection = function() {
 Blockly.Toolbox.TreeControl = function(html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeControl.call(this, html, opt_config, opt_domHelper);
 };
-goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
+//goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 
 /**
  * Adds touch handling to TreeControl.
@@ -283,7 +283,7 @@ Blockly.Toolbox.TreeNode = function(html, opt_config, opt_domHelper) {
   goog.events.listen(Blockly.Toolbox.tree_,
       goog.ui.tree.BaseNode.EventType.COLLAPSE, resize);
 };
-goog.inherits(Blockly.Toolbox.TreeNode, goog.ui.tree.TreeNode);
+//goog.inherits(Blockly.Toolbox.TreeNode, goog.ui.tree.TreeNode);
 
 /**
  * Do not show the +/- icon.

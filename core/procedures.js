@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+Blockly.Procedures = {};
 
 /**
  * Category to separate procedure names from variables and generated functions.

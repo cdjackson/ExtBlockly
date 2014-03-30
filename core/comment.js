@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a comment.
  * @param {!Blockly.Block} block The block associated with this comment.
@@ -36,7 +34,7 @@ Blockly.Comment = function(block) {
   Blockly.Comment.superClass_.constructor.call(this, block);
   this.createIcon_();
 };
-goog.inherits(Blockly.Comment, Blockly.Icon);
+Blockly.inherits(Blockly.Comment, Blockly.Icon);
 
 /**
  * Comment text (if bubble is not visible).

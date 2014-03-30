@@ -24,6 +24,7 @@
  */
 'use strict';
 
+Blockly.Xml = {};
 
 /**
  * Encode a block tree as XML.
@@ -32,7 +33,7 @@
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
   var width = Blockly.svgSize().width;
-  var xml = goog.dom.createDom('xml');
+  var xml = Ext.DomHelper.createDom({tag:'xml'});
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     var element = Blockly.Xml.blockToDom_(block);
@@ -51,9 +52,10 @@ Blockly.Xml.workspaceToDom = function(workspace) {
  * @private
  */
 Blockly.Xml.blockToDom_ = function(block) {
-  var element = goog.dom.createDom('block');
-  element.setAttribute('type', block.type);
-  element.setAttribute('id', block.id);
+    var element = Ext.DomHelper.createDom({tag : 'block', type: block.type, id : block.id });
+
+//    element.setAttribute('type', block.type);
+//  element.setAttribute('id', block.id);
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
@@ -63,7 +65,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   }
   function fieldToDom(field) {
     if (field.name && field.EDITABLE) {
-      var container = goog.dom.createDom('field', null, field.getValue());
+      var container = Ext.DomHelper.createDom({tag:'field', children: field.getValue()});
       container.setAttribute('name', field.name);
       element.appendChild(container);
     }
@@ -75,8 +77,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   }
 
   if (block.comment) {
-    var commentElement = goog.dom.createDom('comment', null,
-        block.comment.getText());
+    var commentElement = Ext.DomHelper.createDom({tag: 'comment', children: block.comment.getText()});
     commentElement.setAttribute('pinned', block.comment.isVisible());
     var hw = block.comment.getBubbleSize();
     commentElement.setAttribute('h', hw.height);
@@ -93,10 +94,10 @@ Blockly.Xml.blockToDom_ = function(block) {
     } else {
       var childBlock = input.connection.targetBlock();
       if (input.type == Blockly.INPUT_VALUE) {
-        container = goog.dom.createDom('value');
+        container = Ext.DomHelper.createDom({tag:'value'});
         hasValues = true;
       } else if (input.type == Blockly.NEXT_STATEMENT) {
-        container = goog.dom.createDom('statement');
+        container = Ext.DomHelper.createDom({tag:'statement'});
       }
       if (childBlock) {
         container.appendChild(Blockly.Xml.blockToDom_(childBlock));
@@ -130,8 +131,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   if (block.nextConnection) {
     var nextBlock = block.nextConnection.targetBlock();
     if (nextBlock) {
-      var container = goog.dom.createDom('next', null,
-          Blockly.Xml.blockToDom_(nextBlock));
+      var container = Ext.DomHelper.createDom({tag:'next', children: Blockly.Xml.blockToDom_(nextBlock)});
       element.appendChild(container);
     }
   }

@@ -24,8 +24,6 @@
  */
 'use strict';
 
-
-
 /**
  * Class for a flyout.
  * @constructor
@@ -217,8 +215,7 @@ Blockly.Flyout.prototype.init =
   this.hide();
 
   // If the document resizes, reposition the flyout.
-  this.onResizeWrapper_ = Blockly.bindEvent_(window,
-      goog.events.EventType.RESIZE, this, this.position_);
+  console.log("this.onResizeWrapper_ = Blockly.bindEvent_(window, goog.events.EventType.RESIZE, this, this.position_);");
   this.position_();
   this.changeWrapper_ = Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.filterForCapacity_);
