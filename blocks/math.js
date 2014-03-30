@@ -24,9 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.math');
-
-goog.require('Blockly.Blocks');
+Blockly.Blocks.math = {};
 
 
 Blockly.Blocks['math_number'] = {

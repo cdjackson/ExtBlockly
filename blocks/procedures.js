@@ -24,10 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.procedures');
-
-goog.require('Blockly.Blocks');
-
+Blockly.Blocks.procedures = {};
 
 Blockly.Blocks['procedures_defnoreturn'] = {
   /**

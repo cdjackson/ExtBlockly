@@ -24,10 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.loops');
-
-goog.require('Blockly.Blocks');
-
+Blockly.Blocks.loops = {};
 
 Blockly.Blocks['controls_repeat'] = {
   /**

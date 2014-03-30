@@ -24,9 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.variables');
-
-goog.require('Blockly.Blocks');
+Blockly.Blocks.variables = {};
 
 
 Blockly.Blocks['variables_get'] = {

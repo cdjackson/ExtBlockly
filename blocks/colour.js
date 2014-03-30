@@ -24,10 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.colour');
-
-goog.require('Blockly.Blocks');
-
+Blockly.Blocks.colour = {};
 
 Blockly.Blocks['colour_picker'] = {
   /**

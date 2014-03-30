@@ -24,9 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.text');
-
-goog.require('Blockly.Blocks');
+Blockly.Blocks.text = {};
 
 
 Blockly.Blocks['text'] = {
