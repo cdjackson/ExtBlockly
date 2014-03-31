@@ -101,7 +101,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     };
 
     var menuCfg = {
-        renderTo: Blockly.WidgetDiv.DIV,
+        renderTo: Blockly.DIV,
         floating: true,
         items:[],
         shrinkWrap: 3,
@@ -112,8 +112,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
             }
         }
     };
-
-    menuCfg.renderTo = 'blocklyDiv';
 
   var options = this.getOptions_();
   for (var x = 0; x < options.length; x++) {

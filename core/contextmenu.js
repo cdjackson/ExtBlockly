@@ -50,7 +50,7 @@ Blockly.ContextMenu.show = function(e, options) {
      callback: Blockly.MakeItSo}
   */
     var menuCfg = {
-        renderTo: Blockly.WidgetDiv.DIV,
+        renderTo: Blockly.DIV,
         floating: true,
         items:[],
         shrinkWrap: 3,
@@ -61,8 +61,6 @@ Blockly.ContextMenu.show = function(e, options) {
             }
         }
     };
-
-    menuCfg.renderTo = 'blocklyDiv';
 
     for (var x = 0, option; option = options[x]; x++) {
         var menuItem = {};
