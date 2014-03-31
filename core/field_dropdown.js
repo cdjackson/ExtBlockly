@@ -84,6 +84,22 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, null);
   var thisField = this;
 
+    var callback = function(item) {
+        if (item != null) {
+            var value = item.getId();
+            if (thisField.changeHandler_) {
+                // Call any change handler, and allow it to override.
+                var override = thisField.changeHandler_(value);
+                if (override !== undefined) {
+                    value = override;
+                }
+            }
+            if (value !== null) {
+                thisField.setValue(value);
+            }
+        }
+    };
+
     var menuCfg = {
         renderTo: Blockly.WidgetDiv.DIV,
         floating: true,
@@ -91,23 +107,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         shrinkWrap: 3,
         minWidth: 30,
         listeners: {
-            click: function (menu, item) {
-                if (item != null) {
-                    var value = item.getId();
-                    if (thisField.changeHandler_) {
-                        // Call any change handler, and allow it to override.
-                        var override = thisField.changeHandler_(value);
-                        if (override !== undefined) {
-                            value = override;
-                        }
-                    }
-                    if (value !== null) {
-                        thisField.setValue(value);
-                    }
-                }
+            hide: function (menu, item) {
                 Ext.destroy(menu);
             }
-            //TODO: Error here. We need to destroy the menu, but the click handler fires after all others!!!
         }
     };
 
@@ -118,6 +120,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     var menuItem = {};
       menuItem.id = options[x][1];          // Language-neutral value.
       menuItem.text = options[x][0];        // Human-readable text.
+      menuItem.handler = callback;
       if(menuItem.id == this.value_)
           menuItem.iconCls = "x-menu-item-arrow";
 //      menuItem.checked = true;
