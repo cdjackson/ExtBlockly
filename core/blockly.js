@@ -220,6 +220,21 @@ Blockly.svgResize = function() {
   }
 };
 
+Blockly.resizeWindow = function(width, height) {
+    if (Blockly.svg.cachedWidth_ != width) {
+        Blockly.svg.setAttribute('width', width + 'px');
+        Blockly.svg.cachedWidth_ = width;
+    }
+    if (Blockly.svg.cachedHeight_ != height) {
+        Blockly.svg.setAttribute('height', height + 'px');
+        Blockly.svg.cachedHeight_ = height;
+    }
+    // Update the scrollbars (if they exist).
+    if (Blockly.mainWorkspace.scrollbar) {
+        Blockly.mainWorkspace.scrollbar.resize();
+    }
+}
+
 /**
  * Handle a mouse-down on SVG drawing surface.
  * @param {!Event} e Mouse down event.
@@ -646,11 +661,7 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
  * @param {function()} cmdThunk A function representing the command execution.
  */
 Blockly.doCommand = function(cmdThunk) {
-  if (Blockly.Realtime.isEnabled) {
-    Blockly.Realtime.doCommand(cmdThunk);
-  } else {
     cmdThunk();
-  }
 };
 
 /**

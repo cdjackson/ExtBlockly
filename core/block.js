@@ -55,11 +55,7 @@ Blockly.setUidCounter = function(val) {
  */
 Blockly.genUid = function() {
   var uid = (++Blockly.uidCounter_).toString();
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.genUid(uid);
-  } else {
     return uid;
-  }
 };
 
 /**
@@ -77,13 +73,9 @@ Blockly.Block = function() {
  * @return {!Blockly.Block} The created block
  */
 Blockly.Block.obtain = function(workspace, prototypeName) {
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.obtainBlock(workspace, prototypeName);
-  } else {
     var newBlock = new Blockly.Block();
     newBlock.initialize(workspace, prototypeName);
     return newBlock;
-  }
 };
 
 /**
@@ -150,11 +142,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
  * @return {Blockly.Block} The found block, or null if not found.
  */
 Blockly.Block.getById = function(id, workspace) {
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.getBlockById(id);
-  } else {
     return workspace.getBlockById(id);
-  }
 };
 
 /**
@@ -377,10 +365,6 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
     this.svg_.dispose();
     this.svg_ = null;
   }
-  // Remove from Realtime set of blocks.
-  if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
-    Blockly.Realtime.removeBlock(this);
-  }
 };
 
 /**
@@ -455,7 +439,6 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.svg_.getRootElement().setAttribute('transform',
       'translate(' + (xy.x + dx) + ', ' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
-  Blockly.Realtime.blockChanged(this);
 };
 
 /**
@@ -1854,5 +1837,4 @@ Blockly.Block.prototype.render = function() {
   if(typeof(this.svg_) !== "object")
       console.log('Uninitialized block cannot be rendered.  Call block.initSvg()');
   this.svg_.render();
-  Blockly.Realtime.blockChanged(this);
 };

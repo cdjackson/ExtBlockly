@@ -30,28 +30,21 @@
  * @param {Object} opt_options Optional dictionary of options.
  */
 Blockly.inject = function(container, opt_options) {
-  // Verify that the container is in document.
-  if (Ext.getDom(container) == null) {
-    throw 'Error: container is not in current document.';
-  }
-    Blockly.DIV = container;
-  if (opt_options) {
-    // TODO(scr): don't mix this in to global variables.
-    Blockly.mixin(Blockly, Blockly.parseOptions_(opt_options));
-  }
-  var startUi = function() {
-    Blockly.createDom_(container);
-    Blockly.init_();
-  };
-  if (Blockly.enableRealtime) {
-    var realtimeElement = document.getElementById('realtime');
-    if (realtimeElement) {
-      realtimeElement.style.display = 'block';
+    // Verify that the container is in document.
+    if (Ext.getDom(container) == null) {
+        throw 'Error: container is not in current document.';
     }
-    Blockly.Realtime.startRealtime(startUi, container, Blockly.realtimeOptions);
-  } else {
+    Blockly.DIV = container;
+    if (opt_options) {
+        // TODO(scr): don't mix this in to global variables.
+        Blockly.mixin(Blockly, Blockly.parseOptions_(opt_options));
+    }
+    var startUi = function () {
+        Blockly.createDom_(container);
+        Blockly.init_();
+    };
+
     startUi();
-  }
 };
 
 /**

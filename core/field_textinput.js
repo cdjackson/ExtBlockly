@@ -107,7 +107,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.widgetDispose_());
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
+  var htmlInput = Ext.DomHelper.createDom({tag : 'input', id : 'blocklyHtmlInput' });
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
 

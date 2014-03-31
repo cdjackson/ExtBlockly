@@ -93,7 +93,7 @@ Blockly.Variables.renameVariable = function(oldName, newName) {
  */
 Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
   var variableList = Blockly.Variables.allVariables();
-  variableList.sort(goog.string.caseInsensitiveCompare);
+  variableList.sort(Blockly.caseInsensitiveCompare);
   // In addition to the user's variables, we also want to display the default
   // variable name at the top.  We also don't want this duplicated if the
   // user has created a variable of the same name.
@@ -135,7 +135,7 @@ Blockly.Variables.generateUniqueName = function() {
   var variableList = Blockly.Variables.allVariables();
   var newName = '';
   if (variableList.length) {
-    variableList.sort(goog.string.caseInsensitiveCompare);
+    variableList.sort(Blockly.caseInsensitiveCompare);
     var nameSuffix = 0, potName = 'i', i = 0, inUse = false;
     while (!newName) {
       i = 0;

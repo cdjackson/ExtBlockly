@@ -195,7 +195,6 @@ Blockly.Trashcan.prototype.dispose = function() {
   this.svgBody_ = null;
   this.svgLid_ = null;
   this.workspace_ = null;
-//  goog.Timer.clear(this.lidTask_);
     if(this.lidTask_ != 0) {
         this.lidTask_.cancel();
         this.lidTask_ = 0;
@@ -262,7 +261,6 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
   if (this.isOpen == state) {
     return;
   }
-//  goog.Timer.clear(this.lidTask_);
     if(this.lidTask_ != 0) {
         this.lidTask_.cancel();
         this.lidTask_ = 0;

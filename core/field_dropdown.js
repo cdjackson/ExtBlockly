@@ -123,57 +123,15 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       menuItem.handler = callback;
       if(menuItem.id == this.value_)
           menuItem.iconCls = "x-menu-item-arrow";
-//      menuItem.checked = true;
-//    console.log("menuItem.setCheckable(true);");
       console.log("menuItem.setChecked(value == this.value_);");
       menuCfg.items.push(menuItem);
   }
 
-  // Record windowSize and scrollOffset before adding menu.
-    console.log("var windowSize = goog.dom.getViewportSize();");
-    var windowSize = 500;
-    console.log("var scrollOffset = goog.style.getViewportPageOffset(document);");
-    var scrollOffset = {x:200,y:200};
   var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
   var borderBBox = this.borderRect_.getBBox();
-//  var div = Blockly.WidgetDiv.DIV;
 
     var menu = new Ext.menu.Menu(menuCfg);
     menu.showAt(xy.x,xy.y + borderBBox.height);
-//  menu.render(div);
-//  var menuDom = menu.getElement();
-//  Blockly.addClass_(menuDom, 'blocklyDropdownMenu');
-  // Record menuSize after adding menu.
-/*  console.log("var menuSize = goog.style.getSize(menuDom);");
-    var menuSize = {};
-    menuSize.width = menu.getWidth();
-    menuSize.height = 300;//menu.getHeight();
-
-  // Position the menu.
-  // Flip menu vertically if off the bottom.
-  if (xy.y + menuSize.height + borderBBox.height >=
-      windowSize.height + scrollOffset.y) {
-    xy.y -= menuSize.height;
-  } else {
-    xy.y += borderBBox.height;
-  }
-  if (Blockly.RTL) {
-    xy.x += borderBBox.width;
-    xy.x += Blockly.FieldDropdown.CHECKMARK_OVERHANG;
-    // Don't go offscreen left.
-    if (xy.x < scrollOffset.x + menuSize.width) {
-      xy.x = scrollOffset.x + menuSize.width;
-    }
-  } else {
-    xy.x -= Blockly.FieldDropdown.CHECKMARK_OVERHANG;
-    // Don't go offscreen right.
-    if (xy.x > windowSize.width + scrollOffset.x - menuSize.width) {
-      xy.x = windowSize.width + scrollOffset.x - menuSize.width;
-    }
-  }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
-  console.log("menu.setAllowAutoFocus(true);");*/
-//  menuDom.focus();
 };
 
 /**

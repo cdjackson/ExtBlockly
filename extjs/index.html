@@ -34,8 +34,6 @@
     <script type="text/javascript" src="../core/mutator.js"></script>
     <script type="text/javascript" src="../core/names.js"></script>
     <script type="text/javascript" src="../core/procedures.js"></script>
-    <script type="text/javascript" src="../core/realtime.js"></script>
-    <script type="text/javascript" src="../core/realtime-client-utils.js"></script>
     <script type="text/javascript" src="../core/scrollbar.js"></script>
     <script type="text/javascript" src="../core/toolbox.js"></script>
     <script type="text/javascript" src="../core/tooltip.js"></script>
@@ -59,7 +57,6 @@
     <script type="text/javascript" src="../msg/js/en.js"></script>
 </head>
 <body>
-<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
 
 <xml id="toolbox" style="display: none">
     <block type="controls_if"></block>
@@ -122,7 +119,6 @@
 
 <script>
 
-
     Ext.require([
         'Ext.window.Window',
         'Ext.tab.*',
@@ -140,18 +136,18 @@
             y: 10,
             plain: true,
             layout: 'fit',
-            id: 'blocklyHere1',
-            html: '<div id="blocklyHere" style="height: 480px; width: 600px;"></div>',
+            html: '<div id="blocklyHere"></div>',
             listeners: {
                 afterrender : function() {
                     Blockly.inject(document.getElementById('blocklyHere'), {path: '../', trashcan: true});
                     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
+                },
+                resize : function( panel, width, height, oldWidth, oldHeight, eOpts ) {
+                    Blockly.resizeWindow(width, height);
                 }
             }
         }).show();
     });
-
-
 
     //      Blockly.inject(document.getElementById('blocklyDiv'), {path: '../', toolbox: document.getElementById('toolbox')});
 </script>

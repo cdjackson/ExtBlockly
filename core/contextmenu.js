@@ -64,19 +64,12 @@ Blockly.ContextMenu.show = function(e, options) {
 
     menuCfg.renderTo = 'blocklyDiv';
 
-//    var options = this.getOptions_();
     for (var x = 0, option; option = options[x]; x++) {
         var menuItem = {};
-//        menuItem.id = options.value;          // Language-neutral value.
         menuItem.text = option.text;        // Human-readable text.
         menuItem.disabled = !option.enabled;        // Human-readable text.
         if (option.enabled) {
             menuItem.handler = option.callback;
-//                menuItem.handler = function(option) {
-//                return function() { Blockly.doCommand(option.callback); };
-//            };
-//            goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
-//                evtHandlerCapturer(option.callback));
         }
 
         menuCfg.items.push(menuItem);
@@ -84,32 +77,6 @@ Blockly.ContextMenu.show = function(e, options) {
 
     var menu = new Ext.menu.Menu(menuCfg);
 
-    /*
-        var menu = new goog.ui.Menu();
-      for (var x = 0, option; option = options[x]; x++) {
-        var menuItem = new goog.ui.MenuItem(option.text);
-        menu.addItem(menuItem);
-        menuItem.setEnabled(option.enabled);
-        if (option.enabled) {
-          var evtHandlerCapturer = function(callback) {
-            return function() { Blockly.doCommand(callback); };
-          };
-          goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
-                             evtHandlerCapturer(option.callback));
-        }
-      }
-      goog.events.listen(menu, goog.ui.Component.EventType.ACTION,
-                         Blockly.ContextMenu.hide);
-      // Record windowSize and scrollOffset before adding menu.
-      var windowSize = goog.dom.getViewportSize();
-      var scrollOffset = goog.style.getViewportPageOffset(document);
-      var div = Blockly.WidgetDiv.DIV;
-      menu.render(div);
-      var menuDom = menu.getElement();
-      Blockly.addClass_(menuDom, 'blocklyContextMenu');
-      // Record menuSize after adding menu.
-      var menuSize = goog.style.getSize(menuDom);
-*/
     var scrollOffset = {};
     scrollOffset.x = 0;
      scrollOffset.y = 0;
@@ -117,27 +84,8 @@ Blockly.ContextMenu.show = function(e, options) {
       // Position the menu.
       var x = e.clientX + scrollOffset.x;
       var y = e.clientY + scrollOffset.y;
-      // Flip menu vertically if off the bottom.
-//      if (e.clientY + menuSize.height >= windowSize.height) {
-//        y -= menuSize.height;
-//      }
-      // Flip menu horizontally if off the edge.
-//      if (Blockly.RTL) {
-//        if (menuSize.width >= e.clientX) {
-//          x += menuSize.width;
-//        }
-//      } else {
-//        if (e.clientX + menuSize.width >= windowSize.width) {
-//          x -= menuSize.width;
- //       }
-//      }
-//      Blockly.WidgetDiv.position(x, y, windowSize, scrollOffset);
     menu.showAt(x,y);
 
-//      menu.setAllowAutoFocus(true);
-      // 1ms delay is required for focusing on context menus because some other
-      // mouse event is still waiting in the queue and clears focus.
-      //setTimeout(function() {menuDom.focus();}, 1);
       Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };
 
