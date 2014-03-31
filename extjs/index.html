@@ -121,8 +121,38 @@
 </xml>
 
 <script>
-    Blockly.inject(document.getElementById('blocklyDiv'), {path: '../', trashcan: true});
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
+
+
+    Ext.require([
+        'Ext.window.Window',
+        'Ext.tab.*',
+        'Ext.toolbar.Spacer',
+        'Ext.layout.container.Card',
+        'Ext.layout.container.Border'
+    ]);
+
+    Ext.onReady(function(){
+        Ext.create('Ext.Window', {
+            title: 'Blockly Panel',
+            width: 400,
+            height: 400,
+            x: 10,
+            y: 10,
+            plain: true,
+            layout: 'fit',
+            id: 'blocklyHere1',
+            html: '<div id="blocklyHere" style="height: 480px; width: 600px;"></div>',
+            listeners: {
+                afterrender : function() {
+                    Blockly.inject(document.getElementById('blocklyHere'), {path: '../', trashcan: true});
+                    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
+                }
+            }
+        }).show();
+    });
+
+
+
     //      Blockly.inject(document.getElementById('blocklyDiv'), {path: '../', toolbox: document.getElementById('toolbox')});
 </script>
 
