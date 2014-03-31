@@ -56,23 +56,9 @@ Blockly.ContextMenu.show = function(e, options) {
         shrinkWrap: 3,
         minWidth: 30,
         listeners: {
-            click: function (menu, item) {
-                if (item != null) {
-                    var value = item.getId();
-                    if (thisField.changeHandler_) {
-                        // Call any change handler, and allow it to override.
-                        var override = thisField.changeHandler_(value);
-                        if (override !== undefined) {
-                            value = override;
-                        }
-                    }
-                    if (value !== null) {
-                        thisField.setValue(value);
-                    }
-                }
+            hide: function (menu, item) {
                 Ext.destroy(menu);
             }
-            //TODO: Error here. We need to destroy the menu, but the click handler fires after all others!!!
         }
     };
 
