@@ -29,7 +29,6 @@
 
 /**
  * Add a CSS class to a element.
- * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
  * @param {!Element} element DOM element to add class to.
  * @param {string} className Name of class to add.
  * @private
@@ -46,7 +45,6 @@ Blockly.addClass_ = function(element, className) {
 
 /**
  * Remove a CSS class from a element.
- * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
  * @param {!Element} element DOM element to remove class from.
  * @param {string} className Name of class to remove.
  * @private

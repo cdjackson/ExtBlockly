@@ -143,7 +143,11 @@
                     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
                 },
                 resize : function( panel, width, height, oldWidth, oldHeight, eOpts ) {
-                    Blockly.resizeWindow(width, height);
+                    var b = panel.getBox();
+                    var w = panel.getWidth();
+                    var c = panel.child("#blocklyHere");
+                    var dd = document.getElementById('blocklyHere');
+                    Blockly.resizeWindow(width-12, height-35);
                 }
             }
         }).show();

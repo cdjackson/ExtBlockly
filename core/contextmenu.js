@@ -39,7 +39,12 @@ Blockly.ContextMenu.currentBlock = null;
  * @param {!Array.<!Object>} options Array of menu options.
  */
 Blockly.ContextMenu.show = function(e, options) {
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
+    if(Blockly.openMenu != null) {
+        Ext.destroy(Blockly.openMenu);
+        Blockly.openMenu = null;
+    }
+
+//  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;
@@ -58,6 +63,7 @@ Blockly.ContextMenu.show = function(e, options) {
         listeners: {
             hide: function (menu, item) {
                 Ext.destroy(menu);
+                Blockly.openMenu = null;
             }
         }
     };
@@ -73,7 +79,7 @@ Blockly.ContextMenu.show = function(e, options) {
         menuCfg.items.push(menuItem);
     }
 
-    var menu = new Ext.menu.Menu(menuCfg);
+    Blockly.openMenu = new Ext.menu.Menu(menuCfg);
 
     var scrollOffset = {};
     scrollOffset.x = 0;
@@ -82,7 +88,9 @@ Blockly.ContextMenu.show = function(e, options) {
       // Position the menu.
       var x = e.clientX + scrollOffset.x;
       var y = e.clientY + scrollOffset.y;
-    menu.showAt(x,y);
+    Blockly.panel.add(Blockly.openMenu);
+    Blockly.openMenu.showAt(0,0);
+//    Blockly.openMenu.showAt(x-Blockly.clientX,y -Blockly.clientY);
 
       Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };

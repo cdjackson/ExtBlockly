@@ -180,7 +180,7 @@ Blockly.Trashcan.prototype.init = function() {
   this.setOpen_(false);
   this.position_();
   // If the document resizes, reposition the trash can.
-  Blockly.bindEvent_(window, 'resize', this, this.position_);
+//  Blockly.bindEvent_(window, 'resize', this, this.position_);
 };
 
 /**

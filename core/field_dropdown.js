@@ -81,7 +81,12 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, null);
+    if(Blockly.openMenu != null) {
+        Ext.destroy(Blockly.openMenu);
+        Blockly.openMenu = null;
+    }
+
+//  Blockly.WidgetDiv.show(this, null);
   var thisField = this;
 
     var callback = function(item) {
@@ -109,6 +114,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         listeners: {
             hide: function (menu, item) {
                 Ext.destroy(menu);
+                Blockly.openMenu = null;
             }
         }
     };
@@ -121,15 +127,19 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       menuItem.handler = callback;
       if(menuItem.id == this.value_)
           menuItem.iconCls = "x-menu-item-arrow";
-      console.log("menuItem.setChecked(value == this.value_);");
       menuCfg.items.push(menuItem);
   }
 
-  var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
+    var xy = Blockly.getAbsoluteXY_(this.borderRect_);
+    var aaa = Ext.getDom("blocklyHere");
+    var bbb = Ext.getDom(Blockly.DIV);
+//    var xy2 = Blockly.getAbsoluteXY_(Blockly.DIV);
+//    xy.x -= xy2.x;
+//    xy.y -= xy2.y;
   var borderBBox = this.borderRect_.getBBox();
 
-    var menu = new Ext.menu.Menu(menuCfg);
-    menu.showAt(xy.x,xy.y + borderBBox.height);
+    Blockly.openMenu = new Ext.menu.Menu(menuCfg);
+    Blockly.openMenu.showAt(xy.x-Blockly.clientX,xy.y -Blockly.clientY+ borderBBox.height);
 };
 
 /**
