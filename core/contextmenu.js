@@ -88,8 +88,9 @@ Blockly.ContextMenu.show = function(e, options) {
       // Position the menu.
       var x = e.clientX + scrollOffset.x;
       var y = e.clientY + scrollOffset.y;
-    Blockly.panel.add(Blockly.openMenu);
-    Blockly.openMenu.showAt(0,0);
+ //   Blockly.panel.add(Blockly.openMenu);
+    Blockly.openMenu.alignTo(Ext.get('blocklyHere'), 'tl-tl',[x-Blockly.clientX,y-Blockly.clientY]);
+    Blockly.openMenu.show();
 //    Blockly.openMenu.showAt(x-Blockly.clientX,y -Blockly.clientY);
 
       Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.

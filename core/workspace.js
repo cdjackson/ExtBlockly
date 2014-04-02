@@ -330,8 +330,7 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
  * @param {!Element} xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function(xmlBlock) {
-  if (xmlBlock.getElementsByTagName('block').length >=
-      this.remainingCapacity()) {
+  if (xmlBlock.getElementsByTagName('block').length >=      this.remainingCapacity()) {
     return;
   }
   var block = Blockly.Xml.domToBlock(this, xmlBlock);
@@ -376,6 +375,3 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
   }
   return this.maxBlocks - this.getAllBlocks().length;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;

@@ -58,6 +58,8 @@
 </head>
 <body>
 
+<xml id="xxx"><block type="controls_if"></block></xml>
+
 <xml id="toolbox" style="display: none">
     <block type="controls_if"></block>
     <block type="controls_repeat_ext"></block>
@@ -118,6 +120,10 @@
 </xml>
 
 <script>
+var svgArray = [
+    {svg: "x",name:"X"},
+    {svg: "x",name:"X"}
+];
 
     Ext.require([
         'Ext.window.Window',
@@ -127,31 +133,129 @@
         'Ext.layout.container.Border'
     ]);
 
-    Ext.onReady(function(){
-        Ext.create('Ext.Window', {
-            title: 'Blockly Panel',
-            width: 400,
-            height: 400,
-            x: 10,
-            y: 10,
-            plain: true,
-            layout: 'fit',
-            html: '<div id="blocklyHere"></div>',
+    Ext.onReady(function() {
+        var cc = Blockly.Xml.textToDom("<xml><block type='controls_if'>xxx</block></xml>");
+
+        Ext.define('FormatModel', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name: 'svg'},
+                {name: 'name'}
+            ]
+        });
+
+// Create the item format store
+        var store = Ext.create('Ext.data.ArrayStore', {
+            model: 'FormatModel'
+        });
+        store.loadData(svgArray);
+
+
+        var itemsList = Ext.create('Ext.grid.Panel', {
+            header: false,
+            hideHeaders: true,
+            store: store,
+            collapsible: false,
+            multiSelect: false,
+            columns: [
+                {
+                    text: "X",
+                    flex:1,
+                    dataIndex: 'type',
+                    renderer: function (value, metadata, record, row, col, store, gridView) {
+
+                        var cc = Blockly.Xml.textToDom("<xml><block type='controls_if'></block></xml>");
+ //                       var block = Blockly.Xml.domToBlock(null, cc.childNodes[0]);
+                        var workspace = new Blockly.Workspace(
+                                function () {
+                                    return Blockly.Flyout.getMetrics_();
+                                },
+                                function (ratio) {
+                                    return Blockly.Flyout.setMetrics_(ratio);
+                                });
+                        workspace.createDom();
+                        var block = Blockly.Xml.domToBlock(workspace, cc.childNodes[0]);
+                 //       block.render();
+                       var b = block.getSvgRoot();
+                        var h = block.getHeightWidth();
+
+                        return '<svg height="' + block.getHeightWidth().height + '">' + b.outerHTML + "</svg>";
+                    }
+                }
+            ],
             listeners: {
-                afterrender : function() {
-                    Blockly.inject(document.getElementById('blocklyHere'), {path: '../', trashcan: true});
-                    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
-                },
-                resize : function( panel, width, height, oldWidth, oldHeight, eOpts ) {
-                    var b = panel.getBox();
-                    var w = panel.getWidth();
-                    var c = panel.child("#blocklyHere");
-                    var dd = document.getElementById('blocklyHere');
-                    Blockly.resizeWindow(width-12, height-35);
+                itemclick: function (grid, record) {
+//                    if (record == null)
+                        return;
+
+                    var newProperties = null;
+
+                    // Create a new itemProperties
+                    newProperties = Ext.create('openHAB.config.itemProperties');
+                    newProperties.setItem(record.get('name'));
+
+                    if (newProperties != null)
+                        Ext.getCmp('configPropertyContainer').setNewProperty(newProperties);
+
+                    // Update the toolbar
+                    toolbar.getComponent('delete').enable();
                 }
             }
+        });
+
+
+        var win = Ext.create('widget.window', {
+            title: 'Layout Window',
+            closable: true,
+            closeAction: 'hide',
+            //animateTarget: this,
+            width: 600,
+            height: 350,
+            layout: 'border',
+//            bodyStyle: 'padding: 5px;',
+            items: [
+                {
+                    region: 'west',
+                    title: 'Navigation',
+                    width: 200,
+                    split: true,
+                    collapsible: true,
+                    floatable: false,
+ //                       layout:{
+   //                         type:'accordion',
+     //                       hideCollapseTool:true
+       //                 }
+//                    ,items:["1","2"]
+                    items: [itemsList]
+
+                },
+                {
+                    region: 'center',
+                    layout: 'fit',
+                    html: '<div id="blocklyHere"></div>',
+                    listeners: {
+                        afterrender: function () {
+                            Blockly.inject(document.getElementById('blocklyHere'), {path: '../', trashcan: true});
+                            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
+                        },
+                        resize: function (panel, width, height, oldWidth, oldHeight, eOpts) {
+                            var b = panel.getBox();
+                            var w = panel.getWidth();
+                            var c = panel.child("#blocklyHere");
+                            var dd = document.getElementById('blocklyHere');
+                            Blockly.resizeWindow(width, height);
+//                            Blockly.resizeWindow(width - 12, height - 35);
+                        },
+                        move: function(panel, x, y) {
+                            Blockly.setClientPosition(x,y);
+                        }
+                    }
+                }
+            ]
         }).show();
     });
+
+
 
     //      Blockly.inject(document.getElementById('blocklyDiv'), {path: '../', toolbox: document.getElementById('toolbox')});
 </script>

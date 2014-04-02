@@ -89,8 +89,7 @@ Blockly.Block.prototype.initialize = function (workspace, prototypeName) {
     this.fill(workspace, prototypeName);
     // Bind an onchange function, if it exists.
     if (Ext.isFunction(this.onchange)) {
-        Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
-            this.onchange);
+        Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,    this.onchange);
     }
 };
 
@@ -851,8 +850,7 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             // Drag all the nested bubbles.
             for (var i = 0; i < this_.draggedBubbles_.length; i++) {
                 var commentData = this_.draggedBubbles_[i];
-                commentData.bubble.setIconLocation(commentData.x + dx,
-                        commentData.y + dy);
+                commentData.bubble.setIconLocation(commentData.x + dx,                        commentData.y + dy);
             }
 
             // Check to see if any of this block's connections are within range of
