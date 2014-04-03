@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>ExtJS Blockly Demo</title>
 
-    <link rel="stylesheet" type="text/css" href="ext-theme-classic-all.css" />
+    <link rel="stylesheet" type="text/css" href="ext-theme-classic-all.css"/>
     <script type="text/javascript" src="ext-all-debug.js"></script>
 
     <script type="text/javascript" src="../core/blockly.js"></script>
@@ -58,7 +58,9 @@
 </head>
 <body>
 
-<xml id="xxx"><block type="controls_if"></block></xml>
+<xml id="xxx">
+    <block type="controls_if"></block>
+</xml>
 
 <xml id="toolbox" style="display: none">
     <block type="controls_if"></block>
@@ -120,10 +122,10 @@
 </xml>
 
 <script>
-var svgArray = [
-    {svg: "x",name:"X"},
-    {svg: "x",name:"X"}
-];
+    var svgArray = [
+        {svg: "<xml><block type='controls_if'></block></xml>", name: "X"},
+        {svg: "<xml><block type='variables_set'></block></xml>", name: "X"}
+    ];
 
     Ext.require([
         'Ext.window.Window',
@@ -133,7 +135,7 @@ var svgArray = [
         'Ext.layout.container.Border'
     ]);
 
-    Ext.onReady(function() {
+    Ext.onReady(function () {
         var cc = Blockly.Xml.textToDom("<xml><block type='controls_if'>xxx</block></xml>");
 
         Ext.define('FormatModel', {
@@ -160,33 +162,25 @@ var svgArray = [
             columns: [
                 {
                     text: "X",
-                    flex:1,
+                    flex: 1,
                     dataIndex: 'type',
                     renderer: function (value, metadata, record, row, col, store, gridView) {
+                        var cc = Blockly.Xml.textToDom(record.get("svg"));
+                        var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
 
-                        var cc = Blockly.Xml.textToDom("<xml><block type='controls_if'></block></xml>");
- //                       var block = Blockly.Xml.domToBlock(null, cc.childNodes[0]);
-                        var workspace = new Blockly.Workspace(
-                                function () {
-                                    return Blockly.Flyout.getMetrics_();
-                                },
-                                function (ratio) {
-                                    return Blockly.Flyout.setMetrics_(ratio);
-                                });
-                        workspace.createDom();
-                        var block = Blockly.Xml.domToBlock(workspace, cc.childNodes[0]);
-                 //       block.render();
-                       var b = block.getSvgRoot();
-                        var h = block.getHeightWidth();
+                        var xx = '<svg height="' + block.getHeightWidth().height + '">' + block.getSvgRoot().outerHTML + "</svg>";
 
-                        return '<svg height="' + block.getHeightWidth().height + '">' + b.outerHTML + "</svg>";
+                        Blockly.mainWorkspace.clear();
+                        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
+
+                        return xx;
                     }
                 }
             ],
             listeners: {
                 itemclick: function (grid, record) {
 //                    if (record == null)
-                        return;
+                    return;
 
                     var newProperties = null;
 
@@ -221,10 +215,10 @@ var svgArray = [
                     split: true,
                     collapsible: true,
                     floatable: false,
- //                       layout:{
-   //                         type:'accordion',
-     //                       hideCollapseTool:true
-       //                 }
+                    //                       layout:{
+                    //                         type:'accordion',
+                    //                       hideCollapseTool:true
+                    //                 }
 //                    ,items:["1","2"]
                     items: [itemsList]
 
@@ -236,7 +230,6 @@ var svgArray = [
                     listeners: {
                         afterrender: function () {
                             Blockly.inject(document.getElementById('blocklyHere'), {path: '../', trashcan: true});
-                            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
                         },
                         resize: function (panel, width, height, oldWidth, oldHeight, eOpts) {
                             var b = panel.getBox();
@@ -246,15 +239,14 @@ var svgArray = [
                             Blockly.resizeWindow(width, height);
 //                            Blockly.resizeWindow(width - 12, height - 35);
                         },
-                        move: function(panel, x, y) {
-                            Blockly.setClientPosition(x,y);
+                        move: function (panel, x, y) {
+                            Blockly.setClientPosition(x, y);
                         }
                     }
                 }
             ]
         }).show();
     });
-
 
 
     //      Blockly.inject(document.getElementById('blocklyDiv'), {path: '../', toolbox: document.getElementById('toolbox')});

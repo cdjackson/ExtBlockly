@@ -189,12 +189,9 @@ Blockly.createDom_ = function (container) {
      </feMerge>
      </filter>
      */
-    filter = Blockly.createSvgElement('filter',
-        {'id': 'blocklyTrashcanShadowFilter'}, defs);
-    Blockly.createSvgElement('feGaussianBlur',
-        {'in': 'SourceAlpha', 'stdDeviation': 2, 'result': 'blur'}, filter);
-    Blockly.createSvgElement('feOffset',
-        {'in': 'blur', 'dx': 1, 'dy': 1, 'result': 'offsetBlur'}, filter);
+    filter = Blockly.createSvgElement('filter', {'id': 'blocklyTrashcanShadowFilter'}, defs);
+    Blockly.createSvgElement('feGaussianBlur', {'in': 'SourceAlpha', 'stdDeviation': 2, 'result': 'blur'}, filter);
+    Blockly.createSvgElement('feOffset', {'in': 'blur', 'dx': 1, 'dy': 1, 'result': 'offsetBlur'}, filter);
     feMerge = Blockly.createSvgElement('feMerge', {}, filter);
     Blockly.createSvgElement('feMergeNode', {'in': 'offsetBlur'}, feMerge);
     Blockly.createSvgElement('feMergeNode', {'in': 'SourceGraphic'}, feMerge);
@@ -203,8 +200,7 @@ Blockly.createDom_ = function (container) {
      <feGaussianBlur stdDeviation="2"/>
      </filter>
      */
-    filter = Blockly.createSvgElement('filter',
-        {'id': 'blocklyShadowFilter'}, defs);
+    filter = Blockly.createSvgElement('filter', {'id': 'blocklyShadowFilter'}, defs);
     Blockly.createSvgElement('feGaussianBlur', {'stdDeviation': 2}, filter);
     /*
      <pattern id="blocklyDisabledPattern" patternUnits="userSpaceOnUse"
@@ -213,16 +209,11 @@ Blockly.createDom_ = function (container) {
      <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
      </pattern>
      */
-    pattern = Blockly.createSvgElement('pattern',
-        {'id': 'blocklyDisabledPattern', 'patternUnits': 'userSpaceOnUse',
-            'width': 10, 'height': 10}, defs);
-    Blockly.createSvgElement('rect',
-        {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
-    Blockly.createSvgElement('path',
-        {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
-    Blockly.mainWorkspace = new Blockly.Workspace(
-        Blockly.getMainWorkspaceMetrics_,
-        Blockly.setMainWorkspaceMetrics_);
+    pattern = Blockly.createSvgElement('pattern', {'id': 'blocklyDisabledPattern', 'patternUnits': 'userSpaceOnUse',
+        'width': 10, 'height': 10}, defs);
+    Blockly.createSvgElement('rect', {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
+    Blockly.createSvgElement('path', {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
+    Blockly.mainWorkspace = new Blockly.Workspace(Blockly.getMainWorkspaceMetrics_, Blockly.setMainWorkspaceMetrics_);
     svg.appendChild(Blockly.mainWorkspace.createDom());
     Blockly.mainWorkspace.maxBlocks = Blockly.maxBlocks;
 
@@ -325,8 +316,7 @@ Blockly.init_ = function () {
          If the getBBox function returns a height of 55px instead of 50px, then
          this browser has broken control points.
          */
-        var path = Blockly.createSvgElement('path',
-            {'d': 'm 0,0 c 0,-5 0,-5 0,0 H 50 V 50 z'}, Blockly.svg);
+        var path = Blockly.createSvgElement('path', {'d': 'm 0,0 c 0,-5 0,-5 0,0 H 50 V 50 z'}, Blockly.svg);
         if (path.getBBox().height > 50) {
             // Chrome (v28) and Opera (v15) report 55, Safari (v6.0.5) reports 53.75.
             Blockly.BROKEN_CONTROL_POINTS = true;
@@ -386,8 +376,6 @@ Blockly.init_ = function () {
     Blockly.mainWorkspace.addTrashcan();
 
     // Load the sounds.
-    Blockly.loadAudio_(
-        ['media/click.mp3', 'media/click.wav', 'media/click.ogg'], 'click');
-    Blockly.loadAudio_(
-        ['media/delete.mp3', 'media/delete.ogg', 'media/delete.wav'], 'delete');
+    Blockly.loadAudio_(['media/click.mp3', 'media/click.wav', 'media/click.ogg'], 'click');
+    Blockly.loadAudio_(['media/delete.mp3', 'media/delete.ogg', 'media/delete.wav'], 'delete');
 };
