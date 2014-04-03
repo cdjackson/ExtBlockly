@@ -124,6 +124,8 @@
 <script>
     var svgArray = [
         {svg: "<xml><block type='controls_if'></block></xml>", name: "X"},
+        {svg: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
+        {svg: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
         {svg: "<xml><block type='variables_set'></block></xml>", name: "X"}
     ];
 
@@ -159,6 +161,13 @@
             store: store,
             collapsible: false,
             multiSelect: false,
+            viewConfig: {
+                plugins: {
+                    ptype: 'gridviewdragdrop',
+                    dragGroup: 'firstGridDDGroup',
+                    dropGroup: 'secondGridDDGroup'
+                }
+            },
             columns: [
                 {
                     text: "X",
@@ -206,7 +215,19 @@
             width: 600,
             height: 350,
             layout: 'border',
-//            bodyStyle: 'padding: 5px;',
+            viewConfig: {
+                plugins: {
+                    ptype: 'gridviewdragdrop',
+                    dragGroup: 'secondGridDDGroup',
+                    dropGroup: 'firstGridDDGroup'
+                },
+                listeners: {
+                    drop: function (node, data, dropRec, dropPosition) {
+                        var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('name') : ' on empty view';
+                        console.log("Drag from left to right", 'Dropped ' + data.records[0].get('name') + dropOn);
+                    }
+                }
+            },
             items: [
                 {
                     region: 'west',

@@ -378,10 +378,8 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function (e) {
 
     var knobXY = Blockly.getSvgXY_(this.svgKnob_);
     var knobStart = this.horizontal_ ? knobXY.x : knobXY.y;
-    var knobLength = parseFloat(
-        this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
-    var knobValue = parseFloat(
-        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    var knobLength = parseFloat(        this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
+    var knobValue = parseFloat(        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
 
     var pageLength = knobLength * 0.95;
     if (mouseLocation <= knobStart) {
@@ -412,14 +410,11 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function (e) {
         return;
     }
     // Look up the current translation and record it.
-    this.startDragKnob = parseFloat(
-        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    this.startDragKnob = parseFloat(        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
     // Record the current mouse position.
     this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
-    Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
-        'mouseup', this, this.onMouseUpKnob_);
-    Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
-        'mousemove', this, this.onMouseMoveKnob_);
+    Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,        'mouseup', this, this.onMouseUpKnob_);
+    Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,        'mousemove', this, this.onMouseMoveKnob_);
     e.stopPropagation();
 };
 
@@ -433,8 +428,7 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function (e) {
     var mouseDelta = currentMouse - this.startDragMouse;
     var knobValue = this.startDragKnob + mouseDelta;
     // Position the bar.
-    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
-        this.constrainKnob_(knobValue));
+    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',        this.constrainKnob_(knobValue));
     this.onScroll_();
 };
 
@@ -479,10 +473,8 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function (value) {
  * @private
  */
 Blockly.Scrollbar.prototype.onScroll_ = function () {
-    var knobValue = parseFloat(
-        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
-    var barLength = parseFloat(
-        this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
+    var knobValue = parseFloat(        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    var barLength = parseFloat(        this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
     var ratio = knobValue / barLength;
     if (isNaN(ratio)) {
         ratio = 0;
