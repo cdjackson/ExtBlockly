@@ -189,8 +189,7 @@ Blockly.getRelativeXY_ = function(element) {
   // 'translate(12, 0)'.
   // Note that IE (9,10) returns 'translate(16 8)' instead of
   // 'translate(16, 8)'.
-  var r = transform &&
-          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
+  var r = transform &&          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
   if (r) {
     xy.x += parseInt(r[1], 10);
     if (r[3]) {
@@ -240,8 +239,7 @@ Blockly.getAbsoluteXY_ = function(element) {
  * @return {!SVGElement} Newly created SVG element.
  */
 Blockly.createSvgElement = function(name, attrs, opt_parent) {
-  var e = /** @type {!SVGElement} */ (
-      document.createElementNS(Blockly.SVG_NS, name));
+  var e =  document.createElementNS(Blockly.SVG_NS, name);
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
@@ -304,8 +302,7 @@ Blockly.convertCoordinates = function(x, y, toSvg) {
 Blockly.mouseToSvg = function(e) {
   var scrollX = window.scrollX || window.pageXOffset;
   var scrollY = window.scrollY || window.pageYOffset;
-  return Blockly.convertCoordinates(e.clientX + scrollX,
-                                    e.clientY + scrollY, true);
+  return Blockly.convertCoordinates(e.clientX + scrollX,                                    e.clientY + scrollY, true);
 };
 
 /**

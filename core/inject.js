@@ -56,53 +56,29 @@ Blockly.inject = function (container, opt_options) {
 Blockly.parseOptions_ = function (options) {
     var readOnly = !!options['readOnly'];
     if (readOnly) {
-        var hasCategories = false;
         var hasTrashcan = false;
         var hasCollapse = false;
         var tree = null;
     } else {
-        var tree = options['toolbox'];
-        if (tree) {
-            if (typeof tree != 'string' && typeof XSLTProcessor == 'undefined') {
-                // In this case the tree will not have been properly built by the
-                // browser. The HTML will be contained in the element, but it will
-                // not have the proper DOM structure since the browser doesn't support
-                // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
-                tree = tree.outerHTML;
-            }
-            if (typeof tree == 'string') {
-                tree = Blockly.Xml.textToDom(tree);
-            }
-            var hasCategories = !!tree.getElementsByTagName('category').length;
-        } else {
-            tree = null;
-            var hasCategories = false;
-        }
         var hasTrashcan = options['trashcan'];
         if (hasTrashcan === undefined) {
-            hasTrashcan = hasCategories;
+            hasTrashcan = false;
         }
         var hasCollapse = options['collapse'];
         if (hasCollapse === undefined) {
-            hasCollapse = hasCategories;
+            hasCollapse = false;
         }
     }
-    if (tree && !hasCategories) {
-        // Scrollbars are not compatible with a non-flyout toolbox.
-        var hasScrollbars = false;
-    } else {
         var hasScrollbars = options['scrollbars'];
         if (hasScrollbars === undefined) {
             hasScrollbars = true;
         }
-    }
     return {
         RTL: !!options['rtl'],
         collapse: hasCollapse,
         readOnly: readOnly,
         maxBlocks: options['maxBlocks'] || Infinity,
         pathToBlockly: options['path'] || './',
-        hasCategories: hasCategories,
         hasScrollbars: hasScrollbars,
         hasTrashcan: hasTrashcan,
         languageTree: tree
@@ -218,11 +194,6 @@ Blockly.createDom_ = function (container) {
     Blockly.mainWorkspace.maxBlocks = Blockly.maxBlocks;
 
     if (!Blockly.readOnly) {
-        // Determine if there needs to be a category tree, or a simple list of
-        // blocks.  This cannot be changed later, since the UI is very different.
-        if (Blockly.hasCategories) {
-            Blockly.Toolbox.createDom(svg, container);
-        } else {
             /**
              * @type {!Blockly.Flyout}
              * @private
@@ -285,7 +256,7 @@ Blockly.createDom_ = function (container) {
                 }
             };
             Blockly.addChangeListener(workspaceChanged);
-        }
+
     }
 
     svg.appendChild(Blockly.Tooltip.createDom());
@@ -308,22 +279,6 @@ Blockly.createDom_ = function (container) {
  * @private
  */
 Blockly.init_ = function () {
-    if (Ext.isWebKit) {
-        /* HACK:
-         WebKit bug 67298 causes control points to be included in the reported
-         bounding box.  Detect if this browser suffers from this bug by drawing a
-         shape that is 50px high, and has a control point that sticks up by 5px.
-         If the getBBox function returns a height of 55px instead of 50px, then
-         this browser has broken control points.
-         */
-        var path = Blockly.createSvgElement('path', {'d': 'm 0,0 c 0,-5 0,-5 0,0 H 50 V 50 z'}, Blockly.svg);
-        if (path.getBBox().height > 50) {
-            // Chrome (v28) and Opera (v15) report 55, Safari (v6.0.5) reports 53.75.
-            Blockly.BROKEN_CONTROL_POINTS = true;
-        }
-        Blockly.svg.removeChild(path);
-    }
-
     // Bind events for scrolling the workspace.
     // Most of these events should be bound to the SVG's surface.
     // However, 'mouseup' has to be on the whole document so that a block dragged
@@ -355,9 +310,6 @@ Blockly.init_ = function () {
     }
 
     if (Blockly.languageTree) {
-        if (Blockly.hasCategories) {
-            Blockly.Toolbox.init();
-        } else {
             // Build a fixed flyout with the root blocks.
             Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
             Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
@@ -366,7 +318,7 @@ Blockly.init_ = function () {
             var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
             Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
             Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
-        }
+
     }
     if (Blockly.hasScrollbars) {
         Blockly.mainWorkspace.scrollbar = new Blockly.ScrollbarPair(Blockly.mainWorkspace);

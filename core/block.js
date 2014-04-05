@@ -440,32 +440,22 @@ Blockly.Block.prototype.moveBy = function (dx, dy) {
 };
 
 /**
- * Returns a bounding box describing the dimensions of this block.
+ * Returns a bounding box describing the dimensions of this block
+ * and any blocks stacked below it.
  * @return {!Object} Object with height and width properties.
  */
 Blockly.Block.prototype.getHeightWidth = function () {
-    try {
-        var bBox = this.getSvgRoot().getBBox();
-        var height = bBox.height;
-    } catch (e) {
-        // Firefox has trouble with hidden elements (Bug 528969).
-        return {height: 0, width: 0};
-    }
-    if (Blockly.BROKEN_CONTROL_POINTS) {
-        /* HACK:
-         WebKit bug 67298 causes control points to be included in the reported
-         bounding box.  The render functions (below) add two 5px spacer control
-         points that we need to subtract.
-         */
-        height -= 10;
-        if (this.nextConnection) {
-            // Bottom control point partially masked by lower tab.
-            height += 4;
-        }
-    }
-    // Subtract one from the height due to the shadow.
-    height -= 1;
-    return {height: height, width: bBox.width};
+    var height = this.svg_.height;
+    var width = this.svg_.width;
+
+    // Recursively add size of subsequent blocks.
+    var nextBlock = this.nextConnection && this.nextConnection.targetBlock();
+    	  if (nextBlock) {
+        	    var nextHeightWidth = nextBlock.getHeightWidth();
+              height += nextHeightWidth.height - 4;  // Height of tab.
+        	    width = Math.max(width, nextHeightWidth.width);
+        	  }
+    	  return {height: height, width: width};
 };
 
 /**
@@ -474,6 +464,8 @@ Blockly.Block.prototype.getHeightWidth = function () {
  * @private
  */
 Blockly.Block.prototype.onMouseDown_ = function (e) {
+    console.log("Block.prototype.onMouseDown_");
+
     if (this.isInFlyout) {
         return;
     }
@@ -495,6 +487,7 @@ Blockly.Block.prototype.onMouseDown_ = function (e) {
         // dragged instead.
         return;
     } else {
+        console.log("STARTING DRAG?????");
         // Left-click (or middle click)
         Blockly.removeAllRanges();
         Blockly.setCursorHand_(true);

@@ -161,7 +161,7 @@ Blockly.DRAG_RADIUS = 5;
  * Maximum misalignment between connections for them to snap together.
  * @const
  */
-Blockly.SNAP_RADIUS = 15;
+Blockly.SNAP_RADIUS = 20;
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
@@ -268,8 +268,7 @@ Blockly.onMouseDown_ = function (e) {
         // Record the current mouse position.
         Blockly.mainWorkspace.startDragMouseX = e.clientX;
         Blockly.mainWorkspace.startDragMouseY = e.clientY;
-        Blockly.mainWorkspace.startDragMetrics =
-            Blockly.mainWorkspace.getMetrics();
+        Blockly.mainWorkspace.startDragMetrics =            Blockly.mainWorkspace.getMetrics();
         Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
         Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
     }
@@ -300,14 +299,11 @@ Blockly.onMouseMove_ = function (e) {
         var y = Blockly.mainWorkspace.startScrollY + dy;
         x = Math.min(x, -metrics.contentLeft);
         y = Math.min(y, -metrics.contentTop);
-        x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-            metrics.contentWidth);
-        y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-            metrics.contentHeight);
+        x = Math.max(x, metrics.viewWidth - metrics.contentLeft - metrics.contentWidth);
+        y = Math.max(y, metrics.viewHeight - metrics.contentTop - metrics.contentHeight);
 
         // Move the scrollbars and the page will scroll automatically.
-        Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
-                -y - metrics.contentTop);
+        Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft, -y - metrics.contentTop);
     }
 };
 
@@ -452,15 +448,10 @@ Blockly.onContextMenu_ = function (e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
  */
-Blockly.hideChaff = function (opt_allowToolbox) {
+Blockly.hideChaff = function () {
     Blockly.Tooltip.hide();
     Blockly.WidgetDiv.hide();
-    if (!opt_allowToolbox &&
-        Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
-        Blockly.Toolbox.clearSelection();
-    }
 };
 
 /**
@@ -591,7 +582,6 @@ Blockly.setCursorHand_ = function (closed) {
  */
 Blockly.getMainWorkspaceMetrics_ = function () {
     var svgSize = Blockly.svgSize();
-    svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
     var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
     var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
     try {
@@ -617,7 +607,6 @@ Blockly.getMainWorkspaceMetrics_ = function () {
         var topEdge = blockBox.y;
         var bottomEdge = topEdge + blockBox.height;
     }
-    var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
     var metrics = {
         viewHeight: svgSize.height,
         viewWidth: svgSize.width,
@@ -628,7 +617,7 @@ Blockly.getMainWorkspaceMetrics_ = function () {
         contentTop: topEdge,
         contentLeft: leftEdge,
         absoluteTop: 0,
-        absoluteLeft: absoluteLeft
+        absoluteLeft: 0
     };
     return metrics;
 };

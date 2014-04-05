@@ -123,10 +123,11 @@
 
 <script>
     var svgArray = [
-        {svg: "<xml><block type='controls_if'></block></xml>", name: "X"},
-        {svg: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
-        {svg: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
-        {svg: "<xml><block type='variables_set'></block></xml>", name: "X"}
+        {block: "<xml><block type='controls_if'></block></xml>", name: "X"},
+        {block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
+        {block: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
+        {block: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
+        {block: "<xml><block type='variables_set'></block></xml>", name: "X"}
     ];
 
     Ext.require([
@@ -140,20 +141,104 @@
     Ext.onReady(function () {
         var cc = Blockly.Xml.textToDom("<xml><block type='controls_if'>xxx</block></xml>");
 
-        Ext.define('FormatModel', {
-            extend: 'Ext.data.Model',
+// Create the item format store
+        var store = Ext.create('Ext.data.ArrayStore', {
             fields: [
+                {name: 'block'},
                 {name: 'svg'},
                 {name: 'name'}
             ]
         });
-
-// Create the item format store
-        var store = Ext.create('Ext.data.ArrayStore', {
-            model: 'FormatModel'
-        });
         store.loadData(svgArray);
 
+        function initializeBlockDragZone(v) {
+            v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
+
+//      On receipt of a mousedown event, see if it is within a draggable element.
+//      Return a drag data object if so. The data object can contain arbitrary application
+//      data, but it should also contain a DOM element in the ddel property to provide
+//      a proxy to drag.
+                getDragData: function (e) {
+                    var sourceEl = e.getTarget("svg", 10);
+                    if (sourceEl) {
+                        var d = sourceEl.cloneNode(true);
+                        d.id = Ext.id();
+                        return v.dragData = {
+                            sourceEl: sourceEl,
+                            repairXY: Ext.fly(sourceEl).getXY(),
+                            ddel: d,
+                            patientData: v.record.get("block")
+                        };
+                    }
+                },
+
+//      Provide coordinates for the proxy to slide back to on failed drag.
+//      This is the original XY coordinates of the draggable element.
+                getRepairXY: function () {
+                    return this.dragData.repairXY;
+                }
+            });
+
+
+//        grid.dropZone =
+            Ext.create('Ext.dd.DropZone', "blocklyHere", {
+
+//      If the mouse is over a target node, return that node. This is
+//      provided as the "target" parameter in all "onNodeXXXX" node event handling functions
+                getTargetFromEvent: function (e) {
+                    console.log("node in");
+                //    var xx = win.getItems();
+                        win.fireEvent("mousemove", {clientX: e.xy[0], clientY: e.xy[1]});
+//                    Blockly.fireUiEvent(document, 'mousemove');
+//                    Blockly.onMouseMove_();
+                    return e.getTarget('#blocklyHere');
+                },
+
+//      On entry into a target node, highlight that node.
+             //   onNodeEnter: function (target, dd, e, data) {
+           //         console.log("node in");
+//                Ext.fly(target).addCls('hospital-target-hover');
+         //       },
+
+//      On exit from a target node, unhighlight that node.
+         //       onNodeOut: function (target, dd, e, data) {
+           //         console.log("node out");
+//                Ext.fly(target).removeCls('hospital-target-hover');
+             //   },
+
+//      While over a target node, return the default drop allowed class which
+//      places a "tick" icon into the drag proxy.
+ //               onNodeOver: function (target, dd, e, data) {
+   //                 console.log("can we drop?");
+     //               return Ext.dd.DropZone.prototype.dropAllowed;
+       //         },
+
+//      On node drop, we can interrogate the target node to find the underlying
+//      application object that is the real target of the dragged data.
+//      In this case, it is a Record in the GridPanel's Store.
+//      We can use the data set up by the DragZone's getDragData method to read
+//      any data we decided to attach.
+                onNodeDrop: function (target, dd, e, data) {
+//                var rowBody = Ext.fly(target).findParent('.x-grid-rowbody-tr', null, false),
+//                        mainRow = rowBody.previousSibling,
+//                        h = gridView.getRecord(mainRow),
+//                        targetEl = Ext.get(target);
+
+//                targetEl.update(data.patientData.name + ', ' + targetEl.dom.innerHTML);
+//                        Ext.Msg.alert('Drop gesture', 'Dropped patient ' + data.patientData.name +
+//                        ' on hospital ' + h.data.name);
+                    Ext.Msg.alert('Drop gesture', 'Dropped block');
+
+                    if (record == null)
+                        return;
+
+                    var cc = Blockly.Xml.textToDom(data.patientData);
+                    Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
+
+                    return true;
+                }
+            });
+        }
 
         var itemsList = Ext.create('Ext.grid.Panel', {
             header: false,
@@ -161,23 +246,24 @@
             store: store,
             collapsible: false,
             multiSelect: false,
-            viewConfig: {
-                plugins: {
-                    ptype: 'gridviewdragdrop',
-                    dragGroup: 'firstGridDDGroup',
-                    dropGroup: 'secondGridDDGroup'
-                }
-            },
+//            viewConfig: {
+//                plugins: {
+//                    ptype: 'gridviewdragdrop',
+//                    dragGroup: 'firstGridDDGroup',
+//                    dropGroup: 'secondGridDDGroup'
+//                }
+//            },
             columns: [
                 {
                     text: "X",
                     flex: 1,
                     dataIndex: 'type',
                     renderer: function (value, metadata, record, row, col, store, gridView) {
-                        var cc = Blockly.Xml.textToDom(record.get("svg"));
+                        var cc = Blockly.Xml.textToDom(record.get("block"));
                         var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
 
                         var xx = '<svg height="' + block.getHeightWidth().height + '">' + block.getSvgRoot().outerHTML + "</svg>";
+                        record.set('svg',xx);
 
                         Blockly.mainWorkspace.clear();
                         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, document.getElementById('go'));
@@ -187,21 +273,14 @@
                 }
             ],
             listeners: {
-                itemclick: function (grid, record) {
-//                    if (record == null)
-                    return;
+                    render: initializeBlockDragZone
+                ,
+                itemdblclick: function (grid, record) {
+                    if (record == null)
+                        return;
 
-                    var newProperties = null;
-
-                    // Create a new itemProperties
-                    newProperties = Ext.create('openHAB.config.itemProperties');
-                    newProperties.setItem(record.get('name'));
-
-                    if (newProperties != null)
-                        Ext.getCmp('configPropertyContainer').setNewProperty(newProperties);
-
-                    // Update the toolbar
-                    toolbar.getComponent('delete').enable();
+                    var cc = Blockly.Xml.textToDom(record.get("block"));
+                    Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
                 }
             }
         });
@@ -215,7 +294,7 @@
             width: 600,
             height: 350,
             layout: 'border',
-            viewConfig: {
+ /*           viewConfig: {
                 plugins: {
                     ptype: 'gridviewdragdrop',
                     dragGroup: 'secondGridDDGroup',
@@ -227,11 +306,11 @@
                         console.log("Drag from left to right", 'Dropped ' + data.records[0].get('name') + dropOn);
                     }
                 }
-            },
+            },*/
             items: [
                 {
                     region: 'west',
-                    title: 'Navigation',
+//                    title: 'Navigation',
                     width: 200,
                     split: true,
                     collapsible: true,
