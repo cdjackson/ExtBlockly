@@ -124,7 +124,7 @@
 
 <script>
     var categoryArray = [
-        {name: "Procedures", icon: "XX", tooltip: "Hello there"},
+        {name: "Procedures", tooltip: "Hello there"},
         {name: "Math", icon: "XXX", tooltip: "Hello there math"}
     ]
     var toolArray = [
@@ -144,11 +144,14 @@
     ]);
 
     Ext.onReady(function () {
+        Ext.QuickTips.init();
+
         var blockly = Ext.create('Ext.ux.Blockly', {
             toolbox: true,
             toolboxCategories: categoryArray,
             toolboxTools: toolArray,
-            trashcan: true
+            trashcan: true,
+            blocks: "<xml>"+document.getElementById('go').innerHTML+"</xml>"
         });
         blockly.show();
         var viewPort = Ext.create('Ext.container.Viewport', {
