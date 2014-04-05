@@ -18,7 +18,7 @@ Ext.define('Ext.ux.Blockly', {
     initComponent: function () {
         var me = this;
 
-        var toolboxStore = null;
+        var toolboxGrids = [];
 
         /*
          function initializeBlockDragZone(v) {
@@ -101,72 +101,70 @@ Ext.define('Ext.ux.Blockly', {
          */
 
 
+        if (me.toolbox == true) {
+            // Create an array of category grids.
+            for (var i = 0; i < me.toolboxCategories.length; i++) {
+                console.log("CAT = " + me.toolboxCategories[i].name);
+                // (Unfortunately!) We need to use separate stores with an accordion.
+                // If we just use a filter, there is a problem as for a short
+                // time two grids are in view and we then see the same view.
+                var store = Ext.create('Ext.data.ArrayStore', {
+                    fields: [
+                        {name: 'category'},
+                        {name: 'block'},
+                        {name: 'svg'},
+                        {name: 'name'}
+                    ]
+                });
 
+                // Load the data
+                for (var t = 0; t < me.toolboxTools.length; t++) {
+                    if(me.toolboxTools[t].category === me.toolboxCategories[i].name) {
+                        console.log("   adding = " + me.toolboxTools[t].block);
 
+                        store.add(me.toolboxTools[t]);
+                    }
+                }
 
+                // Create the separate lists for the accordion panels
+                var cat = Ext.create('Ext.grid.Panel', {
+                    title: me.toolboxCategories[i].name,
+                    icon: me.toolboxCategories[i].icon,
+                    tooltip: me.toolboxCategories[i].tooltip,
+                    category: me.toolboxCategories[i].name,
+                    hideHeaders: true,
+                    store: store,
+                    collapsible: false,
+                    multiSelect: false,
+                    disableSelection: true,
+                    layout: 'fit',
+                    viewConfig: {
+                        stripeRows: true,
+                        enableTextSelection: false,
+                        markDirty: false
+                    },
+                    columns: [
+                        {
+                            flex: 1,
+                            dataIndex: 'svg'
+                        }
+                    ],
+                    listeners: {
+                        //                    render: initializeBlockDragZone,
+                        itemdblclick: function (grid, record) {
+                            if (record == null)
+                                return;
 
-        if (this.toolbox != null) {
-            // Create the toolbox store
-            var toolboxStore = Ext.create('Ext.data.ArrayStore', {
-                fields: [
-                    {name: 'category'},
-                    {name: 'block'},
-                    {name: 'svg'},
-                    {name: 'name'}
-                ]
-            });
-            // Load the data
-            toolboxStore.loadData(this.toolbox);
-/*
+                            var cc = Blockly.Xml.textToDom(record.get("block"));
+                            Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
+                        },
+                        render: function () {
+                        }
+                    }
+                });
 
-            // Create the accordion for navigation
-            var navigation = Ext.create('Ext.Panel', {
-                split: true,
-                border: true,
-                region: 'west',
-                flex: 1,
-                preventHeader: true,
-                layout: {
-                    type: 'accordion',
-                    hideCollapseTool: true
-                },
-                items: []
-            });
-
-*/
-
-                        // Create the separate lists for the accordion panels
-                        var panel1 = Ext.create('Ext.grid.Panel', {
-                            title:"x",
-                            hideHeaders: true,
-                            store: toolboxStore,
-                            collapsible: false,
-                            multiSelect: false,
-                            disableSelection: true,
-                            layout:'fit',
-                            viewConfig: {
-                                stripeRows: true,
-                                enableTextSelection: false,
-                                markDirty: false
-                            },
-                                columns: [
-                                {
-                                    flex: 1,
-                                    dataIndex: 'svg'
-                                }
-                            ],
-                            listeners: {
-            //                    render: initializeBlockDragZone,
-                                itemdblclick: function (grid, record) {
-                                    if (record == null)
-                                        return;
-
-                                    var cc = Blockly.Xml.textToDom(record.get("block"));
-                                    Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
-                                }
-                            }
-                        });
-
+                toolboxGrids.push(cat);
+            }
 
             var accordion = Ext.create('Ext.Panel', {
                 split: true,
@@ -178,14 +176,16 @@ Ext.define('Ext.ux.Blockly', {
                     type: 'accordion',
                     hideCollapseTool: true
                 },
-                items: [panel1]
+                listeners: {
+                    expand: function(panel, eOpts) {
+
+                    }
+                },
+                items: toolboxGrids
             });
 
             this.items.push(accordion);
         }
-
-
-
 
 
         // Create the panel to hold the Blockly editor
@@ -214,22 +214,24 @@ Ext.define('Ext.ux.Blockly', {
             // Initialise Blockly
             Blockly.inject(document.getElementById(id), {path: '../', trashcan: me.trashcan});
 
-            if (this.toolbox != null) {
+            if (me.toolbox == true) {
                 // Loop through all records in the toolbox and create the SVG graphic
-                toolboxStore.each(function (record, id) {
-                    var blockXml = Blockly.Xml.textToDom(record.get("block"));
-                    if (blockXml == null || blockXml.hasChildNodes() == false) {
-                        console.log("Unable to load block '" + record.get("block") + "'.");
-                    }
-                    else {
-                        var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, blockXml.childNodes[0]);
+                for (var i = 0; i < toolboxGrids.length; i++) {
+                    toolboxGrids[i].store.each(function (record, id) {
+                        var blockXml = Blockly.Xml.textToDom(record.get("block"));
+                        if (blockXml == null || blockXml.hasChildNodes() == false) {
+                            console.log("Unable to load block '" + record.get("block") + "'.");
+                        }
+                        else {
+                            var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, blockXml.childNodes[0]);
 
-                        var svg = '<svg height="' + block.getHeightWidth().height + '">' + block.getSvgRoot().outerHTML + "</svg>";
-                        record.set('svg', svg);
+                            var svg = '<svg height="' + block.getHeightWidth().height + '">' + block.getSvgRoot().outerHTML + "</svg>";
+                            record.set('svg', svg);
 
-                        Blockly.mainWorkspace.clear();
-                    }
-                }, me)
+                            Blockly.mainWorkspace.clear();
+                        }
+                    }, me);
+                }
             }
 
             // Load the design into the workspace

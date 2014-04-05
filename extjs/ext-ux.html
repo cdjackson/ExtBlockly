@@ -123,12 +123,16 @@
 </xml>
 
 <script>
-    var svgArray = [
-        {block: "<xml><block type='controls_if'></block></xml>", name: "X"},
-        {block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
-        {block: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
-        {block: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
-        {block: "<xml><block type='variables_set'></block></xml>", name: "X"}
+    var categoryArray = [
+        {name: "Procedures", icon: "XX", tooltip: "Hello there"},
+        {name: "Math", icon: "XXX", tooltip: "Hello there math"}
+    ]
+    var toolArray = [
+        {category: "Procedures", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
+        {category: "Math", block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
+        {category: "Procedures", block: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
+        {category: "Math", block: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
+        {category: "Math", block: "<xml><block type='variables_set'></block></xml>", name: "X"}
     ];
 
     Ext.require([
@@ -141,11 +145,13 @@
 
     Ext.onReady(function () {
         var blockly = Ext.create('Ext.ux.Blockly', {
-            toolbox: svgArray,
+            toolbox: true,
+            toolboxCategories: categoryArray,
+            toolboxTools: toolArray,
             trashcan: true
         });
         blockly.show();
-        viewPort = Ext.create('Ext.container.Viewport', {
+        var viewPort = Ext.create('Ext.container.Viewport', {
             renderTo: document.body,
             layout: 'fit',
             items: [blockly]
