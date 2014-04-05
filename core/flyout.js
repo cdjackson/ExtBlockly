@@ -387,7 +387,7 @@ Blockly.Flyout.prototype.show = function (xmlList) {
             block.svg_.removeSelect();
         }
     };
-    this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',        this, deselectAll));
+    this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover', this, deselectAll));
 
     this.width_ = 0;
     this.reflow();
@@ -487,7 +487,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function (block) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseMove_ = function (e) {
-    if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&        e.button == 0) {
+    if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 && e.button == 0) {
         /* HACK:
          Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
          on certain touch actions. Ignore events with these signatures.
