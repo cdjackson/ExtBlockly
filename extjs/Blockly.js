@@ -81,7 +81,6 @@ Ext.define('Ext.ux.Blockly', {
                                 // data, but it should also contain a DOM element in the ddel property to provide
                                 // a proxy to drag.
                                 getDragData: function (e) {
-                                    console.log("drag data");
                                     var sourceEl = e.getTarget("svg", 10);
                                     if (sourceEl) {
                                         var d = sourceEl.cloneNode(true);
@@ -103,15 +102,16 @@ Ext.define('Ext.ux.Blockly', {
                             });
                         },
                         beforecellmousedown: function (grid, td, cellIndex, record, tr, rowIndex, e, eOpts) {
-                            console.log("select");
+                            // We use this event to record the block that we're potentially about to drag...
                             me.selectedRecord = record;
                         },
                         itemdblclick: function (grid, record) {
+                            // Double click - just add this block to the workspace
                             if (record == null)
                                 return;
 
-                            var cc = Blockly.Xml.textToDom(record.get("block"));
-                            Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
+                            var block = Blockly.Xml.textToDom(record.get("block"));
+                            Blockly.Xml.domToBlock(Blockly.mainWorkspace, block.childNodes[0]);
                         }
                     }
                 });
@@ -171,8 +171,7 @@ Ext.define('Ext.ux.Blockly', {
 
 
                 blocklyPanel.dropZone = Ext.create('Ext.dd.DropZone', Blockly.DIV, {
-                    // If the mouse is over a target node, return that node. This is
-                    // provided as the "target" parameter in all "onNodeXXXX" node event handling functions
+                    // If the mouse is over a target node, return that node.
                     getTargetFromEvent: function (e) {
                         console.log("node in");
                         //    var xx = win.getItems();
@@ -181,23 +180,21 @@ Ext.define('Ext.ux.Blockly', {
                         //                    Blockly.onMouseMove_();
                         return e.getTarget("#" + blocklyId);
                     },
-
-                    // While over a target node, return the default drop allowed class which
-                    // places a "tick" icon into the drag proxy.
                     onNodeOver: function (target, dd, e, data) {
+                        // While over a target node, return the default drop allowed class which
+                        // places a "tick" icon into the drag proxy.
                         return Ext.dd.DropZone.prototype.dropAllowed;
                     },
-                    // On node drop, we can interrogate the target node to find the underlying
-                    // application object that is the real target of the dragged data.
-                    // We can use the data set up by the DragZone's getDragData method to read
-                    // any data we decided to attach.
                     onNodeDrop: function (target, dd, e, data) {
+                        // On node drop, we can interrogate the target node to find the underlying
+                        // application object that is the real target of the dragged data.
+                        // We can use the data set up by the DragZone's getDragData method to read
+                        // any data we decided to attach.
                         if (data.block == null)
                             return false;
 
-                        var cc = Blockly.Xml.textToDom(data.block);
-                        Blockly.Xml.domToBlock(Blockly.mainWorkspace, cc.childNodes[0]);
-
+                        var block = Blockly.Xml.textToDom(data.block);
+                        Blockly.Xml.domToBlock(Blockly.mainWorkspace, block.childNodes[0]);
                         return true;
                     }
                 });
