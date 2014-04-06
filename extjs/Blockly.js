@@ -6,7 +6,7 @@
  */
 
 
-Ext.define('Ext.ux.Blockly', {
+Ext.define('Ext.ux.blockly.Blockly', {
     extend: 'Ext.panel.Panel',
     closable: true,
     layout: 'border',
@@ -21,9 +21,13 @@ Ext.define('Ext.ux.Blockly', {
 
         var toolboxGrids = [];
 
-        if (me.toolbox == true) {
+        // Avoid undeclared error
+        if(me.blockly == null)
+            me.blockly = {};
+
+        if (me.blockly.toolbox == true) {
             // Create an array of category grids.
-            for (var i = 0; i < me.toolboxCategories.length; i++) {
+            for (var i = 0; i < me.blockly.toolboxCategories.length; i++) {
                 // (Unfortunately!) We need to use separate stores with an accordion.
                 // If we just use a filter, there is a problem as for a short
                 // time two grids are in view and we then see the same view.
@@ -37,18 +41,18 @@ Ext.define('Ext.ux.Blockly', {
                 });
 
                 // Load the data
-                for (var t = 0; t < me.toolboxTools.length; t++) {
-                    if (me.toolboxTools[t].category === me.toolboxCategories[i].name) {
-                        store.add(me.toolboxTools[t]);
+                for (var t = 0; t < me.blockly.toolboxTools.length; t++) {
+                    if (me.blockly.toolboxTools[t].category === me.blockly.toolboxCategories[i].name) {
+                        store.add(me.blockly.toolboxTools[t]);
                     }
                 }
 
                 // Create the separate lists for the accordion panels
                 var cat = Ext.create('Ext.grid.Panel', {
-                    title: me.toolboxCategories[i].name,
-                    icon: me.toolboxCategories[i].icon,
-                    tooltip: me.toolboxCategories[i].tooltip,
-                    category: me.toolboxCategories[i].name,
+                    title: me.blockly.toolboxCategories[i].name,
+                    icon: me.blockly.toolboxCategories[i].icon,
+                    tooltip: me.blockly.toolboxCategories[i].tooltip,
+                    category: me.blockly.toolboxCategories[i].name,
                     hideHeaders: true,
                     store: store,
                     collapsible: false,
@@ -161,7 +165,6 @@ Ext.define('Ext.ux.Blockly', {
                     Blockly.svgResize();
                 },
                 move: function (panel, x, y) {
-              //      Blockly.setClientPosition(x, y);
                 }
             }
         });
@@ -173,12 +176,12 @@ Ext.define('Ext.ux.Blockly', {
             var blocklyId = blocklyPanel.getId() + "-body";
             // Initialise Blockly
             Blockly.inject(document.getElementById(blocklyId), {
-                path: '../',
-                collapse: me.collapse,
-                trashcan: me.trashcan
+                path: me.blockly.path,
+                collapse: me.blockly.collapse,
+                trashcan: me.blockly.trashcan
             });
 
-            if (me.toolbox == true) {
+            if (me.blockly.toolbox == true) {
                 blocklyPanel.dropZone = Ext.create('Ext.dd.DropZone', Blockly.DIV, {
                     // If the mouse is over a target node, return that node.
                     getTargetFromEvent: function (e) {
@@ -229,8 +232,8 @@ Ext.define('Ext.ux.Blockly', {
             }
 
             // Load the design into the workspace
-            if (me.blocks != null)
-                me.setBlocks(me.blocks);
+            if (me.blockly.blocks != null && me.blockly.blocks != "")
+                me.setBlocks(me.blockly.blocks);
         }
     },
     setBlocks: function (blocks) {
