@@ -1,0 +1,24 @@
+{
+  "name": "ExtBlockly",
+  "version": "0.1.0",
+  "description": "ExjtJS User Extension for Blockly" ,
+  "dependencies": {
+    "grunt": "~0.4.2"
+  },
+  "devDependencies": {
+      "grunt-contrib-cssmin":         "*",
+      "grunt-contrib-copy":           "*",
+      "grunt-json-minify":            "*",
+      "grunt-contrib-uglify":         "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://cdjackson@github.com/cdjackson/ExtBlockly"
+  },
+  "author": "Chris Jackson",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/cdjackson/ExtBlockly/issues"
+  },
+  "homepage": "https://github.com/cdjackson/ExtBlockly"
+}
