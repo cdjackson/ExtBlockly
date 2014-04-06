@@ -31,15 +31,15 @@
  *     illegal for use as names in a language (e.g. 'new,if,this,...').
  * @constructor
  */
-Blockly.Names = function(reservedWords) {
-  this.reservedDict_ = Object.create(null);
-  if (reservedWords) {
-    var splitWords = reservedWords.split(',');
-    for (var x = 0; x < splitWords.length; x++) {
-      this.reservedDict_[splitWords[x]] = true;
+Blockly.Names = function (reservedWords) {
+    this.reservedDict_ = Object.create(null);
+    if (reservedWords) {
+        var splitWords = reservedWords.split(',');
+        for (var x = 0; x < splitWords.length; x++) {
+            this.reservedDict_[splitWords[x]] = true;
+        }
     }
-  }
-  this.reset();
+    this.reset();
 };
 
 /**
@@ -54,9 +54,9 @@ Blockly.Names = function(reservedWords) {
 /**
  * Empty the database and start from scratch.  The reserved words are kept.
  */
-Blockly.Names.prototype.reset = function() {
-  this.db_ = Object.create(null);
-  this.dbReverse_ = Object.create(null);
+Blockly.Names.prototype.reset = function () {
+    this.db_ = Object.create(null);
+    this.dbReverse_ = Object.create(null);
 };
 
 /**
@@ -66,14 +66,14 @@ Blockly.Names.prototype.reset = function() {
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
  * @return {string} An entity name legal for the exported language.
  */
-Blockly.Names.prototype.getName = function(name, type) {
-  var normalized = name.toLowerCase() + '_' + type;
-  if (normalized in this.db_) {
-    return this.db_[normalized];
-  }
-  var safeName = this.getDistinctName(name, type);
-  this.db_[normalized] = safeName;
-  return safeName;
+Blockly.Names.prototype.getName = function (name, type) {
+    var normalized = name.toLowerCase() + '_' + type;
+    if (normalized in this.db_) {
+        return this.db_[normalized];
+    }
+    var safeName = this.getDistinctName(name, type);
+    this.db_[normalized] = safeName;
+    return safeName;
 };
 
 /**
@@ -86,17 +86,17 @@ Blockly.Names.prototype.getName = function(name, type) {
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
  * @return {string} An entity name legal for the exported language.
  */
-Blockly.Names.prototype.getDistinctName = function(name, type) {
-  var safeName = this.safeName_(name);
-  var i = '';
-  while (this.dbReverse_[safeName + i] ||
-         (safeName + i) in this.reservedDict_) {
-    // Collision with existing name.  Create a unique name.
-    i = i ? i + 1 : 2;
-  }
-  safeName += i;
-  this.dbReverse_[safeName] = true;
-  return safeName;
+Blockly.Names.prototype.getDistinctName = function (name, type) {
+    var safeName = this.safeName_(name);
+    var i = '';
+    while (this.dbReverse_[safeName + i] ||
+        (safeName + i) in this.reservedDict_) {
+        // Collision with existing name.  Create a unique name.
+        i = i ? i + 1 : 2;
+    }
+    safeName += i;
+    this.dbReverse_[safeName] = true;
+    return safeName;
 };
 
 /**
@@ -107,19 +107,19 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
  * @return {string} Safe entity name.
  * @private
  */
-Blockly.Names.prototype.safeName_ = function(name) {
-  if (!name) {
-    name = 'unnamed';
-  } else {
-    // Unfortunately names in non-latin characters will look like
-    // _E9_9F_B3_E4_B9_90 which is pretty meaningless.
-    name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
-    // Most languages don't allow names with leading numbers.
-    if ('0123456789'.indexOf(name[0]) != -1) {
-      name = 'my_' + name;
+Blockly.Names.prototype.safeName_ = function (name) {
+    if (!name) {
+        name = 'unnamed';
+    } else {
+        // Unfortunately names in non-latin characters will look like
+        // _E9_9F_B3_E4_B9_90 which is pretty meaningless.
+        name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
+        // Most languages don't allow names with leading numbers.
+        if ('0123456789'.indexOf(name[0]) != -1) {
+            name = 'my_' + name;
+        }
     }
-  }
-  return name;
+    return name;
 };
 
 /**
@@ -129,6 +129,6 @@ Blockly.Names.prototype.safeName_ = function(name) {
  * @param {string} name2 Second name.
  * @return {boolean} True if names are the same.
  */
-Blockly.Names.equals = function(name1, name2) {
-  return name1.toLowerCase() == name2.toLowerCase();
+Blockly.Names.equals = function (name1, name2) {
+    return name1.toLowerCase() == name2.toLowerCase();
 };

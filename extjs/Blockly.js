@@ -157,10 +157,10 @@ Ext.define('Ext.ux.Blockly', {
                     renderBlockly();
                 },
                 resize: function (panel, width, height, oldWidth, oldHeight, eOpts) {
-                    Blockly.resizeWindow(width, height);
+                    Blockly.svgResize();
                 },
                 move: function (panel, x, y) {
-                    Blockly.setClientPosition(x, y);
+              //      Blockly.setClientPosition(x, y);
                 }
             }
         });

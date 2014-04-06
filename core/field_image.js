@@ -33,30 +33,30 @@
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height, opt_alt) {
-  this.sourceBlock_ = null;
-  // Ensure height and width are numbers.  Strings are bad at math.
-  this.height_ = Number(height);
-  this.width_ = Number(width);
-  this.size_ = {height: this.height_ + 10, width: this.width_};
-  this.text_ = opt_alt || '';
-  // Build the DOM.
-  var offsetY = 6 - Blockly.BlockSvg.FIELD_HEIGHT;
-  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
-  this.imageElement_ = Blockly.createSvgElement('image',
-      {'height': this.height_ + 'px',
-       'width': this.width_ + 'px',
-       'y': offsetY}, this.fieldGroup_);
-  this.setValue(src);
-  if (Ext.isGecko) {
-    // Due to a Firefox bug which eats mouse events on image elements,
-    // a transparent rectangle needs to be placed on top of the image.
-    this.rectElement_ = Blockly.createSvgElement('rect',
+Blockly.FieldImage = function (src, width, height, opt_alt) {
+    this.sourceBlock_ = null;
+    // Ensure height and width are numbers.  Strings are bad at math.
+    this.height_ = Number(height);
+    this.width_ = Number(width);
+    this.size_ = {height: this.height_ + 10, width: this.width_};
+    this.text_ = opt_alt || '';
+    // Build the DOM.
+    var offsetY = 6 - Blockly.BlockSvg.FIELD_HEIGHT;
+    this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+    this.imageElement_ = Blockly.createSvgElement('image',
         {'height': this.height_ + 'px',
-         'width': this.width_ + 'px',
-         'y': offsetY,
-         'fill-opacity': 0}, this.fieldGroup_);
-  }
+            'width': this.width_ + 'px',
+            'y': offsetY}, this.fieldGroup_);
+    this.setValue(src);
+    if (Ext.isGecko) {
+        // Due to a Firefox bug which eats mouse events on image elements,
+        // a transparent rectangle needs to be placed on top of the image.
+        this.rectElement_ = Blockly.createSvgElement('rect',
+            {'height': this.height_ + 'px',
+                'width': this.width_ + 'px',
+                'y': offsetY,
+                'fill-opacity': 0}, this.fieldGroup_);
+    }
 };
 Blockly.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -65,9 +65,9 @@ Blockly.inherits(Blockly.FieldImage, Blockly.Field);
  * @return {!Blockly.FieldImage} The result of calling the constructor again
  *   with the current values of the arguments used during construction.
  */
-Blockly.FieldImage.prototype.clone = function() {
-  return new Blockly.FieldImage(this.getSrc(), this.width_, this.height_,
-      this.getText());
+Blockly.FieldImage.prototype.clone = function () {
+    return new Blockly.FieldImage(this.getSrc(), this.width_, this.height_,
+        this.getText());
 };
 
 /**
@@ -86,27 +86,27 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * Install this text on a block.
  * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldImage.prototype.init = function(block) {
-  if (this.sourceBlock_) {
-    throw 'Image has already been initialized once.';
-  }
-  this.sourceBlock_ = block;
-  block.getSvgRoot().appendChild(this.fieldGroup_);
+Blockly.FieldImage.prototype.init = function (block) {
+    if (this.sourceBlock_) {
+        throw 'Image has already been initialized once.';
+    }
+    this.sourceBlock_ = block;
+    block.getSvgRoot().appendChild(this.fieldGroup_);
 
-  // Configure the field to be transparent with respect to tooltips.
-  var topElement = this.rectElement_ || this.imageElement_;
-  topElement.tooltip = this.sourceBlock_;
-  Blockly.Tooltip.bindMouseEvents(topElement);
+    // Configure the field to be transparent with respect to tooltips.
+    var topElement = this.rectElement_ || this.imageElement_;
+    topElement.tooltip = this.sourceBlock_;
+    Blockly.Tooltip.bindMouseEvents(topElement);
 };
 
 /**
  * Dispose of all DOM objects belonging to this text.
  */
-Blockly.FieldImage.prototype.dispose = function() {
-  Ext.removeNode(this.fieldGroup_);
-  this.fieldGroup_ = null;
-  this.imageElement_ = null;
-  this.rectElement_ = null;
+Blockly.FieldImage.prototype.dispose = function () {
+    Ext.removeNode(this.fieldGroup_);
+    this.fieldGroup_ = null;
+    this.imageElement_ = null;
+    this.rectElement_ = null;
 };
 
 /**
@@ -114,9 +114,9 @@ Blockly.FieldImage.prototype.dispose = function() {
  * @param {string|!Element} newTip Text for tooltip or a parent element to
  *     link to for its tooltip.
  */
-Blockly.FieldImage.prototype.setTooltip = function(newTip) {
-  var topElement = this.rectElement_ || this.imageElement_;
-  topElement.tooltip = newTip;
+Blockly.FieldImage.prototype.setTooltip = function (newTip) {
+    var topElement = this.rectElement_ || this.imageElement_;
+    topElement.tooltip = newTip;
 };
 
 /**
@@ -124,8 +124,8 @@ Blockly.FieldImage.prototype.setTooltip = function(newTip) {
  * @return {string} Current text.
  * @override
  */
-Blockly.FieldImage.prototype.getValue = function() {
-  return this.src_;
+Blockly.FieldImage.prototype.getValue = function () {
+    return this.src_;
 };
 
 /**
@@ -133,13 +133,13 @@ Blockly.FieldImage.prototype.getValue = function() {
  * @param {?string} src New source.
  * @override
  */
-Blockly.FieldImage.prototype.setValue = function(src) {
-  if (src === null) {
-    // No change if null.
-    return;
-  }
-  this.src_ = src;
-  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', Ext.isString(src) ? src : '');
+Blockly.FieldImage.prototype.setValue = function (src) {
+    if (src === null) {
+        // No change if null.
+        return;
+    }
+    this.src_ = src;
+    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', Ext.isString(src) ? src : '');
 };
 
 /**
@@ -147,10 +147,10 @@ Blockly.FieldImage.prototype.setValue = function(src) {
  * @param {?string} alt New alt text.
  * @override
  */
-Blockly.FieldImage.prototype.setText = function(alt) {
-  if (alt === null) {
-    // No change if null.
-    return;
-  }
-  this.text_ = alt;
+Blockly.FieldImage.prototype.setText = function (alt) {
+    if (alt === null) {
+        // No change if null.
+        return;
+    }
+    this.text_ = alt;
 };

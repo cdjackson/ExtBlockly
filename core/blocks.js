@@ -88,93 +88,87 @@ Blockly.Blocks = {};
  *     - customContextMenuFunc {Function} TODO desc.
  *     Additional fields will be ignored.
  */
-Blockly.Blocks.addTemplate = function(details) {
-  // Validate inputs.  TODO: Add more.
-  if(details.blockName)
-    console.log("Error");
-  if(Blockly.Blocks[details.blockName])
-      console.log('Blockly.Blocks already has a field named ', details.blockName);
-  if(details.message)
-    console.log("Error")
-  if(details.colour && typeof details.colour == 'number' &&
-      details.colour >= 0 && details.colour < 360)
-     console.log('details.colour must be a number from 0 to 360 (exclusive)');
-  if (details.output != 'undefined') {
-    if(!details.previousStatement)
-        console.log('When details.output is defined, ' +
-        'details.previousStatement must not be true.');
-    if(!details.nextStatement)
-        console.log('When details.output is defined, ' +
-        'details.nextStatement must not be true.');
-  }
-
-  // Build up template.
-  var block = {};
-  block.init = function() {
-    var thisBlock = this;
-    // Set basic properties of block.
-    this.setColour(details.colour);
-    this.setHelpUrl(details.helpUrl);
-    if (typeof details.tooltip == 'string') {
-      this.setTooltip(details.tooltip);
-    } else if (typeof details.tooltip == 'function') {
-      this.setTooltip(function() {
-        return details.tooltip(thisBlock);
-      });
-    }
-    // Set output and previous/next connections.
+Blockly.Blocks.addTemplate = function (details) {
+    // Validate inputs.  TODO: Add more.
+    if (details.blockName)
+        console.log("Error");
+    if (Blockly.Blocks[details.blockName])
+        console.log('Blockly.Blocks already has a field named ', details.blockName);
+    if (details.message)
+        console.log("Error")
+    if (details.colour && typeof details.colour == 'number' && details.colour >= 0 && details.colour < 360)
+        console.log('details.colour must be a number from 0 to 360 (exclusive)');
     if (details.output != 'undefined') {
-      this.setOutput(true, details.output);
-    } else {
-      this.setPreviousStatement(
-          typeof details.previousStatement == 'undefined' ?
-              true : details.previousStatement);
-      this.setNextStatement(
-          typeof details.nextStatement == 'undefined' ?
-              true : details.nextStatement);
+        if (!details.previousStatement)
+            console.log('When details.output is defined, details.previousStatement must not be true.');
+        if (!details.nextStatement)
+            console.log('When details.output is defined, details.nextStatement must not be true.');
     }
-    // Build up arguments in the format expected by interpolateMsg.
-    var interpArgs = [];
-    interpArgs.push(details.text);
-    if (details.args) {
-      details.args.forEach(function(arg) {
-        if(arg.name)
-            console.log("Error")
-        if(arg.check != 'undefined')
-            console.log("Error")
-        if (arg.type == 'undefined' || arg.type == Blockly.INPUT_VALUE) {
-          interpArgs.push([arg.name,
-                           arg.check,
-                           typeof arg.align == 'undefined' ? Blockly.ALIGN_RIGHT
-                               : arg.align]);
-        } else {
-          // TODO: Write code for other input types.
-          console.log('addTemplate() can only handle value inputs.');
+
+    // Build up template.
+    var block = {};
+    block.init = function () {
+        var thisBlock = this;
+        // Set basic properties of block.
+        this.setColour(details.colour);
+        this.setHelpUrl(details.helpUrl);
+        if (typeof details.tooltip == 'string') {
+            this.setTooltip(details.tooltip);
+        } else if (typeof details.tooltip == 'function') {
+            this.setTooltip(function () {
+                return details.tooltip(thisBlock);
+            });
         }
-      });
-    }
-    // Neil, how would you recommend specifying the final dummy alignment?
-    // Should it be a top-level field in details?
-    interpArgs.push(Blockly.ALIGN_RIGHT);
-    if (details.inline) {
-      this.setInlineInputs(details.inline);
-    }
-    Blockly.Block.prototype.interpolateMsg.apply(this, interpArgs);
-  };
-
-  // Create mutationToDom if needed.
-  if (details.switchable) {
-    block.mutationToDom = function() {
-      var container = details.mutationToDomFunc ? details.mutatationToDomFunc()
-          : document.createElement('mutation');
-      container.setAttribute('is_statement', this['isStatement'] || false);
-      return container;
+        // Set output and previous/next connections.
+        if (details.output != 'undefined') {
+            this.setOutput(true, details.output);
+        } else {
+            this.setPreviousStatement(
+                    typeof details.previousStatement == 'undefined' ?
+                    true : details.previousStatement);
+            this.setNextStatement(
+                    typeof details.nextStatement == 'undefined' ?
+                    true : details.nextStatement);
+        }
+        // Build up arguments in the format expected by interpolateMsg.
+        var interpArgs = [];
+        interpArgs.push(details.text);
+        if (details.args) {
+            details.args.forEach(function (arg) {
+                if (arg.name)
+                    console.log("Error")
+                if (arg.check != 'undefined')
+                    console.log("Error")
+                if (arg.type == 'undefined' || arg.type == Blockly.INPUT_VALUE) {
+                    interpArgs.push([arg.name, arg.check,
+                            typeof arg.align == 'undefined' ? Blockly.ALIGN_RIGHT : arg.align]);
+                } else {
+                    // TODO: Write code for other input types.
+                    console.log('addTemplate() can only handle value inputs.');
+                }
+            });
+        }
+        // Neil, how would you recommend specifying the final dummy alignment?
+        // Should it be a top-level field in details?
+        interpArgs.push(Blockly.ALIGN_RIGHT);
+        if (details.inline) {
+            this.setInlineInputs(details.inline);
+        }
+        Blockly.Block.prototype.interpolateMsg.apply(this, interpArgs);
     };
-  } else {
-    block.mutationToDom = details.mutationToDomFunc;
-  }
-  // TODO: Add domToMutation and customContextMenu.
 
-  // Add new block to Blockly.Blocks.
-  Blockly.Blocks[details.blockName] = block;
+    // Create mutationToDom if needed.
+    if (details.switchable) {
+        block.mutationToDom = function () {
+            var container = details.mutationToDomFunc ? details.mutatationToDomFunc() : document.createElement('mutation');
+            container.setAttribute('is_statement', this['isStatement'] || false);
+            return container;
+        };
+    } else {
+        block.mutationToDom = details.mutationToDomFunc;
+    }
+    // TODO: Add domToMutation and customContextMenu.
+
+    // Add new block to Blockly.Blocks.
+    Blockly.Blocks[details.blockName] = block;
 };

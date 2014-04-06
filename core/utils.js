@@ -33,14 +33,14 @@
  * @param {string} className Name of class to add.
  * @private
  */
-Blockly.addClass_ = function(element, className) {
-  var classes = element.getAttribute('class') || '';
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
-    if (classes) {
-      classes += ' ';
+Blockly.addClass_ = function (element, className) {
+    var classes = element.getAttribute('class') || '';
+    if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
+        if (classes) {
+            classes += ' ';
+        }
+        element.setAttribute('class', classes + className);
     }
-    element.setAttribute('class', classes + className);
-  }
 };
 
 /**
@@ -49,22 +49,22 @@ Blockly.addClass_ = function(element, className) {
  * @param {string} className Name of class to remove.
  * @private
  */
-Blockly.removeClass_ = function(element, className) {
-  var classes = element.getAttribute('class');
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
-    var classList = classes.split(/\s+/);
-    for (var i = 0; i < classList.length; i++) {
-      if (!classList[i] || classList[i] == className) {
-        classList.splice(i, 1);
-        i--;
-      }
+Blockly.removeClass_ = function (element, className) {
+    var classes = element.getAttribute('class');
+    if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
+        var classList = classes.split(/\s+/);
+        for (var i = 0; i < classList.length; i++) {
+            if (!classList[i] || classList[i] == className) {
+                classList.splice(i, 1);
+                i--;
+            }
+        }
+        if (classList.length) {
+            element.setAttribute('class', classList.join(' '));
+        } else {
+            element.removeAttribute('class');
+        }
     }
-    if (classList.length) {
-      element.setAttribute('class', classList.join(' '));
-    } else {
-      element.removeAttribute('class');
-    }
-  }
 };
 
 /**
@@ -76,30 +76,32 @@ Blockly.removeClass_ = function(element, className) {
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
  * @private
  */
-Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
-    func.apply(thisObject, arguments);
-  };
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
-  // Add equivalent touch event.
-  if (name in Blockly.bindEvent_.TOUCH_MAP) {
-    wrapFunc = function(e) {
-      // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
-        // Map the touch event's properties to the event.
-        var touchPoint = e.changedTouches[0];
-        e.clientX = touchPoint.clientX;
-        e.clientY = touchPoint.clientY;
-      }
-      func.apply(thisObject, arguments);
-      // Stop the browser from scrolling/zooming the page
-      e.preventDefault();
+Blockly.bindEvent_ = function (node, name, thisObject, func) {
+    var wrapFunc = function (e) {
+        func.apply(thisObject, arguments);
     };
-    node.addEventListener(Blockly.bindEvent_.TOUCH_MAP[name], wrapFunc, false);
-    bindData.push([node, Blockly.bindEvent_.TOUCH_MAP[name], wrapFunc]);
-  }
-  return bindData;
+    node.addEventListener(name, wrapFunc, false);
+    var bindData = [
+        [node, name, wrapFunc]
+    ];
+    // Add equivalent touch event.
+    if (name in Blockly.bindEvent_.TOUCH_MAP) {
+        wrapFunc = function (e) {
+            // Punt on multitouch events.
+            if (e.changedTouches.length == 1) {
+                // Map the touch event's properties to the event.
+                var touchPoint = e.changedTouches[0];
+                e.clientX = touchPoint.clientX;
+                e.clientY = touchPoint.clientY;
+            }
+            func.apply(thisObject, arguments);
+            // Stop the browser from scrolling/zooming the page
+            e.preventDefault();
+        };
+        node.addEventListener(Blockly.bindEvent_.TOUCH_MAP[name], wrapFunc, false);
+        bindData.push([node, Blockly.bindEvent_.TOUCH_MAP[name], wrapFunc]);
+    }
+    return bindData;
 };
 
 /**
@@ -109,11 +111,11 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
  */
 Blockly.bindEvent_.TOUCH_MAP = {};
 if ('ontouchstart' in document.documentElement) {
-  Blockly.bindEvent_.TOUCH_MAP = {
-    mousedown: 'touchstart',
-    mousemove: 'touchmove',
-    mouseup: 'touchend'
-  };
+    Blockly.bindEvent_.TOUCH_MAP = {
+        mousedown: 'touchstart',
+        mousemove: 'touchmove',
+        mouseup: 'touchend'
+    };
 }
 
 /**
@@ -123,15 +125,15 @@ if ('ontouchstart' in document.documentElement) {
  * @return {!Function} The function call.
  * @private
  */
-Blockly.unbindEvent_ = function(bindData) {
-  while (bindData.length) {
-    var bindDatum = bindData.pop();
-    var node = bindDatum[0];
-    var name = bindDatum[1];
-    var func = bindDatum[2];
-    node.removeEventListener(name, func, false);
-  }
-  return func;
+Blockly.unbindEvent_ = function (bindData) {
+    while (bindData.length) {
+        var bindDatum = bindData.pop();
+        var node = bindDatum[0];
+        var name = bindDatum[1];
+        var func = bindDatum[2];
+        node.removeEventListener(name, func, false);
+    }
+    return func;
 };
 
 /**
@@ -139,30 +141,30 @@ Blockly.unbindEvent_ = function(bindData) {
  * @param {!Node} node The event's target node.
  * @param {string} eventName Name of event (e.g. 'click').
  */
-Blockly.fireUiEvent = function(node, eventName) {
-  var doc = document;
-  if (doc.createEvent) {
-    // W3
-    var evt = doc.createEvent('UIEvents');
-    evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
-    node.dispatchEvent(evt);
-  } else if (doc.createEventObject) {
-    // MSIE
-    var evt = doc.createEventObject();
-    node.fireEvent('on' + eventName, evt);
-  } else {
-    throw 'FireEvent: No event creation mechanism.';
-  }
+Blockly.fireUiEvent = function (node, eventName) {
+    var doc = document;
+    if (doc.createEvent) {
+        // W3
+        var evt = doc.createEvent('UIEvents');
+        evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
+        node.dispatchEvent(evt);
+    } else if (doc.createEventObject) {
+        // MSIE
+        var evt = doc.createEventObject();
+        node.fireEvent('on' + eventName, evt);
+    } else {
+        throw 'FireEvent: No event creation mechanism.';
+    }
 };
 
 /**
  * Don't do anything for this event, just halt propagation.
  * @param {!Event} e An event.
  */
-Blockly.noEvent = function(e) {
-  // This event has been handled.  No need to bubble up to the document.
-  e.preventDefault();
-  e.stopPropagation();
+Blockly.noEvent = function (e) {
+    // This event has been handled.  No need to bubble up to the document.
+    e.preventDefault();
+    e.stopPropagation();
 };
 
 /**
@@ -172,31 +174,31 @@ Blockly.noEvent = function(e) {
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
-Blockly.getRelativeXY_ = function(element) {
-  var xy = {x: 0, y: 0};
-  // First, check for x and y attributes.
-  var x = element.getAttribute('x');
-  if (x) {
-    xy.x = parseInt(x, 10);
-  }
-  var y = element.getAttribute('y');
-  if (y) {
-    xy.y = parseInt(y, 10);
-  }
-  // Second, check for transform="translate(...)" attribute.
-  var transform = element.getAttribute('transform');
-  // Note that Firefox and IE (9,10) return 'translate(12)' instead of
-  // 'translate(12, 0)'.
-  // Note that IE (9,10) returns 'translate(16 8)' instead of
-  // 'translate(16, 8)'.
-  var r = transform &&          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
-  if (r) {
-    xy.x += parseInt(r[1], 10);
-    if (r[3]) {
-      xy.y += parseInt(r[3], 10);
+Blockly.getRelativeXY_ = function (element) {
+    var xy = {x: 0, y: 0};
+    // First, check for x and y attributes.
+    var x = element.getAttribute('x');
+    if (x) {
+        xy.x = parseInt(x, 10);
     }
-  }
-  return xy;
+    var y = element.getAttribute('y');
+    if (y) {
+        xy.y = parseInt(y, 10);
+    }
+    // Second, check for transform="translate(...)" attribute.
+    var transform = element.getAttribute('transform');
+    // Note that Firefox and IE (9,10) return 'translate(12)' instead of
+    // 'translate(12, 0)'.
+    // Note that IE (9,10) returns 'translate(16 8)' instead of
+    // 'translate(16, 8)'.
+    var r = transform && transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
+    if (r) {
+        xy.x += parseInt(r[1], 10);
+        if (r[3]) {
+            xy.y += parseInt(r[3], 10);
+        }
+    }
+    return xy;
 };
 
 /**
@@ -206,17 +208,17 @@ Blockly.getRelativeXY_ = function(element) {
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
-Blockly.getSvgXY_ = function(element) {
-  var x = 0;
-  var y = 0;
-  do {
-    // Loop through this block and every parent.
-    var xy = Blockly.getRelativeXY_(element);
-    x += xy.x;
-    y += xy.y;
-    element = element.parentNode;
-  } while (element && element != Blockly.svg);
-  return {x: x, y: y};
+Blockly.getSvgXY_ = function (element) {
+    var x = 0;
+    var y = 0;
+    do {
+        // Loop through this block and every parent.
+        var xy = Blockly.getRelativeXY_(element);
+        x += xy.x;
+        y += xy.y;
+        element = element.parentNode;
+    } while (element && element != Blockly.svg);
+    return {x: x, y: y};
 };
 
 /**
@@ -226,9 +228,9 @@ Blockly.getSvgXY_ = function(element) {
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
-Blockly.getAbsoluteXY_ = function(element) {
-  var xy = Blockly.getSvgXY_(element);
-  return Blockly.convertCoordinates(xy.x, xy.y, false);
+Blockly.getAbsoluteXY_ = function (element) {
+    var xy = Blockly.getSvgXY_(element);
+    return Blockly.convertCoordinates(xy.x, xy.y, false);
 };
 
 /**
@@ -238,21 +240,21 @@ Blockly.getAbsoluteXY_ = function(element) {
  * @param {Element=} opt_parent Optional parent on which to append the element.
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, opt_parent) {
-  var e =  document.createElementNS(Blockly.SVG_NS, name);
-  for (var key in attrs) {
-    e.setAttribute(key, attrs[key]);
-  }
-  // IE defines a unique attribute "runtimeStyle", it is NOT applied to
-  // elements created with createElementNS. However, Closure checks for IE
-  // and assumes the presence of the attribute and crashes.
-  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
-    e.runtimeStyle = e.currentStyle = e.style;
-  }
-  if (opt_parent) {
-    opt_parent.appendChild(e);
-  }
-  return e;
+Blockly.createSvgElement = function (name, attrs, opt_parent) {
+    var e = document.createElementNS(Blockly.SVG_NS, name);
+    for (var key in attrs) {
+        e.setAttribute(key, attrs[key]);
+    }
+    // IE defines a unique attribute "runtimeStyle", it is NOT applied to
+    // elements created with createElementNS. However, Closure checks for IE
+    // and assumes the presence of the attribute and crashes.
+    if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
+        e.runtimeStyle = e.currentStyle = e.style;
+    }
+    if (opt_parent) {
+        opt_parent.appendChild(e);
+    }
+    return e;
 };
 
 /**
@@ -260,9 +262,9 @@ Blockly.createSvgElement = function(name, attrs, opt_parent) {
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
  */
-Blockly.isRightButton = function(e) {
-  // Control-clicking in WebKit on Mac OS X fails to change button to 2.
-  return e.button == 2 || e.ctrlKey;
+Blockly.isRightButton = function (e) {
+    // Control-clicking in WebKit on Mac OS X fails to change button to 2.
+    return e.button == 2 || e.ctrlKey;
 };
 
 /**
@@ -273,24 +275,24 @@ Blockly.isRightButton = function(e) {
  *     False to convert to mouse/HTML coordinates.
  * @return {!Object} Object with x and y properties in output coordinates.
  */
-Blockly.convertCoordinates = function(x, y, toSvg) {
-  if (toSvg) {
-    x -= window.scrollX || window.pageXOffset;
-    y -= window.scrollY || window.pageYOffset;
-  }
-  var svgPoint = Blockly.svg.createSVGPoint();
-  svgPoint.x = x;
-  svgPoint.y = y;
-  var matrix = Blockly.svg.getScreenCTM();
-  if (toSvg) {
-    matrix = matrix.inverse();
-  }
-  var xy = svgPoint.matrixTransform(matrix);
-  if (!toSvg) {
-    xy.x += window.scrollX || window.pageXOffset;
-    xy.y += window.scrollY || window.pageYOffset;
-  }
-  return xy;
+Blockly.convertCoordinates = function (x, y, toSvg) {
+    if (toSvg) {
+        x -= window.scrollX || window.pageXOffset;
+        y -= window.scrollY || window.pageYOffset;
+    }
+    var svgPoint = Blockly.svg.createSVGPoint();
+    svgPoint.x = x;
+    svgPoint.y = y;
+    var matrix = Blockly.svg.getScreenCTM();
+    if (toSvg) {
+        matrix = matrix.inverse();
+    }
+    var xy = svgPoint.matrixTransform(matrix);
+    if (!toSvg) {
+        xy.x += window.scrollX || window.pageXOffset;
+        xy.y += window.scrollY || window.pageYOffset;
+    }
+    return xy;
 };
 
 /**
@@ -299,10 +301,10 @@ Blockly.convertCoordinates = function(x, y, toSvg) {
  * @param {!Event} e Mouse event.
  * @return {!Object} Object with .x and .y properties.
  */
-Blockly.mouseToSvg = function(e) {
-  var scrollX = window.scrollX || window.pageXOffset;
-  var scrollY = window.scrollY || window.pageYOffset;
-  return Blockly.convertCoordinates(e.clientX + scrollX,                                    e.clientY + scrollY, true);
+Blockly.mouseToSvg = function (e) {
+    var scrollX = window.scrollX || window.pageXOffset;
+    var scrollY = window.scrollY || window.pageYOffset;
+    return Blockly.convertCoordinates(e.clientX + scrollX, e.clientY + scrollY, true);
 };
 
 /**
@@ -310,15 +312,15 @@ Blockly.mouseToSvg = function(e) {
  * @param {!Array.<string>} array Array of strings.
  * @return {number} Length of shortest string.
  */
-Blockly.shortestStringLength = function(array) {
-  if (!array.length) {
-    return 0;
-  }
-  var len = array[0].length;
-  for (var i = 1; i < array.length; i++) {
-    len = Math.min(len, array[i].length);
-  }
-  return len;
+Blockly.shortestStringLength = function (array) {
+    if (!array.length) {
+        return 0;
+    }
+    var len = array[0].length;
+    for (var i = 1; i < array.length; i++) {
+        len = Math.min(len, array[i].length);
+    }
+    return len;
 };
 
 /**
@@ -328,32 +330,32 @@ Blockly.shortestStringLength = function(array) {
  * @param {?number} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
-Blockly.commonWordPrefix = function(array, opt_shortest) {
-  if (!array.length) {
-    return 0;
-  } else if (array.length == 1) {
-    return array[0].length;
-  }
-  var wordPrefix = 0;
-  var max = opt_shortest || Blockly.shortestStringLength(array);
-  for (var len = 0; len < max; len++) {
-    var letter = array[0][len];
+Blockly.commonWordPrefix = function (array, opt_shortest) {
+    if (!array.length) {
+        return 0;
+    } else if (array.length == 1) {
+        return array[0].length;
+    }
+    var wordPrefix = 0;
+    var max = opt_shortest || Blockly.shortestStringLength(array);
+    for (var len = 0; len < max; len++) {
+        var letter = array[0][len];
+        for (var i = 1; i < array.length; i++) {
+            if (letter != array[i][len]) {
+                return wordPrefix;
+            }
+        }
+        if (letter == ' ') {
+            wordPrefix = len + 1;
+        }
+    }
     for (var i = 1; i < array.length; i++) {
-      if (letter != array[i][len]) {
-        return wordPrefix;
-      }
+        var letter = array[i][len];
+        if (letter && letter != ' ') {
+            return wordPrefix;
+        }
     }
-    if (letter == ' ') {
-      wordPrefix = len + 1;
-    }
-  }
-  for (var i = 1; i < array.length; i++) {
-    var letter = array[i][len];
-    if (letter && letter != ' ') {
-      return wordPrefix;
-    }
-  }
-  return max;
+    return max;
 };
 
 /**
@@ -363,32 +365,32 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
  * @param {?number} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
-Blockly.commonWordSuffix = function(array, opt_shortest) {
-  if (!array.length) {
-    return 0;
-  } else if (array.length == 1) {
-    return array[0].length;
-  }
-  var wordPrefix = 0;
-  var max = opt_shortest || Blockly.shortestStringLength(array);
-  for (var len = 0; len < max; len++) {
-    var letter = array[0].substr(-len - 1, 1);
+Blockly.commonWordSuffix = function (array, opt_shortest) {
+    if (!array.length) {
+        return 0;
+    } else if (array.length == 1) {
+        return array[0].length;
+    }
+    var wordPrefix = 0;
+    var max = opt_shortest || Blockly.shortestStringLength(array);
+    for (var len = 0; len < max; len++) {
+        var letter = array[0].substr(-len - 1, 1);
+        for (var i = 1; i < array.length; i++) {
+            if (letter != array[i].substr(-len - 1, 1)) {
+                return wordPrefix;
+            }
+        }
+        if (letter == ' ') {
+            wordPrefix = len + 1;
+        }
+    }
     for (var i = 1; i < array.length; i++) {
-      if (letter != array[i].substr(-len - 1, 1)) {
-        return wordPrefix;
-      }
+        var letter = array[i].charAt(array[i].length - len - 1);
+        if (letter && letter != ' ') {
+            return wordPrefix;
+        }
     }
-    if (letter == ' ') {
-      wordPrefix = len + 1;
-    }
-  }
-  for (var i = 1; i < array.length; i++) {
-    var letter = array[i].charAt(array[i].length - len - 1);
-    if (letter && letter != ' ') {
-      return wordPrefix;
-    }
-  }
-  return max;
+    return max;
 };
 
 /**
@@ -396,6 +398,6 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.
  */
-Blockly.isNumber = function(str) {
-  return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
+Blockly.isNumber = function (str) {
+    return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
 };

@@ -54,32 +54,32 @@ Blockly.WidgetDiv.dispose_ = null;
  * @param {Function} dispose Optional cleanup function to be run when the widget
  *   is closed.
  */
-Blockly.WidgetDiv.show = function(newOwner, dispose) {
-  Blockly.WidgetDiv.hide();
-  Blockly.WidgetDiv.owner_ = newOwner;
-  Blockly.WidgetDiv.dispose_ = dispose;
+Blockly.WidgetDiv.show = function (newOwner, dispose) {
+    Blockly.WidgetDiv.hide();
+    Blockly.WidgetDiv.owner_ = newOwner;
+    Blockly.WidgetDiv.dispose_ = dispose;
 //  Blockly.WidgetDiv.DIV.style.display = 'block';
 };
 
 /**
  * Destroy the widget and hide the div.
  */
-Blockly.WidgetDiv.hide = function() {
-  if (Blockly.WidgetDiv.owner_) {
+Blockly.WidgetDiv.hide = function () {
+    if (Blockly.WidgetDiv.owner_) {
 //    Blockly.WidgetDiv.DIV.style.display = 'none';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.owner_ = null;
-    Blockly.WidgetDiv.dispose_ = null;
+        Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
+        Blockly.WidgetDiv.owner_ = null;
+        Blockly.WidgetDiv.dispose_ = null;
 //    Blockly.removeChildren(Blockly.WidgetDiv.DIV);
-  }
+    }
 };
 
 /**
  * Is the container visible?
  * @return {boolean} True if visible.
  */
-Blockly.WidgetDiv.isVisible = function() {
-  return !!Blockly.WidgetDiv.owner_;
+Blockly.WidgetDiv.isVisible = function () {
+    return !!Blockly.WidgetDiv.owner_;
 };
 
 /**
@@ -87,10 +87,10 @@ Blockly.WidgetDiv.isVisible = function() {
  *   object.
  * @param {!Object} oldOwner The object that was using this container.
  */
-Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
-  if (Blockly.WidgetDiv.owner_ == oldOwner) {
-    Blockly.WidgetDiv.hide();
-  }
+Blockly.WidgetDiv.hideIfOwner = function (oldOwner) {
+    if (Blockly.WidgetDiv.owner_ == oldOwner) {
+        Blockly.WidgetDiv.hide();
+    }
 };
 
 /**
@@ -101,23 +101,22 @@ Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
  * @param {!goog.math.Size} widowSize Height/width of window.
  * @param {!goog.math.Coordinate} scrollOffset X/y of window scrollbars.
  */
-Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
-                                      scrollOffset) {
-  // Don't let the widget go above the top edge of the window.
-  if (anchorY < scrollOffset.y) {
-    anchorY = scrollOffset.y;
-  }
-  if (Blockly.RTL) {
-    // Don't let the menu go right of the right edge of the window.
-    if (anchorX > windowSize.width + scrollOffset.x) {
-      anchorX = windowSize.width + scrollOffset.x;
+Blockly.WidgetDiv.position = function (anchorX, anchorY, windowSize, scrollOffset) {
+    // Don't let the widget go above the top edge of the window.
+    if (anchorY < scrollOffset.y) {
+        anchorY = scrollOffset.y;
     }
-  } else {
-    // Don't let the widget go left of the left edge of the window.
-    if (anchorX < scrollOffset.x) {
-      anchorX = scrollOffset.x;
+    if (Blockly.RTL) {
+        // Don't let the menu go right of the right edge of the window.
+        if (anchorX > windowSize.width + scrollOffset.x) {
+            anchorX = windowSize.width + scrollOffset.x;
+        }
+    } else {
+        // Don't let the widget go left of the left edge of the window.
+        if (anchorX < scrollOffset.x) {
+            anchorX = scrollOffset.x;
+        }
     }
-  }
-  Blockly.WidgetDiv.DIV.style.left = anchorX + 'px';
-  Blockly.WidgetDiv.DIV.style.top = anchorY + 'px';
+    Blockly.WidgetDiv.DIV.style.left = anchorX + 'px';
+    Blockly.WidgetDiv.DIV.style.top = anchorY + 'px';
 };

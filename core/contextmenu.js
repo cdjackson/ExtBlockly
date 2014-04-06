@@ -38,26 +38,28 @@ Blockly.ContextMenu.currentBlock = null;
  * @param {!Event} e Mouse event.
  * @param {!Array.<!Object>} options Array of menu options.
  */
-Blockly.ContextMenu.show = function(e, options) {
-    if(Blockly.openMenu != null) {
+Blockly.ContextMenu.show = function (e, options) {
+    // If there's already a menu open, we need to destroy it first
+    // Failure to do so will corrupt the menu!
+    if (Blockly.openMenu != null) {
         Ext.destroy(Blockly.openMenu);
         Blockly.openMenu = null;
     }
 
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
-  if (!options.length) {
-    Blockly.ContextMenu.hide();
-    return;
-  }
-  /* Here's what one option object looks like:
-    {text: 'Make It So',
+    Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
+    if (!options.length) {
+        Blockly.ContextMenu.hide();
+        return;
+    }
+    /* Here's what one option object looks like:
+     {text: 'Make It So',
      enabled: true,
      callback: Blockly.MakeItSo}
-  */
+     */
     var menuCfg = {
-        renderTo: Blockly.DIV,
+        renderTo: document.body,
         floating: true,
-        items:[],
+        items: [],
         shrinkWrap: 3,
         minWidth: 30,
         listeners: {
@@ -70,8 +72,8 @@ Blockly.ContextMenu.show = function(e, options) {
 
     for (var x = 0, option; option = options[x]; x++) {
         var menuItem = {};
-        menuItem.text = option.text;        // Human-readable text.
-        menuItem.disabled = !option.enabled;        // Human-readable text.
+        menuItem.text = option.text;                 // Human-readable text.
+        menuItem.disabled = !option.enabled;         // Human-readable text.
         if (option.enabled) {
             menuItem.handler = option.callback;
         }
@@ -83,25 +85,24 @@ Blockly.ContextMenu.show = function(e, options) {
 
     var scrollOffset = {};
     scrollOffset.x = 0;
-     scrollOffset.y = 0;
+    scrollOffset.y = 0;
 
-      // Position the menu.
-      var x = e.clientX + scrollOffset.x;
-      var y = e.clientY + scrollOffset.y;
- //   Blockly.panel.add(Blockly.openMenu);
-    Blockly.openMenu.alignTo(Ext.get('blocklyHere'), 'tl-tl',[x-Blockly.clientX,y-Blockly.clientY]);
-    Blockly.openMenu.show();
-//    Blockly.openMenu.showAt(x-Blockly.clientX,y -Blockly.clientY);
+    // Position the menu.
+    var x = e.clientX + scrollOffset.x;
+    var y = e.clientY + scrollOffset.y;
+    //   Blockly.panel.add(Blockly.openMenu);
 
-      Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
+    Blockly.openMenu.showAt(x, y);
+
+    Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };
 
 /**
  * Hide the context menu.
  */
-Blockly.ContextMenu.hide = function() {
-  Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
-  Blockly.ContextMenu.currentBlock = null;
+Blockly.ContextMenu.hide = function () {
+    Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
+    Blockly.ContextMenu.currentBlock = null;
 };
 
 /**
@@ -111,18 +112,18 @@ Blockly.ContextMenu.hide = function() {
  * @param {!Element} xml XML representation of new block.
  * @return {!Function} Function that creates a block.
  */
-Blockly.ContextMenu.callbackFactory = function(block, xml) {
-  return function() {
-    var newBlock = Blockly.Xml.domToBlock(block.workspace, xml);
-    // Move the new block next to the old block.
-    var xy = block.getRelativeToSurfaceXY();
-    if (Blockly.RTL) {
-      xy.x -= Blockly.SNAP_RADIUS;
-    } else {
-      xy.x += Blockly.SNAP_RADIUS;
-    }
-    xy.y += Blockly.SNAP_RADIUS * 2;
-    newBlock.moveBy(xy.x, xy.y);
-    newBlock.select();
-  };
+Blockly.ContextMenu.callbackFactory = function (block, xml) {
+    return function () {
+        var newBlock = Blockly.Xml.domToBlock(block.workspace, xml);
+        // Move the new block next to the old block.
+        var xy = block.getRelativeToSurfaceXY();
+        if (Blockly.RTL) {
+            xy.x -= Blockly.SNAP_RADIUS;
+        } else {
+            xy.x += Blockly.SNAP_RADIUS;
+        }
+        xy.y += Blockly.SNAP_RADIUS * 2;
+        newBlock.moveBy(xy.x, xy.y);
+        newBlock.select();
+    };
 };

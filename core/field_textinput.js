@@ -108,7 +108,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function () {
     Blockly.FieldTextInput.htmlInput_ = Ext.create("Ext.form.field.Text", {
         block: this,
         border: false,
-        cls:'blocklyHtmlInput',
+        cls: 'blocklyHtmlInput',
         floating: true,
         value: this.text_,
         enableKeyEvents: true,

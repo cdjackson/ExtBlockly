@@ -69,10 +69,10 @@ Blockly.parseOptions_ = function (options) {
             hasCollapse = false;
         }
     }
-        var hasScrollbars = options['scrollbars'];
-        if (hasScrollbars === undefined) {
-            hasScrollbars = true;
-        }
+    var hasScrollbars = options['scrollbars'];
+    if (hasScrollbars === undefined) {
+        hasScrollbars = true;
+    }
     return {
         RTL: !!options['rtl'],
         collapse: hasCollapse,
@@ -144,17 +144,12 @@ Blockly.createDom_ = function (container) {
     Blockly.createSvgElement('feGaussianBlur',
         {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, filter);
     feSpecularLighting = Blockly.createSvgElement('feSpecularLighting',
-        {'in': 'blur', 'surfaceScale': 1, 'specularConstant': 0.5,
-            'specularExponent': 10, 'lighting-color': 'white', 'result': 'specOut'},
+        {'in': 'blur', 'surfaceScale': 1, 'specularConstant': 0.5, 'specularExponent': 10, 'lighting-color': 'white', 'result': 'specOut'},
         filter);
     Blockly.createSvgElement('fePointLight',
         {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
-    Blockly.createSvgElement('feComposite',
-        {'in': 'specOut', 'in2': 'SourceAlpha', 'operator': 'in',
-            'result': 'specOut'}, filter);
-    Blockly.createSvgElement('feComposite',
-        {'in': 'SourceGraphic', 'in2': 'specOut', 'operator': 'arithmetic',
-            'k1': 0, 'k2': 1, 'k3': 1, 'k4': 0}, filter);
+    Blockly.createSvgElement('feComposite', {'in': 'specOut', 'in2': 'SourceAlpha', 'operator': 'in', 'result': 'specOut'}, filter);
+    Blockly.createSvgElement('feComposite', {'in': 'SourceGraphic', 'in2': 'specOut', 'operator': 'arithmetic', 'k1': 0, 'k2': 1, 'k3': 1, 'k4': 0}, filter);
     /*
      <filter id="blocklyTrashcanShadowFilter">
      <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
@@ -185,8 +180,7 @@ Blockly.createDom_ = function (container) {
      <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
      </pattern>
      */
-    pattern = Blockly.createSvgElement('pattern', {'id': 'blocklyDisabledPattern', 'patternUnits': 'userSpaceOnUse',
-        'width': 10, 'height': 10}, defs);
+    pattern = Blockly.createSvgElement('pattern', {'id': 'blocklyDisabledPattern', 'patternUnits': 'userSpaceOnUse', 'width': 10, 'height': 10}, defs);
     Blockly.createSvgElement('rect', {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
     Blockly.createSvgElement('path', {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
     Blockly.mainWorkspace = new Blockly.Workspace(Blockly.getMainWorkspaceMetrics_, Blockly.setMainWorkspaceMetrics_);
@@ -194,69 +188,64 @@ Blockly.createDom_ = function (container) {
     Blockly.mainWorkspace.maxBlocks = Blockly.maxBlocks;
 
     if (!Blockly.readOnly) {
-            /**
-             * @type {!Blockly.Flyout}
-             * @private
-             */
-            Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
-            var flyout = Blockly.mainWorkspace.flyout_;
-            var flyoutSvg = flyout.createDom();
-            flyout.init(Blockly.mainWorkspace, true);
-            flyout.autoClose = false;
-            // Insert the flyout behind the workspace so that blocks appear on top.
-            Ext.DomHelper.insertBefore(Blockly.mainWorkspace.svgGroup_, flyoutSvg);
+        /**
+         * @type {!Blockly.Flyout}
+         * @private
+         */
+        Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
+        var flyout = Blockly.mainWorkspace.flyout_;
+        var flyoutSvg = flyout.createDom();
+        flyout.init(Blockly.mainWorkspace, true);
+        flyout.autoClose = false;
+        // Insert the flyout behind the workspace so that blocks appear on top.
+        Ext.DomHelper.insertBefore(Blockly.mainWorkspace.svgGroup_, flyoutSvg);
 
-            var workspaceChanged = function () {
-                if (Blockly.Block.dragMode_ == 0) {
-                    var metrics = Blockly.mainWorkspace.getMetrics();
-                    if (metrics.contentTop < 0 ||
-                        metrics.contentTop + metrics.contentHeight >
-                        metrics.viewHeight + metrics.viewTop ||
-                        metrics.contentLeft < (Blockly.RTL ? metrics.viewLeft : 0) ||
-                        metrics.contentLeft + metrics.contentWidth >
-                        metrics.viewWidth + (Blockly.RTL ? 2 : 1) * metrics.viewLeft) {
-                        // One or more blocks is out of bounds.  Bump them back in.
-                        var MARGIN = 25;
-                        var blocks = Blockly.mainWorkspace.getTopBlocks(false);
-                        for (var b = 0, block; block = blocks[b]; b++) {
-                            var blockXY = block.getRelativeToSurfaceXY();
-                            var blockHW = block.getHeightWidth();
-                            // Bump any block that's above the top back inside.
-                            var overflow = metrics.viewTop + MARGIN - blockHW.height -
-                                blockXY.y;
-                            if (overflow > 0) {
-                                block.moveBy(0, overflow);
-                            }
-                            // Bump any block that's below the bottom back inside.
-                            var overflow = metrics.viewTop + metrics.viewHeight - MARGIN -
-                                blockXY.y;
-                            if (overflow < 0) {
-                                block.moveBy(0, overflow);
-                            }
-                            // Bump any block that's off the left back inside.
-                            var overflow = MARGIN + metrics.viewLeft - blockXY.x -
-                                (Blockly.RTL ? 0 : blockHW.width);
-                            if (overflow > 0) {
-                                block.moveBy(overflow, 0);
-                            }
-                            // Bump any block that's off the right back inside.
-                            var overflow = metrics.viewLeft + metrics.viewWidth - MARGIN -
-                                blockXY.x + (Blockly.RTL ? blockHW.width : 0);
-                            if (overflow < 0) {
-                                block.moveBy(overflow, 0);
-                            }
-                            // Delete any block that's sitting on top of the flyout.
-                            if (block.isDeletable() && (Blockly.RTL ?
-                                blockXY.x - 2 * metrics.viewLeft - metrics.viewWidth :
-                                -blockXY.x) > MARGIN * 2) {
-                                block.dispose(false, true);
-                            }
+        var workspaceChanged = function () {
+            if (Blockly.Block.dragMode_ == 0) {
+                var metrics = Blockly.mainWorkspace.getMetrics();
+                if (metrics.contentTop < 0 ||
+                    metrics.contentTop + metrics.contentHeight >
+                    metrics.viewHeight + metrics.viewTop ||
+                    metrics.contentLeft < (Blockly.RTL ? metrics.viewLeft : 0) ||
+                    metrics.contentLeft + metrics.contentWidth >
+                    metrics.viewWidth + (Blockly.RTL ? 2 : 1) * metrics.viewLeft) {
+                    // One or more blocks is out of bounds.  Bump them back in.
+                    var MARGIN = 25;
+                    var blocks = Blockly.mainWorkspace.getTopBlocks(false);
+                    for (var b = 0, block; block = blocks[b]; b++) {
+                        var blockXY = block.getRelativeToSurfaceXY();
+                        var blockHW = block.getHeightWidth();
+                        // Bump any block that's above the top back inside.
+                        var overflow = metrics.viewTop + MARGIN - blockHW.height - blockXY.y;
+                        if (overflow > 0) {
+                            block.moveBy(0, overflow);
                         }
+                        // Bump any block that's below the bottom back inside.
+                        var overflow = metrics.viewTop + metrics.viewHeight - MARGIN - blockXY.y;
+                        if (overflow < 0) {
+                            block.moveBy(0, overflow);
+                        }
+                        // Bump any block that's off the left back inside.
+                        var overflow = MARGIN + metrics.viewLeft - blockXY.x - (Blockly.RTL ? 0 : blockHW.width);
+                        if (overflow > 0) {
+                            block.moveBy(overflow, 0);
+                        }
+                        // Bump any block that's off the right back inside.
+                        var overflow = metrics.viewLeft + metrics.viewWidth - MARGIN - blockXY.x + (Blockly.RTL ? blockHW.width : 0);
+                        if (overflow < 0) {
+                            block.moveBy(overflow, 0);
+                        }
+                        // Delete any block that's sitting on top of the flyout.
+                        // TODO: Why??????
+                        // We've removed the toolbox in this version, so that's why (I think!)
+//                        if (block.isDeletable() && (Blockly.RTL ? blockXY.x - 2 * metrics.viewLeft - metrics.viewWidth : -blockXY.x) > MARGIN * 2) {
+//                            block.dispose(false, true);
+//                        }
                     }
                 }
-            };
-            Blockly.addChangeListener(workspaceChanged);
-
+            }
+        };
+        Blockly.addChangeListener(workspaceChanged);
     }
 
     svg.appendChild(Blockly.Tooltip.createDom());
@@ -310,14 +299,14 @@ Blockly.init_ = function () {
     }
 
     if (Blockly.languageTree) {
-            // Build a fixed flyout with the root blocks.
-            Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
-            Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
-            // Translate the workspace sideways to avoid the fixed flyout.
-            Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
-            var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
-            Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
-            Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
+        // Build a fixed flyout with the root blocks.
+        Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
+        Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
+        // Translate the workspace sideways to avoid the fixed flyout.
+        Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
+        var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
+        Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
+        Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
 
     }
     if (Blockly.hasScrollbars) {

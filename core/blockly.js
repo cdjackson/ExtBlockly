@@ -193,8 +193,7 @@ Blockly.clipboard_ = null;
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function () {
-    return {width: Blockly.svg.cachedWidth_,
-        height: Blockly.svg.cachedHeight_};
+    return {width: Blockly.svg.cachedWidth_, height: Blockly.svg.cachedHeight_};
 };
 
 /**
@@ -202,7 +201,6 @@ Blockly.svgSize = function () {
  * the height/width and the absolute position of the SVG image.
  */
 Blockly.svgResize = function () {
-
     var svg = Blockly.svg;
     var div = svg.parentNode;
     var width = div.offsetWidth;
@@ -219,8 +217,12 @@ Blockly.svgResize = function () {
     if (Blockly.mainWorkspace.scrollbar) {
         Blockly.mainWorkspace.scrollbar.resize();
     }
+    // Flip the trash can lid if needed.
+    if (Blockly.mainWorkspace.trashcan) {
+        Blockly.mainWorkspace.trashcan.position_();
+    }
 };
-
+/*
 Blockly.resizeWindow = function (width, height) {
 
     if (Blockly.svg.cachedWidth_ != width) {
@@ -240,7 +242,7 @@ Blockly.resizeWindow = function (width, height) {
     if (Blockly.mainWorkspace.trashcan) {
         Blockly.mainWorkspace.trashcan.position_();
     }
-}
+}*/
 
 /**
  * Handle a mouse-down on SVG drawing surface.
@@ -248,11 +250,10 @@ Blockly.resizeWindow = function (width, height) {
  * @private
  */
 Blockly.onMouseDown_ = function (e) {
-//    Blockly.svgResize();
+    Blockly.svgResize();
     Blockly.terminateDrag_(); // In case mouse-up event was lost.
     Blockly.hideChaff();
-    var isTargetSvg = e.target && e.target.nodeName &&
-        e.target.nodeName.toLowerCase() == 'svg';
+    var isTargetSvg = e.target && e.target.nodeName && e.target.nodeName.toLowerCase() == 'svg';
     if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
         // Clicking on the document clears the selection.
         Blockly.selected.unselect();
@@ -268,7 +269,7 @@ Blockly.onMouseDown_ = function (e) {
         // Record the current mouse position.
         Blockly.mainWorkspace.startDragMouseX = e.clientX;
         Blockly.mainWorkspace.startDragMouseY = e.clientY;
-        Blockly.mainWorkspace.startDragMetrics =            Blockly.mainWorkspace.getMetrics();
+        Blockly.mainWorkspace.startDragMetrics = Blockly.mainWorkspace.getMetrics();
         Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
         Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
     }
@@ -440,6 +441,7 @@ Blockly.showContextMenu_ = function (e) {
  * @private
  */
 Blockly.onContextMenu_ = function (e) {
+    console.log("onContextMenu");
     if (!Blockly.isTargetInput_(e)) {
         // When focused on an HTML text input widget, don't cancel the context menu.
         e.preventDefault();
@@ -745,7 +747,7 @@ Blockly.removeChildren = function (node) {
         node.removeChild(child);
     }
 };
-
+/*
 Blockly.openMenu = null;
 
 Blockly.clientX = 0;
@@ -754,3 +756,4 @@ Blockly.setClientPosition = function (x, y) {
     Blockly.clientX = x;
     Blockly.clientY = y;
 }
+*/

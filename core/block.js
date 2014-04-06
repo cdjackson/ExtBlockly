@@ -89,7 +89,7 @@ Blockly.Block.prototype.initialize = function (workspace, prototypeName) {
     this.fill(workspace, prototypeName);
     // Bind an onchange function, if it exists.
     if (Ext.isFunction(this.onchange)) {
-        Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,    this.onchange);
+        Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this, this.onchange);
     }
 };
 
@@ -450,12 +450,12 @@ Blockly.Block.prototype.getHeightWidth = function () {
 
     // Recursively add size of subsequent blocks.
     var nextBlock = this.nextConnection && this.nextConnection.targetBlock();
-    	  if (nextBlock) {
-        	    var nextHeightWidth = nextBlock.getHeightWidth();
-              height += nextHeightWidth.height - 4;  // Height of tab.
-        	    width = Math.max(width, nextHeightWidth.width);
-        	  }
-    	  return {height: height, width: width};
+    if (nextBlock) {
+        var nextHeightWidth = nextBlock.getHeightWidth();
+        height += nextHeightWidth.height - 4;  // Height of tab.
+        width = Math.max(width, nextHeightWidth.width);
+    }
+    return {height: height, width: width};
 };
 
 /**
@@ -586,7 +586,7 @@ Blockly.Block.prototype.duplicate_ = function () {
     // Create a duplicate via XML.
     var xmlBlock = Blockly.Xml.blockToDom_(this);
     Blockly.Xml.deleteNext(xmlBlock);
-    var newBlock = Blockly.Xml.domToBlock(        this.workspace, xmlBlock);
+    var newBlock = Blockly.Xml.domToBlock(this.workspace, xmlBlock);
     // Move the duplicate next to the old block.
     var xy = this.getRelativeToSurfaceXY();
     if (Blockly.RTL) {
@@ -696,7 +696,7 @@ Blockly.Block.prototype.showContextMenu_ = function (e) {
         var descendantCount = this.getDescendants().length;
         if (block.nextConnection && block.nextConnection.targetConnection) {
             // Blocks in the current stack would survive this block's deletion.
-            descendantCount -= this.nextConnection.targetBlock().                getDescendants().length;
+            descendantCount -= this.nextConnection.targetBlock().getDescendants().length;
         }
         var deleteOption = {
             text: descendantCount == 1 ? Blockly.Msg.DELETE_BLOCK :
@@ -810,7 +810,7 @@ Blockly.Block.prototype.setDragging_ = function (adding) {
 Blockly.Block.prototype.onMouseMove_ = function (e) {
     var this_ = this;
     Blockly.doCommand(function () {
-        if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&            e.button == 0) {
+        if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 && e.button == 0) {
             /* HACK:
              Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
              on certain touch actions. Ignore events with these signatures.
@@ -837,11 +837,11 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             // Unrestricted dragging.
             var x = this_.startDragX + dx;
             var y = this_.startDragY + dy;
-            this_.svg_.getRootElement().setAttribute('transform',                    'translate(' + x + ', ' + y + ')');
+            this_.svg_.getRootElement().setAttribute('transform', 'translate(' + x + ', ' + y + ')');
             // Drag all the nested bubbles.
             for (var i = 0; i < this_.draggedBubbles_.length; i++) {
                 var commentData = this_.draggedBubbles_[i];
-                commentData.bubble.setIconLocation(commentData.x + dx,                        commentData.y + dy);
+                commentData.bubble.setIconLocation(commentData.x + dx, commentData.y + dy);
             }
 
             // Check to see if any of this block's connections are within range of
@@ -1247,7 +1247,7 @@ Blockly.Block.prototype.setPreviousStatement = function (newBoolean, opt_check) 
         if (opt_check === undefined) {
             opt_check = null;
         }
-        this.previousConnection =            new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
+        this.previousConnection = new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
         this.previousConnection.setCheck(opt_check);
     }
     if (this.rendered) {
@@ -1273,7 +1273,7 @@ Blockly.Block.prototype.setNextStatement = function (newBoolean, opt_check) {
         if (opt_check === undefined) {
             opt_check = null;
         }
-        this.nextConnection =            new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
+        this.nextConnection = new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
         this.nextConnection.setCheck(opt_check);
     }
     if (this.rendered) {
@@ -1302,7 +1302,7 @@ Blockly.Block.prototype.setOutput = function (newBoolean, opt_check) {
         if (opt_check === undefined) {
             opt_check = null;
         }
-        this.outputConnection =            new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
+        this.outputConnection = new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
         this.outputConnection.setCheck(opt_check);
     }
     if (this.rendered) {

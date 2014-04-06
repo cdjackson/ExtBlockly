@@ -25,14 +25,13 @@
 'use strict';
 
 
-
 /**
  * Class for a trash can.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.
  * @constructor
  */
-Blockly.Trashcan = function(workspace) {
-  this.workspace_ = workspace;
+Blockly.Trashcan = function (workspace) {
+    this.workspace_ = workspace;
 };
 
 /**
@@ -150,36 +149,36 @@ Blockly.Trashcan.prototype.top_ = 0;
  * Create the trash can elements.
  * @return {!Element} The trash can's SVG group.
  */
-Blockly.Trashcan.prototype.createDom = function() {
-  /*
-  <g filter="url(#blocklyTrashcanShadowFilter)">
-    <image width="47" height="45" y="15" href="media/trashbody.png"></image>
-    <image width="47" height="15" href="media/trashlid.png"></image>
-  </g>
-  */
-  this.svgGroup_ = Blockly.createSvgElement('g',
-      {'filter': 'url(#blocklyTrashcanShadowFilter)'}, null);
-  this.svgBody_ = Blockly.createSvgElement('image',
-      {'width': this.WIDTH_, 'height': this.BODY_HEIGHT_},
-      this.svgGroup_);
-  this.svgBody_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + this.BODY_URL_);
-  this.svgBody_.setAttribute('y', this.LID_HEIGHT_);
-  this.svgLid_ = Blockly.createSvgElement('image',
-      {'width': this.WIDTH_, 'height': this.LID_HEIGHT_},
-      this.svgGroup_);
-  this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + this.LID_URL_);
-  return this.svgGroup_;
+Blockly.Trashcan.prototype.createDom = function () {
+    /*
+     <g filter="url(#blocklyTrashcanShadowFilter)">
+     <image width="47" height="45" y="15" href="media/trashbody.png"></image>
+     <image width="47" height="15" href="media/trashlid.png"></image>
+     </g>
+     */
+    this.svgGroup_ = Blockly.createSvgElement('g',
+        {'filter': 'url(#blocklyTrashcanShadowFilter)'}, null);
+    this.svgBody_ = Blockly.createSvgElement('image',
+        {'width': this.WIDTH_, 'height': this.BODY_HEIGHT_},
+        this.svgGroup_);
+    this.svgBody_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+            Blockly.pathToBlockly + this.BODY_URL_);
+    this.svgBody_.setAttribute('y', this.LID_HEIGHT_);
+    this.svgLid_ = Blockly.createSvgElement('image',
+        {'width': this.WIDTH_, 'height': this.LID_HEIGHT_},
+        this.svgGroup_);
+    this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+            Blockly.pathToBlockly + this.LID_URL_);
+    return this.svgGroup_;
 };
 
 /**
  * Initialize the trash can.
  */
-Blockly.Trashcan.prototype.init = function() {
-  this.setOpen_(false);
-  this.position_();
-  // If the document resizes, reposition the trash can.
+Blockly.Trashcan.prototype.init = function () {
+    this.setOpen_(false);
+    this.position_();
+    // If the document resizes, reposition the trash can.
 //  Blockly.bindEvent_(window, 'resize', this, this.position_);
 };
 
@@ -187,15 +186,15 @@ Blockly.Trashcan.prototype.init = function() {
  * Dispose of this trash can.
  * Unlink from all DOM elements to prevent memory leaks.
  */
-Blockly.Trashcan.prototype.dispose = function() {
-  if (this.svgGroup_) {
-    Ext.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
-  }
-  this.svgBody_ = null;
-  this.svgLid_ = null;
-  this.workspace_ = null;
-    if(this.lidTask_ != 0) {
+Blockly.Trashcan.prototype.dispose = function () {
+    if (this.svgGroup_) {
+        Ext.removeNode(this.svgGroup_);
+        this.svgGroup_ = null;
+    }
+    this.svgBody_ = null;
+    this.svgLid_ = null;
+    this.workspace_ = null;
+    if (this.lidTask_ != 0) {
         this.lidTask_.cancel();
         this.lidTask_ = 0;
     }
@@ -205,22 +204,22 @@ Blockly.Trashcan.prototype.dispose = function() {
  * Move the trash can to the bottom-right corner.
  * @private
  */
-Blockly.Trashcan.prototype.position_ = function() {
-  var metrics = this.workspace_.getMetrics();
-  if (!metrics) {
-    // There are no metrics available (workspace is probably not visible).
-    return;
-  }
-  if (Blockly.RTL) {
-    this.left_ = this.MARGIN_SIDE_;
-  } else {
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_;
-  }
-  this.top_ = metrics.viewHeight + metrics.absoluteTop -
-      (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.MARGIN_BOTTOM_;
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.left_ + ',' + this.top_ + ')');
+Blockly.Trashcan.prototype.position_ = function () {
+    var metrics = this.workspace_.getMetrics();
+    if (!metrics) {
+        // There are no metrics available (workspace is probably not visible).
+        return;
+    }
+    if (Blockly.RTL) {
+        this.left_ = this.MARGIN_SIDE_;
+    } else {
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft -
+            this.WIDTH_ - this.MARGIN_SIDE_;
+    }
+    this.top_ = metrics.viewHeight + metrics.absoluteTop -
+        (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.MARGIN_BOTTOM_;
+    this.svgGroup_.setAttribute('transform',
+            'translate(' + this.left_ + ',' + this.top_ + ')');
 };
 
 /**
@@ -228,28 +227,28 @@ Blockly.Trashcan.prototype.position_ = function() {
  * Opens/closes the lid and sets the isOpen flag.
  * @param {!Event} e Mouse move event.
  */
-Blockly.Trashcan.prototype.onMouseMove = function(e) {
-  /*
-  An alternative approach would be to use onMouseOver and onMouseOut events.
-  However the selected block will be between the mouse and the trash can,
-  thus these events won't fire.
-  Another approach is to use HTML5's drag & drop API, but it's widely hated.
-  Instead, we'll just have the block's drag_ function call us.
-  */
-  if (!this.svgGroup_) {
-    return;
-  }
-  var mouseXY = Blockly.mouseToSvg(e);
-  var trashXY = Blockly.getSvgXY_(this.svgGroup_);
-  var over = (mouseXY.x > trashXY.x - this.MARGIN_HOTSPOT_) &&
-             (mouseXY.x < trashXY.x + this.WIDTH_ + this.MARGIN_HOTSPOT_) &&
-             (mouseXY.y > trashXY.y - this.MARGIN_HOTSPOT_) &&
-             (mouseXY.y < trashXY.y + this.BODY_HEIGHT_ + this.LID_HEIGHT_ +
-              this.MARGIN_HOTSPOT_);
-  // For bonus points we might want to match the trapezoidal outline.
-  if (this.isOpen != over) {
-    this.setOpen_(over);
-  }
+Blockly.Trashcan.prototype.onMouseMove = function (e) {
+    /*
+     An alternative approach would be to use onMouseOver and onMouseOut events.
+     However the selected block will be between the mouse and the trash can,
+     thus these events won't fire.
+     Another approach is to use HTML5's drag & drop API, but it's widely hated.
+     Instead, we'll just have the block's drag_ function call us.
+     */
+    if (!this.svgGroup_) {
+        return;
+    }
+    var mouseXY = Blockly.mouseToSvg(e);
+    var trashXY = Blockly.getSvgXY_(this.svgGroup_);
+    var over = (mouseXY.x > trashXY.x - this.MARGIN_HOTSPOT_) &&
+        (mouseXY.x < trashXY.x + this.WIDTH_ + this.MARGIN_HOTSPOT_) &&
+        (mouseXY.y > trashXY.y - this.MARGIN_HOTSPOT_) &&
+        (mouseXY.y < trashXY.y + this.BODY_HEIGHT_ + this.LID_HEIGHT_ +
+            this.MARGIN_HOTSPOT_);
+    // For bonus points we might want to match the trapezoidal outline.
+    if (this.isOpen != over) {
+        this.setOpen_(over);
+    }
 };
 
 /**
@@ -257,39 +256,39 @@ Blockly.Trashcan.prototype.onMouseMove = function(e) {
  * @param {boolean} state True if open.
  * @private
  */
-Blockly.Trashcan.prototype.setOpen_ = function(state) {
-  if (this.isOpen == state) {
-    return;
-  }
-    if(this.lidTask_ != 0) {
+Blockly.Trashcan.prototype.setOpen_ = function (state) {
+    if (this.isOpen == state) {
+        return;
+    }
+    if (this.lidTask_ != 0) {
         this.lidTask_.cancel();
         this.lidTask_ = 0;
     }
-  this.isOpen = state;
-  this.animateLid_();
+    this.isOpen = state;
+    this.animateLid_();
 };
 
 /**
  * Rotate the lid open or closed by one step.  Then wait and recurse.
  * @private
  */
-Blockly.Trashcan.prototype.animateLid_ = function() {
-  this.lidAngle_ += this.isOpen ? 10 : -10;
-  this.lidAngle_ = Math.max(0, this.lidAngle_);
-  this.svgLid_.setAttribute('transform', 'rotate(' +
-      (Blockly.RTL ? -this.lidAngle_ : this.lidAngle_) + ', ' +
-      (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
-      (this.LID_HEIGHT_ - 2) + ')');
-  if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
-      this.lidTask_ = new Ext.util.DelayedTask(this.animateLid_, this);
-      this.lidTask_.delay(5);
-  }
+Blockly.Trashcan.prototype.animateLid_ = function () {
+    this.lidAngle_ += this.isOpen ? 10 : -10;
+    this.lidAngle_ = Math.max(0, this.lidAngle_);
+    this.svgLid_.setAttribute('transform', 'rotate(' +
+        (Blockly.RTL ? -this.lidAngle_ : this.lidAngle_) + ', ' +
+        (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
+        (this.LID_HEIGHT_ - 2) + ')');
+    if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
+        this.lidTask_ = new Ext.util.DelayedTask(this.animateLid_, this);
+        this.lidTask_.delay(5);
+    }
 };
 
 /**
  * Flip the lid shut.
  * Called externally after a drag.
  */
-Blockly.Trashcan.prototype.close = function() {
-  this.setOpen_(false);
+Blockly.Trashcan.prototype.close = function () {
+    this.setOpen_(false);
 };
