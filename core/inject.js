@@ -276,9 +276,9 @@ Blockly.init_ = function () {
     // understand a concept of focus on the SVG image.
     Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
     Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMove_);
-    Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
+//    Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
 //    Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null, Blockly.onContextMenu_);
-    Blockly.bindEvent_(Blockly.DIV, 'contextmenu', null, Blockly.onContextMenu_);
+//    Blockly.bindEvent_(Blockly.DIV, 'contextmenu', null, Blockly.onContextMenu_);
 
     if (!Blockly.documentEventsBound_) {
         // Only bind the window/document events once.

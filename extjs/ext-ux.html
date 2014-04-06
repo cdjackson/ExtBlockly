@@ -59,16 +59,6 @@
 </head>
 <body>
 
-<xml id="toolbox" style="display: none">
-    <block type="controls_if"></block>
-    <block type="controls_repeat_ext"></block>
-    <block type="logic_compare"></block>
-    <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="text_print"></block>
-</xml>
-
 <xml id="go">
     <block type="controls_if" id="26" inline="false" x="54" y="25">
         <value name="IF0">
@@ -120,8 +110,8 @@
 
 <script>
     var categoryArray = [
-        {name: "Procedures", tooltip: "Hello there"},
-        {name: "Math", icon: "sum.png", tooltip: "Hello there math"}
+        {name: "Procedures", title: "Procedures", tooltip: "Hello there"},
+        {name: "Math", title: "Math", icon: "sum.png", tooltip: "Hello there math"}
     ];
     var toolArray = [
         {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},

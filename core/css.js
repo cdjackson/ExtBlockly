@@ -304,10 +304,6 @@ Blockly.Css.CONTENT = [
     '  stroke-linecap: round;',
     '}',
 
-    '.blocklyContextMenu {',
-    '  border-radius: 4px;',
-    '}',
-
     '.blocklyDropdownMenu {',
     '  padding: 0 !important;',
     '}',
