@@ -58,7 +58,7 @@ Blockly.WidgetDiv.show = function(newOwner, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
-  Blockly.WidgetDiv.DIV.style.display = 'block';
+//  Blockly.WidgetDiv.DIV.style.display = 'block';
 };
 
 /**
@@ -66,11 +66,11 @@ Blockly.WidgetDiv.show = function(newOwner, dispose) {
  */
 Blockly.WidgetDiv.hide = function() {
   if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.DIV.style.display = 'none';
+//    Blockly.WidgetDiv.DIV.style.display = 'none';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.owner_ = null;
     Blockly.WidgetDiv.dispose_ = null;
-    Blockly.removeChildren(Blockly.WidgetDiv.DIV);
+//    Blockly.removeChildren(Blockly.WidgetDiv.DIV);
   }
 };
 

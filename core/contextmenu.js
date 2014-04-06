@@ -44,7 +44,7 @@ Blockly.ContextMenu.show = function(e, options) {
         Blockly.openMenu = null;
     }
 
-//  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
+  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;

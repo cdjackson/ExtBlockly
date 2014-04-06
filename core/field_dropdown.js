@@ -84,7 +84,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         Blockly.openMenu = null;
     }
 
-//  Blockly.WidgetDiv.show(this, null);
+  Blockly.WidgetDiv.show(this, null);
   var thisField = this;
 
     var callback = function(item) {

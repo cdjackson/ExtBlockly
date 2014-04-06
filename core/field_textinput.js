@@ -91,29 +91,30 @@ Blockly.FieldTextInput.prototype.setText = function (text) {
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function () {
     console.log("Text showeditor");
- /*   if (Ext.is.Phone || Ext.is.Tablet) {
-        // Mobile browsers have issues with in-line textareas (focus & keyboards).
-        var newValue = window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_);
-        if (this.changeHandler_) {
-            var override = this.changeHandler_(newValue);
-            if (override !== undefined) {
-                newValue = override;
-            }
-        }
-        if (newValue !== null) {
-            this.setText(newValue);
-        }
-        return;
-    }*/
+    /*   if (Ext.is.Phone || Ext.is.Tablet) {
+     // Mobile browsers have issues with in-line textareas (focus & keyboards).
+     var newValue = window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_);
+     if (this.changeHandler_) {
+     var override = this.changeHandler_(newValue);
+     if (override !== undefined) {
+     newValue = override;
+     }
+     }
+     if (newValue !== null) {
+     this.setText(newValue);
+     }
+     return;
+     }*/
 
 
-    Blockly.FieldTextInput.htmlInput_ = Ext.create("Ext.form.field.Text",{
- //       height:xy.height,
- //       width:xy.width,
+    Blockly.FieldTextInput.htmlInput_ = Ext.create("Ext.form.field.Text", {
+        //       height:xy.height,
+        //       width:xy.width,
         border: false,
         floating: true,
         value: this.text_
     })
+    Blockly.WidgetDiv.show(this, this.widgetDispose_());
 
     var xy = this.resizeEditor_();
     Blockly.FieldTextInput.htmlInput_.show();
@@ -122,9 +123,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function () {
     htmlInput.onWorkspaceChangeWrapper_ = Blockly.bindEvent_(workspaceSvg, 'blocklyWorkspaceChange', this, this.resizeEditor_);
 
 
-
     return;
-//    Blockly.WidgetDiv.show(this, this.widgetDispose_());
     var div = Blockly.DIV;
     // Create the input.
     var htmlInput = Ext.DomHelper.createDom({tag: 'input', id: 'blocklyHtmlInput' });
@@ -198,6 +197,10 @@ Blockly.FieldTextInput.prototype.validate_ = function () {
  * @private
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function () {
+    var htmlInput = Blockly.FieldTextInput.htmlInput_;
+    if (htmlInput == null)
+        return;
+
 //    var div = Blockly.WidgetDiv.DIV;
     var bBox = this.fieldGroup_.getBBox();
 //    div.style.width = bBox.width + 'px';
@@ -217,10 +220,9 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function () {
 //    div.style.left = xy.x + 'px';
 //    div.style.top = xy.y + 'px';
     xy.width = bBox.width + 2;
-    xy.height = bBox.height+2;
-    xy.x-=1;
+    xy.height = bBox.height + 2;
+    xy.x -= 1;
 
-    var htmlInput = Blockly.FieldTextInput.htmlInput_;
     htmlInput.setPosition(xy.x, xy.y);
     htmlInput.setSize(xy.width, xy.height);
 
@@ -247,14 +249,15 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function () {
             }
         }
         thisField.setText(text);
-        thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
-        Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
-        Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
-        Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
-        htmlInput.destroy();
+//        thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
+//        Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
+//        Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
+//        Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
+        if (htmlInput != null)
+            htmlInput.destroy();
         Blockly.FieldTextInput.htmlInput_ = null;
         // Delete the width property.
-        Blockly.WidgetDiv.DIV.style.width = 'auto';
+//        Blockly.WidgetDiv.DIV.style.width = 'auto';
     };
 };
 

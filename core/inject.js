@@ -267,10 +267,10 @@ Blockly.createDom_ = function (container) {
     Blockly.svgResize();
 
     // Create an HTML container for popup overlays (e.g. editor widgets).
-    Blockly.WidgetDiv.DIV = Ext.DomHelper.createDom({tag: 'div', id: 'blocklyWidgetDiv' });
+//    Blockly.WidgetDiv.DIV = Ext.DomHelper.createDom({tag: 'div', id: 'blocklyWidgetDiv' });
 
-    Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
-    document.body.appendChild(Blockly.WidgetDiv.DIV);
+//    Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
+//    document.body.appendChild(Blockly.WidgetDiv.DIV);
 };
 
 
