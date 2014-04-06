@@ -151,6 +151,7 @@ Ext.define('Ext.ux.Blockly', {
             region: 'center',
             tbar: tbar,
             layout: 'fit',
+            border: me.border,
             flex: 4,
             listeners: {
                 afterrender: function () {

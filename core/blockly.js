@@ -203,8 +203,8 @@ Blockly.svgSize = function () {
 Blockly.svgResize = function () {
     var svg = Blockly.svg;
     var div = svg.parentNode;
-    var width = div.offsetWidth;
-    var height = div.offsetHeight + 4;
+    var width = div.clientWidth;
+    var height = div.clientHeight;
     if (svg.cachedWidth_ != width) {
         svg.setAttribute('width', width + 'px');
         svg.cachedWidth_ = width;
@@ -222,27 +222,6 @@ Blockly.svgResize = function () {
         Blockly.mainWorkspace.trashcan.position_();
     }
 };
-/*
-Blockly.resizeWindow = function (width, height) {
-
-    if (Blockly.svg.cachedWidth_ != width) {
-        Blockly.svg.setAttribute('width', width + 'px');
-        Blockly.svg.cachedWidth_ = width;
-    }
-    if (Blockly.svg.cachedHeight_ != height) {
-        Blockly.svg.setAttribute('height', height + 'px');
-        Blockly.svg.cachedHeight_ = height;
-    }
-    // Update the scrollbars (if they exist).
-    if (Blockly.mainWorkspace.scrollbar) {
-        Blockly.mainWorkspace.scrollbar.resize();
-    }
-
-    // Flip the trash can lid if needed.
-    if (Blockly.mainWorkspace.trashcan) {
-        Blockly.mainWorkspace.trashcan.position_();
-    }
-}*/
 
 /**
  * Handle a mouse-down on SVG drawing surface.
@@ -595,14 +574,10 @@ Blockly.getMainWorkspaceMetrics_ = function () {
     if (Blockly.mainWorkspace.scrollbar) {
         // Add a border around the content that is at least half a screenful wide.
         // Ensure border is wide enough that blocks can scroll over entire screen.
-        var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-                blockBox.x + blockBox.width - viewWidth);
-        var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-                blockBox.x + viewWidth);
-        var topEdge = Math.min(blockBox.y - viewHeight / 2,
-                blockBox.y + blockBox.height - viewHeight);
-        var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-                blockBox.y + viewHeight);
+        var leftEdge = Math.min(blockBox.x - viewWidth / 2, blockBox.x + blockBox.width - viewWidth);
+        var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2, blockBox.x + viewWidth);
+        var topEdge = Math.min(blockBox.y - viewHeight / 2, blockBox.y + blockBox.height - viewHeight);
+        var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2, blockBox.y + viewHeight);
     } else {
         var leftEdge = blockBox.x;
         var rightEdge = leftEdge + blockBox.width;
@@ -747,13 +722,3 @@ Blockly.removeChildren = function (node) {
         node.removeChild(child);
     }
 };
-/*
-Blockly.openMenu = null;
-
-Blockly.clientX = 0;
-Blockly.clientY = 0;
-Blockly.setClientPosition = function (x, y) {
-    Blockly.clientX = x;
-    Blockly.clientY = y;
-}
-*/
