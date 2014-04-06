@@ -132,6 +132,8 @@ Blockly.FieldVariable.dropdownCreate = function () {
 Blockly.FieldVariable.dropdownChange = function (text) {
     function promptName(promptText, defaultText) {
         Blockly.hideChaff();
+        // TODO = change to use Ext.Msg.prompt
+        // TODO = Due to the callback nature of this though, this isn't so simple?
         var newVar = window.prompt(promptText, defaultText);
         // Merge runs of whitespace.  Strip leading and trailing whitespace.
         // Beyond this, all names are legal.

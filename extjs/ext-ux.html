@@ -122,7 +122,7 @@
     var categoryArray = [
         {name: "Procedures", tooltip: "Hello there"},
         {name: "Math", icon: "sum.png", tooltip: "Hello there math"}
-    ]
+    ];
     var toolArray = [
         {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},
         {category: "Procedures", block: "<xml><block type='procedures_ifreturn'></block></xml>", name: "X"},
@@ -173,14 +173,17 @@
             ]
         });
 
-        var blockly = Ext.create('Ext.ux.Blockly', {
+        var blockly = Ext.create('Ext.ux.blockly.Blockly', {
             tbar: toolbar,
-            toolbox: true,
-            collapse: true,
-            toolboxCategories: categoryArray,
-            toolboxTools: toolArray,
-            trashcan: true,
-            blocks: "<xml>"+document.getElementById('go').innerHTML+"</xml>"
+            blockly: {
+                toolbox: true,
+                collapse: true,
+                toolboxCategories: categoryArray,
+                toolboxTools: toolArray,
+                trashcan: true,
+                blocks: "<xml>" + document.getElementById('go').innerHTML + "</xml>",
+                path:"../"
+            }
         });
         blockly.show();
         var viewPort = Ext.create('Ext.container.Viewport', {
