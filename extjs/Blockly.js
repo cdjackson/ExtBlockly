@@ -171,12 +171,13 @@ Ext.define('Ext.ux.Blockly', {
         function renderBlockly() {
             var blocklyId = blocklyPanel.getId() + "-body";
             // Initialise Blockly
-            Blockly.inject(document.getElementById(blocklyId), {path: '../', trashcan: me.trashcan});
-
+            Blockly.inject(document.getElementById(blocklyId), {
+                path: '../',
+                collapse: me.collapse,
+                trashcan: me.trashcan
+            });
 
             if (me.toolbox == true) {
-
-
                 blocklyPanel.dropZone = Ext.create('Ext.dd.DropZone', Blockly.DIV, {
                     // If the mouse is over a target node, return that node.
                     getTargetFromEvent: function (e) {
