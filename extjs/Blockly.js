@@ -21,7 +21,6 @@ Ext.define('Ext.ux.Blockly', {
 
         var toolboxGrids = [];
 
-
         if (me.toolbox == true) {
             // Create an array of category grids.
             for (var i = 0; i < me.toolboxCategories.length; i++) {
@@ -140,9 +139,17 @@ Ext.define('Ext.ux.Blockly', {
             this.items.push(accordion);
         }
 
+        // If the toolbar exists, move it into the editor rather than the top panel
+        var tbar = null;
+        if(this.tbar != null) {
+            tbar = this.tbar;
+            this.tbar = null;
+        }
+
         // Create the panel to hold the Blockly editor
         var blocklyPanel = Ext.create('Ext.panel.Panel', {
             region: 'center',
+            tbar: tbar,
             layout: 'fit',
             flex: 4,
             listeners: {
