@@ -108,11 +108,19 @@ Blockly.FieldTextInput.prototype.showEditor_ = function () {
 
 
     Blockly.FieldTextInput.htmlInput_ = Ext.create("Ext.form.field.Text", {
-        //       height:xy.height,
-        //       width:xy.width,
+        block: this,
         border: false,
         floating: true,
-        value: this.text_
+        value: this.text_,
+        enableKeyEvents: true,
+        listeners: {
+            keypress: function (panel, e, options) {
+                this.block.onHtmlInputChange_(e);
+            },
+            keyup: function (panel, e, options) {
+                this.block.onHtmlInputChange_(e);
+            }
+        }
     })
     Blockly.WidgetDiv.show(this, this.widgetDispose_());
 
@@ -120,7 +128,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function () {
     Blockly.FieldTextInput.htmlInput_.show();
 
     var workspaceSvg = this.sourceBlock_.workspace.getCanvas();
-    htmlInput.onWorkspaceChangeWrapper_ = Blockly.bindEvent_(workspaceSvg, 'blocklyWorkspaceChange', this, this.resizeEditor_);
+    Blockly.FieldTextInput.htmlInput_.onWorkspaceChangeWrapper_ = Blockly.bindEvent_(workspaceSvg, 'blocklyWorkspaceChange', this, this.resizeEditor_);
 
 
     return;
@@ -213,20 +221,18 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function () {
 //        xy.x -= div.offsetWidth;
 //    }
     // Shift by a few pixels to line up exactly.
+    xy.x -= 1;
     xy.y += 1;
     if (Ext.isWebKit) {
         xy.y -= 3;
     }
 //    div.style.left = xy.x + 'px';
 //    div.style.top = xy.y + 'px';
-    xy.width = bBox.width + 2;
-    xy.height = bBox.height + 2;
-    xy.x -= 1;
 
     htmlInput.setPosition(xy.x, xy.y);
-    htmlInput.setSize(xy.width, xy.height);
+    htmlInput.setSize(bBox.width + 2, bBox.height + 2);
 
-    return xy;
+//    return xy;
 };
 
 /**
@@ -252,7 +258,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function () {
 //        thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
 //        Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
 //        Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
-//        Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
+        Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
         if (htmlInput != null)
             htmlInput.destroy();
         Blockly.FieldTextInput.htmlInput_ = null;
