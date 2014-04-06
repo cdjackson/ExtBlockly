@@ -36,22 +36,22 @@
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
-  this.menuGenerator_ = menuGenerator;
-  this.changeHandler_ = opt_changeHandler;
-  this.trimOptions_();
-  var firstTuple = this.getOptions_()[0];
-  this.value_ = firstTuple[1];
+Blockly.FieldDropdown = function (menuGenerator, opt_changeHandler) {
+    this.menuGenerator_ = menuGenerator;
+    this.changeHandler_ = opt_changeHandler;
+    this.trimOptions_();
+    var firstTuple = this.getOptions_()[0];
+    this.value_ = firstTuple[1];
 
-  // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
-  // Android can't (in 2014) display "▾", so use "▼" instead.
-  var arrowChar = Ext.is.Android ? '\u25BC' : '\u25BE';
-  this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
-  this.arrow_.appendChild(document.createTextNode(
-      Blockly.RTL ? arrowChar + ' ' : ' ' + arrowChar));
+    // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
+    // Android can't (in 2014) display "▾", so use "▼" instead.
+    var arrowChar = Ext.is.Android ? '\u25BC' : '\u25BE';
+    this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
+    this.arrow_.appendChild(document.createTextNode(
+        Blockly.RTL ? arrowChar + ' ' : ' ' + arrowChar));
 
-  // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
+    // Call parent's constructor.
+    Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
 };
 Blockly.inherits(Blockly.FieldDropdown, Blockly.Field);
 
@@ -65,8 +65,8 @@ Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
  * @return {!Blockly.FieldDropdown} The result of calling the constructor again
  *   with the current values of the arguments used during construction.
  */
-Blockly.FieldDropdown.prototype.clone = function() {
-  return new Blockly.FieldDropdown(this.menuGenerator_, this.changeHandler_);
+Blockly.FieldDropdown.prototype.clone = function () {
+    return new Blockly.FieldDropdown(this.menuGenerator_, this.changeHandler_);
 };
 
 /**
@@ -78,16 +78,16 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * Create a dropdown menu under the text.
  * @private
  */
-Blockly.FieldDropdown.prototype.showEditor_ = function() {
-    if(Blockly.openMenu != null) {
+Blockly.FieldDropdown.prototype.showEditor_ = function () {
+    if (Blockly.openMenu != null) {
         Ext.destroy(Blockly.openMenu);
         Blockly.openMenu = null;
     }
 
-  Blockly.WidgetDiv.show(this, null);
-  var thisField = this;
+    Blockly.WidgetDiv.show(this, null);
+    var thisField = this;
 
-    var callback = function(item) {
+    var callback = function (item) {
         if (item != null) {
             var value = item.getId();
             if (thisField.changeHandler_) {
@@ -104,9 +104,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     };
 
     var menuCfg = {
-        renderTo: Blockly.DIV,
+        renderTo: document.body,
         floating: true,
-        items:[],
+        items: [],
         shrinkWrap: 3,
         minWidth: 30,
         listeners: {
@@ -117,31 +117,25 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         }
     };
 
-  var options = this.getOptions_();
-  for (var x = 0; x < options.length; x++) {
-    var menuItem = {};
-      menuItem.id = options[x][1];          // Language-neutral value.
-      menuItem.text = options[x][0];        // Human-readable text.
-      menuItem.handler = callback;
-      if(menuItem.id == this.value_)
-          menuItem.iconCls = "x-menu-item-arrow";
-      menuCfg.items.push(menuItem);
-  }
+    var options = this.getOptions_();
+    for (var x = 0; x < options.length; x++) {
+        var menuItem = {};
+        menuItem.id = options[x][1];          // Language-neutral value.
+        menuItem.text = options[x][0];        // Human-readable text.
+        menuItem.handler = callback;
+        if (menuItem.id == this.value_)
+            menuItem.iconCls = "x-menu-item-arrow";
+        menuCfg.items.push(menuItem);
+    }
 
     var xy = Blockly.getAbsoluteXY_(this.borderRect_);
-    var aaa = Ext.getDom("blocklyHere");
-    var bbb = Ext.getDom(Blockly.DIV);
-//    var xy2 = Blockly.getAbsoluteXY_(Blockly.DIV);
-//    xy.x -= xy2.x;
-//    xy.y -= xy2.y;
-  var borderBBox = this.borderRect_.getBBox();
+    var borderBBox = this.borderRect_.getBBox();
 
     Blockly.openMenu = new Ext.menu.Menu(menuCfg);
-//    Blockly.openMenu.alignTo(Ext.get('blocklyHere'), 'tl',[xy.x-Blockly.clientX,xy.y -Blockly.clientY+ borderBBox.height]);
-//    Blockly.openMenu.alignTo(Ext.get('blocklyHere'), 'tl-tl');
+//    Blockly.openMenu.alignTo(Ext.get(Blockly.DIV), 'tl',[xy.x-Blockly.clientX,xy.y -Blockly.clientY+ borderBBox.height]);
+//    Blockly.openMenu.alignTo(Ext.get(Blockly.DIV), 'tl-tl');
 
-    Blockly.openMenu.showAt(xy.x-Blockly.clientX,xy.y -Blockly.clientY+ borderBBox.height);
-//    Blockly.openMenu.show();
+    Blockly.openMenu.showAt(xy.x, xy.y + borderBBox.height);
 };
 
 /**
@@ -149,39 +143,41 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
  * Create prefix and/or suffix labels.
  * @private
  */
-Blockly.FieldDropdown.prototype.trimOptions_ = function() {
-  this.prefixField = null;
-  this.suffixField = null;
-  var options = this.menuGenerator_;
-  if (!Ext.isArray(options) || options.length < 2) {
-    return;
-  }
-  var strings = options.map(function(t) {return t[0];});
-  var shortest = Blockly.shortestStringLength(strings);
-  var prefixLength = Blockly.commonWordPrefix(strings, shortest);
-  var suffixLength = Blockly.commonWordSuffix(strings, shortest);
-  if (!prefixLength && !suffixLength) {
-    return;
-  }
-  if (shortest <= prefixLength + suffixLength) {
-    // One or more strings will entirely vanish if we proceed.  Abort.
-    return;
-  }
-  if (prefixLength) {
-    this.prefixField = strings[0].substring(0, prefixLength - 1);
-  }
-  if (suffixLength) {
-    this.suffixField = strings[0].substr(1 - suffixLength);
-  }
-  // Remove the prefix and suffix from the options.
-  var newOptions = [];
-  for (var x = 0; x < options.length; x++) {
-    var text = options[x][0];
-    var value = options[x][1];
-    text = text.substring(prefixLength, text.length - suffixLength);
-    newOptions[x] = [text, value];
-  }
-  this.menuGenerator_ = newOptions;
+Blockly.FieldDropdown.prototype.trimOptions_ = function () {
+    this.prefixField = null;
+    this.suffixField = null;
+    var options = this.menuGenerator_;
+    if (!Ext.isArray(options) || options.length < 2) {
+        return;
+    }
+    var strings = options.map(function (t) {
+        return t[0];
+    });
+    var shortest = Blockly.shortestStringLength(strings);
+    var prefixLength = Blockly.commonWordPrefix(strings, shortest);
+    var suffixLength = Blockly.commonWordSuffix(strings, shortest);
+    if (!prefixLength && !suffixLength) {
+        return;
+    }
+    if (shortest <= prefixLength + suffixLength) {
+        // One or more strings will entirely vanish if we proceed.  Abort.
+        return;
+    }
+    if (prefixLength) {
+        this.prefixField = strings[0].substring(0, prefixLength - 1);
+    }
+    if (suffixLength) {
+        this.suffixField = strings[0].substr(1 - suffixLength);
+    }
+    // Remove the prefix and suffix from the options.
+    var newOptions = [];
+    for (var x = 0; x < options.length; x++) {
+        var text = options[x][0];
+        var value = options[x][1];
+        text = text.substring(prefixLength, text.length - suffixLength);
+        newOptions[x] = [text, value];
+    }
+    this.menuGenerator_ = newOptions;
 };
 
 /**
@@ -190,87 +186,87 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
  *     (human-readable text, language-neutral name).
  * @private
  */
-Blockly.FieldDropdown.prototype.getOptions_ = function() {
-  if (Ext.isFunction(this.menuGenerator_)) {
-    return this.menuGenerator_.call(this);
-  }
-  return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
+Blockly.FieldDropdown.prototype.getOptions_ = function () {
+    if (Ext.isFunction(this.menuGenerator_)) {
+        return this.menuGenerator_.call(this);
+    }
+    return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
 };
 
 /**
  * Get the language-neutral value from this dropdown menu.
  * @return {string} Current text.
  */
-Blockly.FieldDropdown.prototype.getValue = function() {
-  return this.value_;
+Blockly.FieldDropdown.prototype.getValue = function () {
+    return this.value_;
 };
 
 /**
  * Set the language-neutral value for this dropdown menu.
  * @param {string} newValue New value to set.
  */
-Blockly.FieldDropdown.prototype.setValue = function(newValue) {
-  this.value_ = newValue;
-  // Look up and display the human-readable text.
-  var options = this.getOptions_();
-  for (var x = 0; x < options.length; x++) {
-    // Options are tuples of human-readable text and language-neutral values.
-    if (options[x][1] == newValue) {
-      this.setText(options[x][0]);
-      return;
+Blockly.FieldDropdown.prototype.setValue = function (newValue) {
+    this.value_ = newValue;
+    // Look up and display the human-readable text.
+    var options = this.getOptions_();
+    for (var x = 0; x < options.length; x++) {
+        // Options are tuples of human-readable text and language-neutral values.
+        if (options[x][1] == newValue) {
+            this.setText(options[x][0]);
+            return;
+        }
     }
-  }
-  // Value not found.  Add it, maybe it will become valid once set
-  // (like variable names).
-  this.setText(newValue);
+    // Value not found.  Add it, maybe it will become valid once set
+    // (like variable names).
+    this.setText(newValue);
 };
 
 /**
  * Set the text in this field.  Trigger a rerender of the source block.
  * @param {?string} text New text.
  */
-Blockly.FieldDropdown.prototype.setText = function(text) {
-  if (this.sourceBlock_) {
-    // Update arrow's colour.
-    this.arrow_.style.fill = Blockly.makeColour(this.sourceBlock_.getColour());
-  }
-  if (text === null) {
-    // No change if null.
-    return;
-  }
-  this.text_ = text;
-  // Empty the text element.
-  Blockly.removeChildren(this.textElement_);
-  // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-  text = text.replace(/\s/g, Blockly.Field.NBSP);
-  if (!text) {
-    // Prevent the field from disappearing if empty.
-    text = Blockly.Field.NBSP;
-  }
-  var textNode = document.createTextNode(text);
-  this.textElement_.appendChild(textNode);
+Blockly.FieldDropdown.prototype.setText = function (text) {
+    if (this.sourceBlock_) {
+        // Update arrow's colour.
+        this.arrow_.style.fill = Blockly.makeColour(this.sourceBlock_.getColour());
+    }
+    if (text === null) {
+        // No change if null.
+        return;
+    }
+    this.text_ = text;
+    // Empty the text element.
+    Blockly.removeChildren(this.textElement_);
+    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
+    text = text.replace(/\s/g, Blockly.Field.NBSP);
+    if (!text) {
+        // Prevent the field from disappearing if empty.
+        text = Blockly.Field.NBSP;
+    }
+    var textNode = document.createTextNode(text);
+    this.textElement_.appendChild(textNode);
 
-  // Insert dropdown arrow.
-  if (Blockly.RTL) {
-    this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
-  } else {
-    this.textElement_.appendChild(this.arrow_);
-  }
+    // Insert dropdown arrow.
+    if (Blockly.RTL) {
+        this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
+    } else {
+        this.textElement_.appendChild(this.arrow_);
+    }
 
-  // Cached width is obsolete.  Clear it.
-  this.size_.width = 0;
+    // Cached width is obsolete.  Clear it.
+    this.size_.width = 0;
 
-  if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-    this.sourceBlock_.render();
-    this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
-  }
+    if (this.sourceBlock_ && this.sourceBlock_.rendered) {
+        this.sourceBlock_.render();
+        this.sourceBlock_.bumpNeighbours_();
+        this.sourceBlock_.workspace.fireChangeEvent();
+    }
 };
 
 /**
  * Close the dropdown menu if this input is being deleted.
  */
-Blockly.FieldDropdown.prototype.dispose = function() {
-  Blockly.WidgetDiv.hideIfOwner(this);
-  Blockly.FieldDropdown.superClass_.dispose.call(this);
+Blockly.FieldDropdown.prototype.dispose = function () {
+    Blockly.WidgetDiv.hideIfOwner(this);
+    Blockly.FieldDropdown.superClass_.dispose.call(this);
 };

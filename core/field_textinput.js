@@ -47,7 +47,6 @@ Blockly.inherits(Blockly.FieldTextInput, Blockly.Field);
  *   with the current values of the arguments used during construction.
  */
 Blockly.FieldTextInput.prototype.clone = function () {
-    console.log("Text clone");
     return new Blockly.FieldTextInput(this.getText(), this.changeHandler_);
 };
 
@@ -90,7 +89,6 @@ Blockly.FieldTextInput.prototype.setText = function (text) {
  * @private
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function () {
-    console.log("Text showeditor");
     /*   if (Ext.is.Phone || Ext.is.Tablet) {
      // Mobile browsers have issues with in-line textareas (focus & keyboards).
      var newValue = window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_);
