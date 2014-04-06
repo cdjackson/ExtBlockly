@@ -110,6 +110,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function () {
     Blockly.FieldTextInput.htmlInput_ = Ext.create("Ext.form.field.Text", {
         block: this,
         border: false,
+        cls:'blocklyHtmlInput',
         floating: true,
         value: this.text_,
         enableKeyEvents: true,
@@ -194,9 +195,9 @@ Blockly.FieldTextInput.prototype.validate_ = function () {
         valid = this.changeHandler_(htmlInput.getValue());
     }
     if (valid === null) {
-        Blockly.addClass_(htmlInput, 'blocklyInvalidInput');
+        htmlInput.addCls('blocklyInvalidInput');
     } else {
-        Blockly.removeClass_(htmlInput, 'blocklyInvalidInput');
+        htmlInput.removeCls('blocklyInvalidInput');
     }
 };
 
