@@ -148,7 +148,37 @@
     Ext.onReady(function () {
         Ext.QuickTips.init();
 
+        var helpWindow = Ext.create('Ext.Window', {
+            title: 'Blockly Output',
+            width: 720,
+            height: 300,
+            closeAction: 'hide',
+            html:"<div id='xmlOutput'></div>",
+            listeners: {
+                show: function(w) {
+                    var x = blockly.getBlocks(true);
+                    Ext.fly('xmlOutput').update(Ext.String.htmlEncode(x), false);
+                }
+            }
+        });
+        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: [
+                {
+                    icon: 'information-balloon.png',
+                    itemId: 'show',
+                    text: "Show XML",
+                    cls: 'x-btn-icon',
+                    disabled: false,
+                    tooltip: "Save the workspace",
+                    handler: function () {
+                        helpWindow.show();
+                    }
+                }
+            ]
+        });
+
         var blockly = Ext.create('Ext.ux.Blockly', {
+            tbar: toolbar,
             toolbox: true,
             toolboxCategories: categoryArray,
             toolboxTools: toolArray,
@@ -163,6 +193,6 @@
         });
     });
 </script>
-
+<body>
 </body>
 </html>
