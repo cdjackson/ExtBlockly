@@ -190,8 +190,10 @@ Blockly.Scrollbar = function (workspace, horizontal, opt_pair) {
         this.svgKnob_.setAttribute('x', 3);
     }
     var scrollbar = this;
-    this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_, 'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-    this.onMouseDownKnobWrapper_ = Blockly.bindEvent_(this.svgKnob_, 'mousedown', scrollbar, scrollbar.onMouseDownKnob_);
+    this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
+        'mousedown', scrollbar, scrollbar.onMouseDownBar_);
+    this.onMouseDownKnobWrapper_ = Blockly.bindEvent_(this.svgKnob_,
+        'mousedown', scrollbar, scrollbar.onMouseDownKnob_);
 };
 
 /**
@@ -261,18 +263,23 @@ Blockly.Scrollbar.prototype.resize = function (opt_metrics) {
             this.setVisible(outerLength < hostMetrics.contentHeight);
         }
         this.ratio_ = outerLength / hostMetrics.contentWidth;
-        if (this.ratio_ === -Infinity || this.ratio_ === Infinity || isNaN(this.ratio_)) {
+        if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+            isNaN(this.ratio_)) {
             this.ratio_ = 0;
         }
         var innerLength = hostMetrics.viewWidth * this.ratio_;
-        var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) * this.ratio_;
+        var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
+            this.ratio_;
         this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
         this.xCoordinate = hostMetrics.absoluteLeft;
         if (this.pair_ && Blockly.RTL) {
-            this.xCoordinate += hostMetrics.absoluteLeft + Blockly.Scrollbar.scrollbarThickness;
+            this.xCoordinate += hostMetrics.absoluteLeft +
+                Blockly.Scrollbar.scrollbarThickness;
         }
-        this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight - Blockly.Scrollbar.scrollbarThickness;
-        this.svgGroup_.setAttribute('transform', 'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
+        this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
+            Blockly.Scrollbar.scrollbarThickness;
+        this.svgGroup_.setAttribute('transform',
+                'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
         this.svgBackground_.setAttribute('width', Math.max(0, outerLength));
         this.svgKnob_.setAttribute('x', this.constrainKnob_(innerOffset));
     } else {
@@ -285,18 +292,22 @@ Blockly.Scrollbar.prototype.resize = function (opt_metrics) {
             this.setVisible(outerLength < hostMetrics.contentHeight);
         }
         this.ratio_ = outerLength / hostMetrics.contentHeight;
-        if (this.ratio_ === -Infinity || this.ratio_ === Infinity || isNaN(this.ratio_)) {
+        if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+            isNaN(this.ratio_)) {
             this.ratio_ = 0;
         }
         var innerLength = hostMetrics.viewHeight * this.ratio_;
-        var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) * this.ratio_;
+        var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
+            this.ratio_;
         this.svgKnob_.setAttribute('height', Math.max(0, innerLength));
         this.xCoordinate = hostMetrics.absoluteLeft;
         if (!Blockly.RTL) {
-            this.xCoordinate += hostMetrics.viewWidth - Blockly.Scrollbar.scrollbarThickness;
+            this.xCoordinate += hostMetrics.viewWidth -
+                Blockly.Scrollbar.scrollbarThickness;
         }
         this.yCoordinate = hostMetrics.absoluteTop;
-        this.svgGroup_.setAttribute('transform', 'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
+        this.svgGroup_.setAttribute('transform',
+                'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
         this.svgBackground_.setAttribute('height', Math.max(0, outerLength));
         this.svgKnob_.setAttribute('y', this.constrainKnob_(innerOffset));
     }
@@ -378,8 +389,10 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function (e) {
 
     var knobXY = Blockly.getSvgXY_(this.svgKnob_);
     var knobStart = this.horizontal_ ? knobXY.x : knobXY.y;
-    var knobLength = parseFloat(this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
-    var knobValue = parseFloat(this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    var knobLength = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
+    var knobValue = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
 
     var pageLength = knobLength * 0.95;
     if (mouseLocation <= knobStart) {
@@ -410,11 +423,14 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function (e) {
         return;
     }
     // Look up the current translation and record it.
-    this.startDragKnob = parseFloat(this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    this.startDragKnob = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
     // Record the current mouse position.
     this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
-    Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document, 'mouseup', this, this.onMouseUpKnob_);
-    Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove', this, this.onMouseMoveKnob_);
+    Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+        'mouseup', this, this.onMouseUpKnob_);
+    Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+        'mousemove', this, this.onMouseMoveKnob_);
     e.stopPropagation();
 };
 
@@ -428,7 +444,8 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function (e) {
     var mouseDelta = currentMouse - this.startDragMouse;
     var knobValue = this.startDragKnob + mouseDelta;
     // Position the bar.
-    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', this.constrainKnob_(knobValue));
+    this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
+        this.constrainKnob_(knobValue));
     this.onScroll_();
 };
 
@@ -473,8 +490,10 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function (value) {
  * @private
  */
 Blockly.Scrollbar.prototype.onScroll_ = function () {
-    var knobValue = parseFloat(this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
-    var barLength = parseFloat(this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
+    var knobValue = parseFloat(
+        this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+    var barLength = parseFloat(
+        this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
     var ratio = knobValue / barLength;
     if (isNaN(ratio)) {
         ratio = 0;

@@ -365,6 +365,7 @@ Blockly.Xml.domToBlock = function (workspace, xmlBlock, opt_reuseBlock) {
             // Unknown tag; ignore.  Same principle as HTML parsers.
         }
     }
+
     var collapsed = xmlBlock.getAttribute('collapsed');
     if (collapsed) {
         block.setCollapsed(collapsed == 'true');
@@ -377,7 +378,6 @@ Blockly.Xml.domToBlock = function (workspace, xmlBlock, opt_reuseBlock) {
     } else {
         block.render();
     }
-
     return block;
 };
 

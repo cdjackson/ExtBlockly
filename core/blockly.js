@@ -232,7 +232,8 @@ Blockly.onMouseDown_ = function (e) {
     Blockly.svgResize();
     Blockly.terminateDrag_(); // In case mouse-up event was lost.
     Blockly.hideChaff();
-    var isTargetSvg = e.target && e.target.nodeName && e.target.nodeName.toLowerCase() == 'svg';
+    var isTargetSvg = e.target && e.target.nodeName &&
+        e.target.nodeName.toLowerCase() == 'svg';
     if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
         // Clicking on the document clears the selection.
         Blockly.selected.unselect();
@@ -248,7 +249,8 @@ Blockly.onMouseDown_ = function (e) {
         // Record the current mouse position.
         Blockly.mainWorkspace.startDragMouseX = e.clientX;
         Blockly.mainWorkspace.startDragMouseY = e.clientY;
-        Blockly.mainWorkspace.startDragMetrics = Blockly.mainWorkspace.getMetrics();
+        Blockly.mainWorkspace.startDragMetrics =
+            Blockly.mainWorkspace.getMetrics();
         Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
         Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
     }
@@ -279,11 +281,14 @@ Blockly.onMouseMove_ = function (e) {
         var y = Blockly.mainWorkspace.startScrollY + dy;
         x = Math.min(x, -metrics.contentLeft);
         y = Math.min(y, -metrics.contentTop);
-        x = Math.max(x, metrics.viewWidth - metrics.contentLeft - metrics.contentWidth);
-        y = Math.max(y, metrics.viewHeight - metrics.contentTop - metrics.contentHeight);
+        x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
+            metrics.contentWidth);
+        y = Math.max(y, metrics.viewHeight - metrics.contentTop -
+            metrics.contentHeight);
 
         // Move the scrollbars and the page will scroll automatically.
-        Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft, -y - metrics.contentTop);
+        Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
+                -y - metrics.contentTop);
     }
 };
 
@@ -403,13 +408,6 @@ Blockly.showContextMenu_ = function (e) {
         };
         options.push(expandOption);
     }
-
-    // Option to get help.
-//    var helpOption = {enabled: false};
-//    helpOption.text = Blockly.Msg.HELP;
-//    helpOption.callback = function () {
-//    };
-//    options.push(helpOption);
 
     Blockly.ContextMenu.show(e, options);
 };
@@ -577,6 +575,14 @@ Blockly.getMainWorkspaceMetrics_ = function () {
         var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2, blockBox.x + viewWidth);
         var topEdge = Math.min(blockBox.y - viewHeight / 2, blockBox.y + blockBox.height - viewHeight);
         var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2, blockBox.y + viewHeight);
+        var leftEdge = Math.min(blockBox.x - viewWidth / 2,
+                blockBox.x + blockBox.width - viewWidth);
+        var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
+                blockBox.x + viewWidth);
+        var topEdge = Math.min(blockBox.y - viewHeight / 2,
+                blockBox.y + blockBox.height - viewHeight);
+        var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
+                blockBox.y + viewHeight);
     } else {
         var leftEdge = blockBox.x;
         var rightEdge = leftEdge + blockBox.width;

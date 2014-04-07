@@ -90,9 +90,11 @@ Blockly.Icon.prototype.dispose = function () {
  */
 Blockly.Icon.prototype.updateEditable = function () {
     if (!this.block_.isInFlyout) {
-        Blockly.addClass_(this.iconGroup_, 'blocklyIconGroup');
+        Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+            'blocklyIconGroup');
     } else {
-        Blockly.removeClass_(this.iconGroup_, 'blocklyIconGroup');
+        Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
+            'blocklyIconGroup');
     }
 };
 
@@ -142,7 +144,8 @@ Blockly.Icon.prototype.renderIcon = function (cursorX) {
     if (Blockly.RTL) {
         cursorX -= diameter;
     }
-    this.iconGroup_.setAttribute('transform', 'translate(' + cursorX + ', ' + TOP_MARGIN + ')');
+    this.iconGroup_.setAttribute('transform',
+            'translate(' + cursorX + ', ' + TOP_MARGIN + ')');
     this.computeIconLocation();
     if (Blockly.RTL) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;

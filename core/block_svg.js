@@ -33,9 +33,13 @@ Blockly.BlockSvg = function (block) {
     this.block_ = block;
     // Create core elements for the block.
     this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-    this.svgPathDark_ = Blockly.createSvgElement('path', {'class': 'blocklyPathDark', 'transform': 'translate(1, 1)'}, this.svgGroup_);
-    this.svgPath_ = Blockly.createSvgElement('path', {'class': 'blocklyPath'}, this.svgGroup_);
-    this.svgPathLight_ = Blockly.createSvgElement('path', {'class': 'blocklyPathLight'}, this.svgGroup_);
+    this.svgPathDark_ = Blockly.createSvgElement('path',
+        {'class': 'blocklyPathDark', 'transform': 'translate(1, 1)'},
+        this.svgGroup_);
+    this.svgPath_ = Blockly.createSvgElement('path', {'class': 'blocklyPath'},
+        this.svgGroup_);
+    this.svgPathLight_ = Blockly.createSvgElement('path',
+        {'class': 'blocklyPathLight'}, this.svgGroup_);
     this.svgPath_.tooltip = this.block_;
     Blockly.Tooltip.bindMouseEvents(this.svgPath_);
     this.updateMovable();
@@ -77,9 +81,11 @@ Blockly.BlockSvg.prototype.init = function () {
  */
 Blockly.BlockSvg.prototype.updateMovable = function () {
     if (this.block_.isMovable()) {
-        Blockly.addClass_(this.svgGroup_, 'blocklyDraggable');
+        Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+            'blocklyDraggable');
     } else {
-        Blockly.removeClass_(this.svgGroup_, 'blocklyDraggable');
+        Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+            'blocklyDraggable');
     }
 };
 
@@ -306,7 +312,7 @@ Blockly.BlockSvg.prototype.dispose = function () {
 Blockly.BlockSvg.prototype.disposeUiEffect = function () {
     Blockly.playAudio('delete');
 
-    var xy = Blockly.getSvgXY_(this.svgGroup_);
+    var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
     // Deeply clone the current block.
     var clone = this.svgGroup_.cloneNode(true);
     clone.translateX_ = xy.x;
@@ -362,7 +368,8 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function () {
         xy.y += 3;
     }
     var ripple = Blockly.createSvgElement('circle',
-        {'cx': xy.x, 'cy': xy.y, 'r': 0, 'fill': 'none', 'stroke': '#888', 'stroke-width': 10},
+        {'cx': xy.x, 'cy': xy.y, 'r': 0, 'fill': 'none',
+            'stroke': '#888', 'stroke-width': 10},
         Blockly.svg);
     // Start the animation.
     ripple.startDate_ = new Date();
@@ -411,10 +418,12 @@ Blockly.BlockSvg.prototype.updateColour = function () {
  */
 Blockly.BlockSvg.prototype.updateDisabled = function () {
     if (this.block_.disabled || this.block_.getInheritedDisabled()) {
-        Blockly.addClass_(this.svgGroup_, 'blocklyDisabled');
+        Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+            'blocklyDisabled');
         this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
     } else {
-        Blockly.removeClass_(this.svgGroup_, 'blocklyDisabled');
+        Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+            'blocklyDisabled');
         this.updateColour();
     }
     var children = this.block_.getChildren();
@@ -427,7 +436,8 @@ Blockly.BlockSvg.prototype.updateDisabled = function () {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function () {
-    Blockly.addClass_(this.svgGroup_, 'blocklySelected');
+    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+        'blocklySelected');
     // Move the selected block to the top of the stack.
     this.svgGroup_.parentNode.appendChild(this.svgGroup_);
 };
@@ -436,7 +446,8 @@ Blockly.BlockSvg.prototype.addSelect = function () {
  * Unselect this block.  Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.removeSelect = function () {
-    Blockly.removeClass_(this.svgGroup_, 'blocklySelected');
+    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+        'blocklySelected');
 };
 
 /**
@@ -444,14 +455,16 @@ Blockly.BlockSvg.prototype.removeSelect = function () {
  * Also disables the highlights/shadows to improve performance.
  */
 Blockly.BlockSvg.prototype.addDragging = function () {
-    Blockly.addClass_(this.svgGroup_, 'blocklyDragging');
+    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+        'blocklyDragging');
 };
 
 /**
  * Removes the dragging class from this block.
  */
 Blockly.BlockSvg.prototype.removeDragging = function () {
-    Blockly.removeClass_(this.svgGroup_, 'blocklyDragging');
+    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+        'blocklyDragging');
 };
 
 /**
@@ -507,12 +520,14 @@ Blockly.BlockSvg.prototype.renderFields_ = function (fieldList, cursorX, cursorY
 
         if (Blockly.RTL) {
             cursorX -= fieldWidth;
-            field.getRootElement().setAttribute('transform', 'translate(' + cursorX + ', ' + cursorY + ')');
+            field.getRootElement().setAttribute('transform',
+                    'translate(' + cursorX + ', ' + cursorY + ')');
             if (fieldWidth) {
                 cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
             }
         } else {
-            field.getRootElement().setAttribute('transform', 'translate(' + cursorX + ', ' + cursorY + ')');
+            field.getRootElement().setAttribute('transform',
+                    'translate(' + cursorX + ', ' + cursorY + ')');
             if (fieldWidth) {
                 cursorX += fieldWidth + Blockly.BlockSvg.SEP_SPACE_X;
             }
@@ -533,7 +548,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
     var inputRows = [];
     inputRows.rightEdge = iconWidth + Blockly.BlockSvg.SEP_SPACE_X * 2;
     if (this.block_.previousConnection || this.block_.nextConnection) {
-        inputRows.rightEdge = Math.max(inputRows.rightEdge, Blockly.BlockSvg.NOTCH_WIDTH + Blockly.BlockSvg.SEP_SPACE_X);
+        inputRows.rightEdge = Math.max(inputRows.rightEdge,
+                Blockly.BlockSvg.NOTCH_WIDTH + Blockly.BlockSvg.SEP_SPACE_X);
     }
     var fieldValueWidth = 0;  // Width of longest external value field.
     var fieldStatementWidth = 0;  // Width of longest statement field.
@@ -569,7 +585,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
         input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
         // The width is currently only needed for inline value inputs.
         if (isInline && input.type == Blockly.INPUT_VALUE) {
-            input.renderWidth = Blockly.BlockSvg.TAB_WIDTH + Blockly.BlockSvg.SEP_SPACE_X * 1.25;
+            input.renderWidth = Blockly.BlockSvg.TAB_WIDTH +
+                Blockly.BlockSvg.SEP_SPACE_X * 1.25;
         } else {
             input.renderWidth = 0;
         }
@@ -632,16 +649,20 @@ Blockly.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
 
     // Compute the statement edge.
     // This is the width of a block where statements are nested.
-    inputRows.statementEdge = 2 * Blockly.BlockSvg.SEP_SPACE_X + fieldStatementWidth;
+    inputRows.statementEdge = 2 * Blockly.BlockSvg.SEP_SPACE_X +
+        fieldStatementWidth;
     // Compute the preferred right edge.  Inline blocks may extend beyond.
     // This is the width of the block where external inputs connect.
     if (hasStatement) {
-        inputRows.rightEdge = Math.max(inputRows.rightEdge, inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH);
+        inputRows.rightEdge = Math.max(inputRows.rightEdge,
+                inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH);
     }
     if (hasValue) {
-        inputRows.rightEdge = Math.max(inputRows.rightEdge, fieldValueWidth + Blockly.BlockSvg.SEP_SPACE_X * 2 + Blockly.BlockSvg.TAB_WIDTH);
+        inputRows.rightEdge = Math.max(inputRows.rightEdge, fieldValueWidth +
+            Blockly.BlockSvg.SEP_SPACE_X * 2 + Blockly.BlockSvg.TAB_WIDTH);
     } else if (hasDummy) {
-        inputRows.rightEdge = Math.max(inputRows.rightEdge, fieldValueWidth + Blockly.BlockSvg.SEP_SPACE_X * 2);
+        inputRows.rightEdge = Math.max(inputRows.rightEdge, fieldValueWidth +
+            Blockly.BlockSvg.SEP_SPACE_X * 2);
     }
 
     inputRows.hasValue = hasValue;
@@ -699,8 +720,10 @@ Blockly.BlockSvg.prototype.renderDraw_ = function (iconWidth, inputRows) {
     var highlightSteps = [];
     var highlightInlineSteps = [];
 
-    this.renderDrawTop_(steps, highlightSteps, connectionsXY, inputRows.rightEdge);
-    var cursorY = this.renderDrawRight_(steps, highlightSteps, inlineSteps, highlightInlineSteps, connectionsXY, inputRows, iconWidth);
+    this.renderDrawTop_(steps, highlightSteps, connectionsXY,
+        inputRows.rightEdge);
+    var cursorY = this.renderDrawRight_(steps, highlightSteps, inlineSteps,
+        highlightInlineSteps, connectionsXY, inputRows, iconWidth);
     this.renderDrawBottom_(steps, highlightSteps, connectionsXY, cursorY);
     this.renderDrawLeft_(steps, highlightSteps, connectionsXY, cursorY);
 
@@ -748,7 +771,8 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
             steps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT);
             highlightSteps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT);
             // Create previous block connection.
-            var connectionX = connectionsXY.x + (Blockly.RTL ? -Blockly.BlockSvg.NOTCH_WIDTH : Blockly.BlockSvg.NOTCH_WIDTH);
+            var connectionX = connectionsXY.x + (Blockly.RTL ?
+                -Blockly.BlockSvg.NOTCH_WIDTH : Blockly.BlockSvg.NOTCH_WIDTH);
             var connectionY = connectionsXY.y;
             this.block_.previousConnection.moveTo(connectionX, connectionY);
             // This connection will be tightened when the parent renders.
@@ -1016,7 +1040,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function (steps, highlightSteps, i
 Blockly.BlockSvg.prototype.renderDrawBottom_ = function (steps, highlightSteps, connectionsXY, cursorY) {
     this.height = cursorY + 1;  // Add one for the shadow.
     if (this.block_.nextConnection) {
-        steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH + ' ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT);
+        steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH + ' ' +
+            Blockly.BlockSvg.NOTCH_PATH_RIGHT);
         // Create next block connection.
         var connectionX;
         if (Blockly.RTL) {

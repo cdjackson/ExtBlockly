@@ -146,6 +146,8 @@ Blockly.FieldTextInput.prototype.showEditor_ = function () {
 
     // Bind to keyup -- trap Enter and Esc; resize after every keystroke.
     htmlInput.onKeyUpWrapper_ = Blockly.bindEvent_(htmlInput, 'keyup', this, this.onHtmlInputChange_);
+    htmlInput.onKeyUpWrapper_ =
+        Blockly.bindEvent_(htmlInput, 'keyup', this, this.onHtmlInputChange_);
     // Bind to keyPress -- repeatedly resize when holding down a key.
     htmlInput.onKeyPressWrapper_ = Blockly.bindEvent_(htmlInput, 'keypress', this, this.onHtmlInputChange_);
 };

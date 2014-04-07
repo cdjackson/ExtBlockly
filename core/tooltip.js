@@ -264,7 +264,7 @@ Blockly.Tooltip.show_ = function () {
     // Erase all existing text.
     Blockly.removeChildren(
         /** @type {!Element} */ (Blockly.Tooltip.svgText_));
-    // Create new text.
+    // Get the new text.
     var tip = Blockly.Tooltip.element_.tooltip;
     if (Ext.isFunction(tip)) {
         tip = tip();

@@ -586,7 +586,8 @@ Blockly.Block.prototype.duplicate_ = function () {
     // Create a duplicate via XML.
     var xmlBlock = Blockly.Xml.blockToDom_(this);
     Blockly.Xml.deleteNext(xmlBlock);
-    var newBlock = Blockly.Xml.domToBlock(this.workspace, xmlBlock);
+    var newBlock = Blockly.Xml.domToBlock(
+        /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
     // Move the duplicate next to the old block.
     var xy = this.getRelativeToSurfaceXY();
     if (Blockly.RTL) {

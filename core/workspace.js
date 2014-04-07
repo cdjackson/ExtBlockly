@@ -331,7 +331,8 @@ Blockly.Workspace.prototype.fireChangeEvent = function () {
  * @param {!Element} xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function (xmlBlock) {
-    if (xmlBlock.getElementsByTagName('block').length >= this.remainingCapacity()) {
+    if (xmlBlock.getElementsByTagName('block').length >=
+        this.remainingCapacity()) {
         return;
     }
     var block = Blockly.Xml.domToBlock(this, xmlBlock);

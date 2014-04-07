@@ -160,7 +160,8 @@ Blockly.Blocks.addTemplate = function (details) {
     // Create mutationToDom if needed.
     if (details.switchable) {
         block.mutationToDom = function () {
-            var container = details.mutationToDomFunc ? details.mutatationToDomFunc() : document.createElement('mutation');
+            var container = details.mutationToDomFunc ? details.mutatationToDomFunc()
+                : document.createElement('mutation');
             container.setAttribute('is_statement', this['isStatement'] || false);
             return container;
         };

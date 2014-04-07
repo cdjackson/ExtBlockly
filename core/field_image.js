@@ -139,7 +139,8 @@ Blockly.FieldImage.prototype.setValue = function (src) {
         return;
     }
     this.src_ = src;
-    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', Ext.isString(src) ? src : '');
+    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+        'xlink:href', goog.isString(src) ? src : '');
 };
 
 /**
