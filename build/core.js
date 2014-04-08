@@ -9387,7 +9387,7 @@ Blockly.Mutator.prototype.createIcon = function () {
         {'class': 'blocklyIconMark',
             'x': Blockly.Icon.RADIUS,
             'y': 2 * Blockly.Icon.RADIUS - 4}, this.iconGroup_);
-    this.iconMark_.appendChild(document.createTextNode('\u2605'));
+    this.iconMark_.appendChild(document.createTextNode('\u2699'));
 };
 
 /**
