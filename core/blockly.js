@@ -571,10 +571,6 @@ Blockly.getMainWorkspaceMetrics_ = function () {
     if (Blockly.mainWorkspace.scrollbar) {
         // Add a border around the content that is at least half a screenful wide.
         // Ensure border is wide enough that blocks can scroll over entire screen.
-        var leftEdge = Math.min(blockBox.x - viewWidth / 2, blockBox.x + blockBox.width - viewWidth);
-        var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2, blockBox.x + viewWidth);
-        var topEdge = Math.min(blockBox.y - viewHeight / 2, blockBox.y + blockBox.height - viewHeight);
-        var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2, blockBox.y + viewHeight);
         var leftEdge = Math.min(blockBox.x - viewWidth / 2,
                 blockBox.x + blockBox.width - viewWidth);
         var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
