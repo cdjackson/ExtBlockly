@@ -7,3 +7,27 @@ The directory extjs contains the ExtJS user extension and an example of its use 
 Configuration for blockly is put into the blockly object.
 
 If a toolbox is defined, it is placed on the left of the window (east container in a border layout). Any toolbar (tbar) defined will then be moved into the centre container above the Blockly editor.
+
+Initialisation options as follows -:
+```
+        var blockly = Ext.create('Ext.ux.blockly.Blockly', {
+            tbar: toolbar,
+            border:false,
+            blockly: {
+                toolbox: true,
+                collapse: true,
+                toolboxCategories: categoryArray,
+                toolboxTools: toolArray,
+                trashcan: true,
+                blocks: "<xml>" + document.getElementById('go').innerHTML + "</xml>",
+                path:"../",
+                listeners: {
+                    workspacechanged: function() {
+                        console.log("It changed");
+                    }
+                }
+            }
+        });
+```
+
+
