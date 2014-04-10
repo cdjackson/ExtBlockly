@@ -244,6 +244,14 @@ Ext.define('Ext.ux.blockly.Blockly', {
             // Load the design into the workspace
             if (me.blockly.blocks != null && me.blockly.blocks != "")
                 me.setBlocks(me.blockly.blocks);
+
+            // If a change listener is specified, add it
+            if(me.blockly.listeners == null)
+                return;
+
+            if(me.blockly.listeners.workspacechanged) {
+                Ext.fly(Blockly.mainWorkspace.getCanvas()).on('blocklyWorkspaceChange',me.blockly.listeners.workspacechanged);
+            }
         }
     },
     listeners: {

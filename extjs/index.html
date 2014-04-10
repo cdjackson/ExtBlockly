@@ -173,7 +173,12 @@
                 toolboxTools: toolArray,
                 trashcan: true,
                 blocks: "<xml>" + document.getElementById('go').innerHTML + "</xml>",
-                path:"../"
+                path:"../",
+                listeners: {
+                    workspacechanged: function() {
+                        console.log("It changed");
+                    }
+                }
             }
         });
         blockly.show();
