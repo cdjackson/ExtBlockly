@@ -254,7 +254,10 @@ Ext.define('Ext.ux.blockly.Blockly', {
         }
     },
     setBlocks: function (blocks) {
-        Blockly.getMainWorkspace().clear();
+        // Clear any existing workspace
+        if(Blockly.getMainWorkspace() != null)
+            Blockly.getMainWorkspace().clear();
+
         var xml = Blockly.Xml.textToDom(blocks);
         Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
     },
