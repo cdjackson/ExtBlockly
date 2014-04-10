@@ -30,9 +30,9 @@ var Turtle = {};
 
 // Supported languages.
 BlocklyApps.LANGUAGES =
-    ['ar', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hu', 'is',
-     'it', 'ko', 'ms', 'nl', 'pl', 'pms', 'pt-br', 'ro', 'ru', 'sv', 'tr',
-     'uk', 'vi', 'zh-hans', 'zh-hant'];
+    ['ar', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hi', 'hrx',
+     'hu', 'is', 'it', 'ko', 'ms', 'nl', 'pl', 'pms', 'pt-br', 'ro', 'ru',
+     'sco', 'sv', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -58,6 +58,21 @@ Turtle.init = function() {
   BlocklyApps.init();
 
   var rtl = BlocklyApps.isRtl();
+  var blocklyDiv = document.getElementById('blockly');
+  var visualization = document.getElementById('visualization');
+  var onresize = function(e) {
+    var top = visualization.offsetTop;
+    blocklyDiv.style.top = Math.max(10, top - window.pageYOffset) + 'px';
+    blocklyDiv.style.left = rtl ? '10px' : '420px';
+    blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
+  };
+  window.addEventListener('scroll', function() {
+      onresize();
+      Blockly.fireUiEvent(window, 'resize');
+    });
+  window.addEventListener('resize', onresize);
+  onresize();
+
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
       {path: '../../',
@@ -78,21 +93,6 @@ Turtle.init = function() {
     }
     return null;
   });
-  var blocklyDiv = document.getElementById('blockly');
-  var visualization = document.getElementById('visualization');
-  var onresize = function(e) {
-    var top = visualization.offsetTop;
-    blocklyDiv.style.top = Math.max(10, top - window.pageYOffset) + 'px';
-    blocklyDiv.style.left = rtl ? '10px' : '420px';
-    blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
-  };
-  window.addEventListener('scroll', function() {
-      onresize();
-      Blockly.fireUiEvent(window, 'resize');
-    });
-  window.addEventListener('resize', onresize);
-  onresize();
-  Blockly.fireUiEvent(window, 'resize');
 
   // Hide download button if browser lacks support
   // (http://caniuse.com/#feat=download).

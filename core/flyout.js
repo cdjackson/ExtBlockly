@@ -29,11 +29,11 @@
  * @constructor
  */
 Blockly.Flyout = function () {
+    var flyout = this;
     /**
      * @type {!Blockly.Workspace}
      * @private
      */
-    var flyout = this;
     this.workspace_ = new Blockly.Workspace(
         function () {
             return flyout.getMetrics_();
@@ -110,7 +110,8 @@ Blockly.Flyout.prototype.createDom = function () {
      </g>
      */
     this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-    this.svgBackground_ = Blockly.createSvgElement('path', {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
+    this.svgBackground_ = Blockly.createSvgElement('path',
+        {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
     this.svgGroup_.appendChild(this.workspace_.createDom());
     return this.svgGroup_;
 };
@@ -408,7 +409,7 @@ Blockly.Flyout.prototype.show = function (xmlList) {
     this.filterForCapacity_();
 
     // Fire a resize event to update the flyout's scrollbar.
-    Blockly.fireUiEvent(window, 'resize');
+    Blockly.fireUiEventNow(window, 'resize');
     this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
         'blocklyWorkspaceChange', this, this.reflow);
     this.workspace_.fireChangeEvent();
@@ -479,7 +480,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function (block) {
         Blockly.hideChaff();
         if (Blockly.isRightButton(e)) {
             // Right-click.
-            block.showContextMenu_(Blockly.mouseToSvg(e));
+            block.showContextMenu_(e);
         } else {
             // Left-click (or middle click)
             Blockly.removeAllRanges();

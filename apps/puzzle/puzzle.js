@@ -29,12 +29,13 @@
 var Puzzle = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = [
-  'af', 'ar', 'be-tarask', 'br', 'ca', 'cdo', 'cs', 'da', 'de', 'el', 'en',
-  'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hu', 'ia',
-  'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb', 'lt', 'lv', 'mk',
-  'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl', 'pms', 'ps', 'pt-br',
-  'ro', 'ru', 'sk', 'sv', 'sw', 'th', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ace', 'af', 'ar', 'be-tarask', 'br', 'ca', 'cdo', 'cs', 'da', 'de', 'el',
+     'en', 'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hi',
+     'hu', 'ia', 'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb',
+     'lt', 'lv', 'mk', 'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl',
+     'pms', 'ps', 'pt-br', 'ro', 'ru', 'si', 'sk', 'sv', 'sw', 'th', 'tr', 'uk',
+     'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -47,12 +48,6 @@ Puzzle.init = function() {
   BlocklyApps.init();
 
   var rtl = BlocklyApps.isRtl();
-  Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
-       rtl: rtl,
-       scrollbars: false,
-       trashcan: false});
-
   var blocklyDiv = document.getElementById('blockly');
   var onresize = function(e) {
     blocklyDiv.style.width = (window.innerWidth - 20) + 'px';
@@ -61,7 +56,12 @@ Puzzle.init = function() {
   };
   onresize();
   window.addEventListener('resize', onresize);
-  Blockly.fireUiEvent(window, 'resize');
+
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       rtl: rtl,
+       scrollbars: false,
+       trashcan: false});
 
   // Add the blocks.
   try {

@@ -193,12 +193,13 @@ Blockly.clipboard_ = null;
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function () {
-    return {width: Blockly.svg.cachedWidth_, height: Blockly.svg.cachedHeight_};
+    return {width: Blockly.svg.cachedWidth_,
+        height: Blockly.svg.cachedHeight_};
 };
 
 /**
- * Size the SVG image to completely fill its container.  Record both
- * the height/width and the absolute position of the SVG image.
+ * Size the SVG image to completely fill its container.
+ * Record the height/width of the SVG image.
  */
 Blockly.svgResize = function () {
     var svg = Blockly.svg;
@@ -426,8 +427,9 @@ Blockly.onContextMenu_ = function (e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
+ * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
  */
-Blockly.hideChaff = function () {
+Blockly.hideChaff = function (opt_allowToolbox) {
     Blockly.Tooltip.hide();
     Blockly.WidgetDiv.hide();
 };

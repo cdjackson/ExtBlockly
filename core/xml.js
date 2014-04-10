@@ -53,9 +53,8 @@ Blockly.Xml.workspaceToDom = function (workspace) {
  */
 Blockly.Xml.blockToDom_ = function (block) {
     var element = Ext.DomHelper.createDom({tag: 'block', type: block.type, id: block.id });
-
-//    element.setAttribute('type', block.type);
-//  element.setAttribute('id', block.id);
+    element.setAttribute('type', block.type);
+    element.setAttribute('id', block.id);
     if (block.mutationToDom) {
         // Custom data for an advanced block.
         var mutation = block.mutationToDom();

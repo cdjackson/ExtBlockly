@@ -29,11 +29,11 @@
 var Maze = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['ar', 'br', 'ca', 'cs', 'da', 'de', 'el', 'en',
-                         'es', 'eu', 'fa', 'fr', 'gl', 'hu', 'ia', 'is', 'it',
-                         'ja', 'ko', 'lv', 'mk', 'ms', 'nl', 'pl', 'pms',
-                         'pt-br', 'ro', 'ru', 'sk', 'sr', 'sv', 'sw', 'th',
-                         'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ar', 'br', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fr',
+     'gl', 'hu', 'hrx', 'ia', 'is', 'it', 'ja', 'ko', 'lv', 'mk', 'ms', 'nl',
+     'pl', 'pms', 'pt-br', 'ro', 'ru', 'sco', 'sk', 'si', 'sr', 'sv', 'sw',
+     'th', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -475,19 +475,6 @@ Maze.init = function() {
   pegmanButton.addEventListener('touchstart', Maze.showPegmanMenu, true);
 
   var rtl = BlocklyApps.isRtl();
-  var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
-       maxBlocks: Maze.MAX_BLOCKS,
-       rtl: rtl,
-       toolbox: toolbox,
-       trashcan: true});
-  Blockly.loadAudio_(Maze.SKIN.winSound, 'win');
-  Blockly.loadAudio_(Maze.SKIN.crashSound, 'fail');
-
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = '  BlocklyApps.checkTimeout(%1);\n';
-  Maze.drawMap();
-
   var blocklyDiv = document.getElementById('blockly');
   var visualization = document.getElementById('visualization');
   var onresize = function(e) {
@@ -502,7 +489,19 @@ Maze.init = function() {
     });
   window.addEventListener('resize', onresize);
   onresize();
-  Blockly.fireUiEvent(window, 'resize');
+
+  var toolbox = document.getElementById('toolbox');
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       maxBlocks: Maze.MAX_BLOCKS,
+       rtl: rtl,
+       toolbox: toolbox,
+       trashcan: true});
+  Blockly.loadAudio_(Maze.SKIN.winSound, 'win');
+  Blockly.loadAudio_(Maze.SKIN.crashSound, 'fail');
+
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = '  BlocklyApps.checkTimeout(%1);\n';
+  Maze.drawMap();
 
   var defaultXml =
       '<xml>' +

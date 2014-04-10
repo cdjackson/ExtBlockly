@@ -218,17 +218,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         var name = this.getFieldValue('NAME');
         option.text = Blockly.Msg.PROCEDURES_CREATE_DO.replace('%1', name);
 
-//    var xmlMutation = goog.dom.createDom('mutation');
         var xmlMutation = Ext.DomHelper.createDom({tag: "mutation"})
-
         xmlMutation.setAttribute('name', name);
         for (var x = 0; x < this.arguments_.length; x++) {
-//      var xmlArg = goog.dom.createDom('arg');
             var xmlArg = Ext.DomHelper.createDom({tag: "arg"})
             xmlArg.setAttribute('name', this.arguments_[x]);
             xmlMutation.appendChild(xmlArg);
         }
-//    var xmlBlock = goog.dom.createDom('block', null, xmlMutation);
         var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlMutation})
         xmlBlock.setAttribute('type', this.callType_);
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -239,10 +235,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
             var option = {enabled: true};
             var name = this.arguments_[x];
             option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-            //var xmlField = goog.dom.createDom('field', null, name);
             var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
             xmlField.setAttribute('name', 'VAR');
-            //var xmlBlock = goog.dom.createDom('block', null, xmlField);
             var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
             xmlBlock.setAttribute('type', 'variables_get');
             option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);

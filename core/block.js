@@ -193,7 +193,8 @@ Blockly.Block.prototype.initSvg = function () {
     this.svg_ = new Blockly.BlockSvg(this);
     this.svg_.init();
     if (!Blockly.readOnly) {
-        Blockly.bindEvent_(this.svg_.getRootElement(), 'mousedown', this, this.onMouseDown_);
+        Blockly.bindEvent_(this.svg_.getRootElement(), 'mousedown', this,
+            this.onMouseDown_);
     }
     this.workspace.getCanvas().appendChild(this.svg_.getRootElement());
 };
@@ -447,7 +448,6 @@ Blockly.Block.prototype.moveBy = function (dx, dy) {
 Blockly.Block.prototype.getHeightWidth = function () {
     var height = this.svg_.height;
     var width = this.svg_.width;
-
     // Recursively add size of subsequent blocks.
     var nextBlock = this.nextConnection && this.nextConnection.targetBlock();
     if (nextBlock) {
@@ -487,7 +487,6 @@ Blockly.Block.prototype.onMouseDown_ = function (e) {
         // dragged instead.
         return;
     } else {
-        console.log("STARTING DRAG?????");
         // Left-click (or middle click)
         Blockly.removeAllRanges();
         Blockly.setCursorHand_(true);
@@ -499,8 +498,10 @@ Blockly.Block.prototype.onMouseDown_ = function (e) {
         this.startDragMouseX = e.clientX;
         this.startDragMouseY = e.clientY;
         Blockly.Block.dragMode_ = 1;
-        Blockly.Block.onMouseUpWrapper_ = Blockly.bindEvent_(document, 'mouseup', this, this.onMouseUp_);
-        Blockly.Block.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove', this, this.onMouseMove_);
+        Blockly.Block.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+            'mouseup', this, this.onMouseUp_);
+        Blockly.Block.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+            'mousemove', this, this.onMouseMove_);
         // Build a list of bubbles that need to be moved and where they started.
         this.draggedBubbles_ = [];
         var descendants = this.getDescendants();
@@ -697,7 +698,8 @@ Blockly.Block.prototype.showContextMenu_ = function (e) {
         var descendantCount = this.getDescendants().length;
         if (block.nextConnection && block.nextConnection.targetConnection) {
             // Blocks in the current stack would survive this block's deletion.
-            descendantCount -= this.nextConnection.targetBlock().getDescendants().length;
+            descendantCount -= this.nextConnection.targetBlock().
+                getDescendants().length;
         }
         var deleteOption = {
             text: descendantCount == 1 ? Blockly.Msg.DELETE_BLOCK :
@@ -811,7 +813,8 @@ Blockly.Block.prototype.setDragging_ = function (adding) {
 Blockly.Block.prototype.onMouseMove_ = function (e) {
     var this_ = this;
     Blockly.doCommand(function () {
-        if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 && e.button == 0) {
+        if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
+            e.button == 0) {
             /* HACK:
              Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
              on certain touch actions. Ignore events with these signatures.
@@ -838,11 +841,13 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             // Unrestricted dragging.
             var x = this_.startDragX + dx;
             var y = this_.startDragY + dy;
-            this_.svg_.getRootElement().setAttribute('transform', 'translate(' + x + ', ' + y + ')');
+            this_.svg_.getRootElement().setAttribute('transform',
+                    'translate(' + x + ', ' + y + ')');
             // Drag all the nested bubbles.
             for (var i = 0; i < this_.draggedBubbles_.length; i++) {
                 var commentData = this_.draggedBubbles_[i];
-                commentData.bubble.setIconLocation(commentData.x + dx, commentData.y + dy);
+                commentData.bubble.setIconLocation(commentData.x + dx,
+                        commentData.y + dy);
             }
 
             // Check to see if any of this block's connections are within range of
