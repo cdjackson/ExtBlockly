@@ -666,13 +666,6 @@ Blockly.getMainWorkspace = function () {
     return Blockly.mainWorkspace;
 };
 
-// Export symbols that would otherwise be renamed by Closure compiler.
-window['Blockly'] = Blockly;
-Blockly['getMainWorkspace'] = Blockly.getMainWorkspace;
-Blockly['addChangeListener'] = Blockly.addChangeListener;
-Blockly['removeChangeListener'] = Blockly.removeChangeListener;
-
-
 /**
  * Inherit the prototype methods from one constructor into another.
  * @param {Function} childCtor Child class.
