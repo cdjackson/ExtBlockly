@@ -250,7 +250,10 @@ Ext.define('Ext.ux.blockly.Blockly', {
                 return;
 
             if(me.blockly.listeners.workspacechanged) {
-                Ext.fly(Blockly.mainWorkspace.getCanvas()).on('blocklyWorkspaceChange',me.blockly.listeners.workspacechanged);
+                var task = new Ext.util.DelayedTask(function(){
+                    Ext.fly(Blockly.mainWorkspace.getCanvas()).on('blocklyWorkspaceChange',me.blockly.listeners.workspacechanged);
+                });
+                task.delay(500);
             }
         }
     },
