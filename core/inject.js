@@ -95,8 +95,6 @@ Blockly.createDom_ = function (container) {
     // out content in RTL mode.  Therefore Blockly forces the use of LTR,
     // then manually positions content in RTL as needed.
     container.setAttribute('dir', 'LTR');
-    // Closure can be trusted to create HTML widgets with the proper direction.
-    console.log("goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);");
 
     // Load CSS.
     Blockly.Css.inject();
