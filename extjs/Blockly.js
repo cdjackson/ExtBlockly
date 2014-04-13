@@ -242,10 +242,8 @@ Ext.define('Ext.ux.blockly.Blockly', {
             }
 
             // Load the design into the workspace
-            if (me.blockly.blocksXml != null && me.blockly.blocksXml != "")
-                me.setBlocks(me.blockly.blocksXml);
-            if (me.blockly.blocksJson != null && me.blockly.blocksJson != "")
-                me.setBlocks(me.blockly.blocksJson);
+            if (me.blockly.blocks != null && me.blockly.blocks != "")
+                me.setBlocks(me.blockly.blocks);
 
             // If a change listener is specified, add it
             if(me.blockly.listeners == null)
