@@ -30,4 +30,7 @@ Initialisation options as follows -:
         });
 ```
 
+```blocks``` can be either an XML string, or a javascript object tree.
+
+Use the method ```getBlocks``` to get the current workspace. If no parameter is provided, the return format will be a javascript object tree. Alternatively, a format can be provided - specify 'json' or 'xml'.
 
