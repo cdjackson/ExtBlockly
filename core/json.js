@@ -32,7 +32,7 @@ Blockly.Json = {};
  * @param {!Object} workspace The SVG workspace.
  * @return {!Object} XML document.
  */
-Blockly.Json.workspaceToDom = function (workspace) {
+Blockly.Json.getWorkspace = function (workspace) {
     var width = Blockly.svgSize().width;
     var json = {};
     json.block = [];
@@ -146,7 +146,7 @@ Blockly.Json.blockToDom_ = function (block) {
  * @param {!Blockly.Workspace} workspace The SVG workspace.
  * @param {!Object} json input object array.
  */
-Blockly.Json.domToWorkspace = function (workspace, json) {
+Blockly.Json.setWorkspace = function (workspace, json) {
     var width = Blockly.svgSize().width;
     if(json == null || json.block == null)
         return;

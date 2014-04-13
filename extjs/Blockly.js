@@ -274,11 +274,11 @@ Ext.define('Ext.ux.blockly.Blockly', {
             Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
         }
         else
-            Blockly.Json.domToWorkspace(Blockly.getMainWorkspace(), blocks);
+            Blockly.Json.setWorkspace(Blockly.getMainWorkspace(), blocks);
     },
     getBlocks: function (format, readable) {
         if(format == null || format.toLowerCase() == 'json')
-            return Blockly.Json.workspaceToDom(Blockly.getMainWorkspace());
+            return Blockly.Json.getWorkspace(Blockly.getMainWorkspace());
 
         var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
         if (readable == true)
