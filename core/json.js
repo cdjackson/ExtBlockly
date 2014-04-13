@@ -30,26 +30,27 @@ Blockly.Json = {};
 /**
  * Encode a block tree as XML.
  * @param {!Object} workspace The SVG workspace.
- * @return {!Element} XML document.
+ * @return {!Object} XML document.
  */
 Blockly.Json.workspaceToDom = function (workspace) {
     var width = Blockly.svgSize().width;
-    var xml = Ext.DomHelper.createDom({tag: 'xml'});
+    var json = {};
+    json.block = [];
     var blocks = workspace.getTopBlocks(true);
     for (var i = 0, block; block = blocks[i]; i++) {
         var element = Blockly.Json.blockToDom_(block);
         var xy = block.getRelativeToSurfaceXY();
-        element.setAttribute('x', Blockly.RTL ? width - xy.x : xy.x);
-        element.setAttribute('y', xy.y);
-        xml.appendChild(element);
+        element.x = Blockly.RTL ? width - xy.x : xy.x;
+        element.y = xy.y;
+        json.block.push(element);
     }
-    return xml;
+    return json;
 };
 
 /**
  * Return a javascript object tree
  * @param {!Blockly.Block} block The root block to encode.
- * @return {!Element} Tree of javascript object elements.
+ * @return {!Object} Tree of javascript object elements.
  * @private
  */
 Blockly.Json.blockToDom_ = function (block) {
@@ -60,14 +61,17 @@ Blockly.Json.blockToDom_ = function (block) {
         // Custom data for an advanced block.
         var mutation = block.mutationToDom();
         if (mutation) {
-            element.appendChild(mutation);
+            element.mutation = mutation;
         }
     }
     function fieldToDom(field) {
         if (field.name && field.EDITABLE) {
-            var container = Ext.DomHelper.createDom({tag: 'field', children: field.getValue()});
+            var container = {};
             container.name = field.name;
-            element.field=container;
+            container.value = field.getValue();
+            if(element.fields==null)
+                element.fields = [];
+            element.fields.push(container);
         }
     }
 
@@ -78,7 +82,8 @@ Blockly.Json.blockToDom_ = function (block) {
     }
 
     if (block.comment) {
-        var commentElement = {text: block.comment.getText()};
+        var commentElement = {};
+        commentElement.text = block.comment.getText();
         commentElement.pinned = block.comment.isVisible();
         var hw = block.comment.getBubbleSize();
         commentElement.h = hw.height;
@@ -88,26 +93,23 @@ Blockly.Json.blockToDom_ = function (block) {
 
     var hasValues = false;
     for (var i = 0, input; input = block.inputList[i]; i++) {
-        var container;
-        var empty = true;
-        if (input.type == Blockly.DUMMY_INPUT) {
+        var container = {};
+        if (input.type == Blockly.DUMMY_INPUT)
             continue;
-        } else {
-            var childBlock = input.connection.targetBlock();
-            if (input.type == Blockly.INPUT_VALUE) {
-                container = Ext.DomHelper.createDom({tag: 'value'});
-                hasValues = true;
-            } else if (input.type == Blockly.NEXT_STATEMENT) {
-                container = Ext.DomHelper.createDom({tag: 'statement'});
-            }
-            if (childBlock) {
-                container.appendChild(Blockly.Json.blockToDom_(childBlock));
-                empty = false;
-            }
+
+        var childBlock = input.connection.targetBlock();
+        if (input.type == Blockly.INPUT_VALUE) {
+            container.type = 'value';
+            hasValues = true;
+        } else if (input.type == Blockly.NEXT_STATEMENT) {
+            container.type = 'statement';
         }
-        container.name = input.name;
-        if (!empty) {
-            element.appendChild(container);
+        if (childBlock) {
+            if(element.children == null)
+                element.children = [];
+            container.name = input.name;
+            container.block = Blockly.Json.blockToDom_(childBlock);
+            element.children.push(container);
         }
     }
     if (hasValues) {
@@ -132,8 +134,7 @@ Blockly.Json.blockToDom_ = function (block) {
     if (block.nextConnection) {
         var nextBlock = block.nextConnection.targetBlock();
         if (nextBlock) {
-            var container = Ext.DomHelper.createDom({tag: 'next', children: Blockly.Json.blockToDom_(nextBlock)});
-            element.appendChild(container);
+            element.next = Blockly.Json.blockToDom_(nextBlock);
         }
     }
 
@@ -141,81 +142,21 @@ Blockly.Json.blockToDom_ = function (block) {
 };
 
 /**
- * Converts a DOM structure into plain text.
- * Currently the text format is fairly ugly: all one line with no whitespace.
- * @param {!Element} dom A tree of XML elements.
- * @return {string} Text representation.
- */
-Blockly.Json.domToText = function (dom) {
-    var oSerializer = new XMLSerializer();
-    return oSerializer.serializeToString(dom);
-};
-
-/**
- * Converts a DOM structure into properly indented text.
- * @param {!Element} dom A tree of XML elements.
- * @return {string} Text representation.
- */
-Blockly.Json.domToPrettyText = function (dom) {
-    // This function is not guaranteed to be correct for all XML.
-    // But it handles the XML that Blockly generates.
-    var blob = Blockly.Json.domToText(dom);
-    // Place every open and close tag on its own line.
-    var lines = blob.split('<');
-    // Indent every line.
-    var indent = '';
-    for (var x = 1; x < lines.length; x++) {
-        var line = lines[x];
-        if (line[0] == '/') {
-            indent = indent.substring(2);
-        }
-        lines[x] = indent + '<' + line;
-        if (line[0] != '/' && line.slice(-2) != '/>') {
-            indent += '  ';
-        }
-    }
-    // Pull simple tags back together.
-    // E.g. <foo></foo>
-    var text = lines.join('\n');
-    text = text.replace(/(<(\w+)\b[^>]*>[^\n]*)\n *<\/\2>/g, '$1</$2>');
-    // Trim leading blank line.
-    return text.replace(/^\n/, '');
-};
-
-/**
- * Converts plain text into a DOM structure.
- * Throws an error if XML doesn't parse.
- * @param {string} text Text representation.
- * @return {!Element} A tree of XML elements.
- */
-Blockly.Json.textToDom = function (text) {
-    var oParser = new DOMParser();
-    var dom = oParser.parseFromString(text, 'text/xml');
-    // The DOM should have one and only one top-level node, an XML tag.
-    if (!dom || !dom.firstChild ||
-        dom.firstChild.nodeName.toLowerCase() != 'xml' ||
-        dom.firstChild !== dom.lastChild) {
-        // Whatever we got back from the parser is not XML.
-        throw 'Blockly.Json.textToDom did not obtain a valid XML tree.';
-    }
-    return dom.firstChild;
-};
-
-/**
  * Decode an XML DOM and create blocks on the workspace.
  * @param {!Blockly.Workspace} workspace The SVG workspace.
- * @param {!Element} xml XML DOM.
+ * @param {!Object} json input object array.
  */
-Blockly.Json.domToWorkspace = function (workspace, xml) {
+Blockly.Json.domToWorkspace = function (workspace, json) {
     var width = Blockly.svgSize().width;
-    for (var x = 0, xmlChild; xmlChild = xml.childNodes[x]; x++) {
-        if (xmlChild.nodeName.toLowerCase() == 'block') {
-            var block = Blockly.Json.domToBlock(workspace, xmlChild);
-            var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-            var blockY = parseInt(xmlChild.getAttribute('y'), 10);
-            if (!isNaN(blockX) && !isNaN(blockY)) {
-                block.moveBy(Blockly.RTL ? width - blockX : blockX, blockY);
-            }
+    if(json == null || json.block == null)
+        return;
+    for (var x = 0; x < json.block.length; x++) {
+        var child = json.block[x];
+        var block = Blockly.Json.domToBlock(workspace, child);
+        var blockX = parseInt(block.x, 10);
+        var blockY = parseInt(block.y, 10);
+        if (!isNaN(blockX) && !isNaN(blockY)) {
+            block.moveBy(Blockly.RTL ? width - blockX : blockX, blockY);
         }
     }
 };
@@ -230,13 +171,13 @@ Blockly.Json.domToWorkspace = function (workspace, xml) {
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Json.domToBlock = function (workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     var block = null;
-    var prototypeName = xmlBlock.getAttribute('type');
+    var prototypeName = jsonBlock.type;
     if (!prototypeName) {
-        throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
+        throw 'Block type unspecified: \n';
     }
-    var id = xmlBlock.getAttribute('id');
+    var id = jsonBlock.id;
     if (opt_reuseBlock && id) {
         block = Blockly.Block.getById(id, workspace);
         // TODO: The following is for debugging.  It should never actually happen.
@@ -253,120 +194,103 @@ Blockly.Json.domToBlock = function (workspace, xmlBlock, opt_reuseBlock) {
         block.parent_ = parentBlock;
     } else {
         block = Blockly.Block.obtain(workspace, prototypeName);
-//    if (id) {
-//      block.id = parseInt(id, 10);
-//    }
     }
     if (!block.svg_) {
         block.initSvg();
     }
 
-    var inline = xmlBlock.getAttribute('inline');
+    var inline = jsonBlock.inline;
     if (inline) {
-        block.setInputsInline(inline == 'true');
+        block.setInputsInline(inline);
     }
-    var disabled = xmlBlock.getAttribute('disabled');
+    var disabled = jsonBlock.disabled;
     if (disabled) {
-        block.setDisabled(disabled == 'true');
+        block.setDisabled(disabled);
     }
-    var deletable = xmlBlock.getAttribute('deletable');
+    var deletable = jsonBlock.deletable;
     if (deletable) {
-        block.setDeletable(deletable == 'true');
+        block.setDeletable(deletable);
     }
-    var movable = xmlBlock.getAttribute('movable');
+    var movable = jsonBlock.movable;
     if (movable) {
-        block.setMovable(movable == 'true');
+        block.setMovable(movable);
     }
-    var editable = xmlBlock.getAttribute('editable');
+    var editable = jsonBlock.editable;
     if (editable) {
-        block.setEditable(editable == 'true');
+        block.setEditable(editable);
+    }
+
+    if (jsonBlock.mutation != null) {
+        // Custom data for an advanced block.
+//            if (block.domToMutation) {
+//                block.domToMutation(xmlChild);
+//            }
+    }
+
+    if (jsonBlock.comment != null) {
+        block.setCommentText(jsonBlock.comment.text);
+        var visible = jsonBlock.comment.pinned;
+        if (visible) {
+            block.comment.setVisible(visible);
+        }
+        var bubbleW = parseInt(jsonBlock.comment.w, 10);
+        var bubbleH = parseInt(jsonBlock.comment.h, 10);
+        if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
+            block.comment.setBubbleSize(bubbleW, bubbleH);
+        }
+    }
+
+    if (jsonBlock.fields != null) {
+        for (var i = 0; i < jsonBlock.fields.length; i++) {
+            block.setFieldValue(jsonBlock.fields[i].value, jsonBlock.fields[i].name);
+        }
     }
 
     var blockChild = null;
-    for (var x = 0, xmlChild; xmlChild = xmlBlock.childNodes[x]; x++) {
-        if (xmlChild.nodeType == 3 && xmlChild.data.match(/^\s*$/)) {
-            // Extra whitespace between tags does not concern us.
-            continue;
-        }
-        var input;
+    if(jsonBlock.children != null) {
+        for (var x = 0; x < jsonBlock.children.length; x++) {
+            var child = jsonBlock.children[x];
+            var input;
 
-        // Find the first 'real' grandchild node (that isn't whitespace).
-        var firstRealGrandchild = null;
-        for (var y = 0, grandchildNode; grandchildNode = xmlChild.childNodes[y];
-             y++) {
-            if (grandchildNode.nodeType != 3 || !grandchildNode.data.match(/^\s*$/)) {
-                firstRealGrandchild = grandchildNode;
+            if (child.block != null) {
+//                for (var i = 0; i < child.block.children.length; i++) {
+                    input = block.getInput(child.name);
+                    if (!input) {
+                        throw 'Input ' + child.name + ' does not exist in block ' + prototypeName;
+                    }
+//                    if (child.block.children[i].block != null) {
+                        blockChild = Blockly.Json.domToBlock(workspace, child.block, opt_reuseBlock);
+                        if (blockChild.outputConnection) {
+                            input.connection.connect(blockChild.outputConnection);
+                        } else if (blockChild.previousConnection) {
+                            input.connection.connect(blockChild.previousConnection);
+                        } else {
+                            throw 'Child block does not have output or previous statement.';
+                        }
+//                    }
+//                }
             }
-        }
-
-        var name = xmlChild.getAttribute('name');
-        switch (xmlChild.nodeName.toLowerCase()) {
-            case 'mutation':
-                // Custom data for an advanced block.
-                if (block.domToMutation) {
-                    block.domToMutation(xmlChild);
-                }
-                break;
-            case 'comment':
-                block.setCommentText(xmlChild.textContent);
-                var visible = xmlChild.getAttribute('pinned');
-                if (visible) {
-                    block.comment.setVisible(visible == 'true');
-                }
-                var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
-                var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
-                if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
-                    block.comment.setBubbleSize(bubbleW, bubbleH);
-                }
-                break;
-            case 'title':
-            // Titles were renamed to field in December 2013.
-            // Fall through.
-            case 'field':
-                block.setFieldValue(xmlChild.textContent, name);
-                break;
-            case 'value':
-            case 'statement':
-                input = block.getInput(name);
-                if (!input) {
-                    throw 'Input ' + name + ' does not exist in block ' + prototypeName;
-                }
-                if (firstRealGrandchild &&
-                    firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-                    blockChild = Blockly.Json.domToBlock(workspace, firstRealGrandchild,
-                        opt_reuseBlock);
-                    if (blockChild.outputConnection) {
-                        input.connection.connect(blockChild.outputConnection);
-                    } else if (blockChild.previousConnection) {
-                        input.connection.connect(blockChild.previousConnection);
-                    } else {
-                        throw 'Child block does not have output or previous statement.';
-                    }
-                }
-                break;
-            case 'next':
-                if (firstRealGrandchild &&
-                    firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-                    if (!block.nextConnection) {
-                        throw 'Next statement does not exist.';
-                    } else if (block.nextConnection.targetConnection) {
-                        // This could happen if there is more than one XML 'next' tag.
-                        throw 'Next statement is already connected.';
-                    }
-                    blockChild = Blockly.Json.domToBlock(workspace, firstRealGrandchild,
-                        opt_reuseBlock);
-                    if (!blockChild.previousConnection) {
-                        throw 'Next block does not have previous statement.';
-                    }
-                    block.nextConnection.connect(blockChild.previousConnection);
-                }
-                break;
-            default:
-            // Unknown tag; ignore.  Same principle as HTML parsers.
+            /*
+             // Next
+             if (child.next &&
+             firstRealGrandchild.nodeName.toLowerCase() == 'block') {
+             if (!block.nextConnection) {
+             throw 'Next statement does not exist.';
+             } else if (block.nextConnection.targetConnection) {
+             // This could happen if there is more than one XML 'next' tag.
+             throw 'Next statement is already connected.';
+             }
+             blockChild = Blockly.Json.domToBlock(workspace, firstRealGrandchild,
+             opt_reuseBlock);
+             if (!blockChild.previousConnection) {
+             throw 'Next block does not have previous statement.';
+             }
+             block.nextConnection.connect(blockChild.previousConnection);
+             }*/
         }
     }
 
-    var collapsed = xmlBlock.getAttribute('collapsed');
+    var collapsed = jsonBlock.collapsed;
     if (collapsed) {
         block.setCollapsed(collapsed == 'true');
     }

@@ -242,8 +242,10 @@ Ext.define('Ext.ux.blockly.Blockly', {
             }
 
             // Load the design into the workspace
-            if (me.blockly.blocks != null && me.blockly.blocks != "")
-                me.setBlocks(me.blockly.blocks);
+            if (me.blockly.blocksXml != null && me.blockly.blocksXml != "")
+                me.setBlocks(me.blockly.blocksXml);
+            if (me.blockly.blocksJson != null && me.blockly.blocksJson != "")
+                me.setBlocks(me.blockly.blocksJson);
 
             // If a change listener is specified, add it
             if(me.blockly.listeners == null)
@@ -269,10 +271,15 @@ Ext.define('Ext.ux.blockly.Blockly', {
         if(Blockly.getMainWorkspace() != null)
             Blockly.getMainWorkspace().clear();
 
-        var xml = Blockly.Xml.textToDom(blocks);
-        Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
+        if(typeof blocks == 'string') {
+            var xml = Blockly.Xml.textToDom(blocks);
+            Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
+        }
+        else
+            Blockly.Json.domToWorkspace(Blockly.getMainWorkspace(), blocks);
     },
     getBlocks: function (readable) {
+        return Blockly.Json.workspaceToDom(Blockly.getMainWorkspace());
         var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
         if (readable == true)
             return Blockly.Xml.domToPrettyText(xml);

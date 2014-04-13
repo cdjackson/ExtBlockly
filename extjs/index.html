@@ -45,6 +45,7 @@
     <script type="text/javascript" src="../core/widgetdiv.js"></script>
     <script type="text/javascript" src="../core/workspace.js"></script>
     <script type="text/javascript" src="../core/xml.js"></script>
+    <script type="text/javascript" src="../core/json.js"></script>
 
     <script type="text/javascript" src="../blocks/colour.js"></script>
     <script type="text/javascript" src="../blocks/lists.js"></script>
@@ -109,6 +110,158 @@
 </xml>
 
 <script>
+    var jsonInput = {
+        "block": [
+            {
+                "type": "controls_if",
+                "id": "8",
+                "comment": {
+                    "text": "This is a comment",
+                    "pinned": true,
+                    "h": 80,
+                    "w": 160
+                },
+                "children": [
+                    {
+                        "type": "value",
+                        "name": "IF0",
+                        "block": {
+                            "type": "logic_compare",
+                            "id": "9",
+                            "fields": [
+                                {
+                                    "name": "OP",
+                                    "value": "EQ"
+                                }
+                            ],
+                            "children": [
+                                {
+                                    "type": "value",
+                                    "name": "A",
+                                    "block": {
+                                        "type": "variables_get",
+                                        "id": "10",
+                                        "fields": [
+                                            {
+                                                "name": "VAR",
+                                                "value": "item"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "value",
+                                    "name": "B",
+                                    "block": {
+                                        "type": "variables_get",
+                                        "id": "11",
+                                        "fields": [
+                                            {
+                                                "name": "VAR",
+                                                "value": "item"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "inline": true
+                        }
+                    },
+                    {
+                        "type": "statement",
+                        "name": "DO0",
+                        "block": {
+                            "type": "controls_repeat_ext",
+                            "id": "12",
+                            "children": [
+                                {
+                                    "type": "value",
+                                    "name": "TIMES",
+                                    "block": {
+                                        "type": "math_number",
+                                        "id": "13",
+                                        "fields": [
+                                            {
+                                                "name": "NUM",
+                                                "value": "10"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "statement",
+                                    "name": "DO",
+                                    "block": {
+                                        "type": "variables_set",
+                                        "id": "14",
+                                        "fields": [
+                                            {
+                                                "name": "VAR",
+                                                "value": "item"
+                                            }
+                                        ],
+                                        "children": [
+                                            {
+                                                "type": "value",
+                                                "name": "VALUE",
+                                                "block": {
+                                                    "type": "math_arithmetic",
+                                                    "id": "15",
+                                                    "fields": [
+                                                        {
+                                                            "name": "OP",
+                                                            "value": "ADD"
+                                                        }
+                                                    ],
+                                                    "children": [
+                                                        {
+                                                            "type": "value",
+                                                            "name": "A",
+                                                            "block": {
+                                                                "type": "variables_get",
+                                                                "id": "16",
+                                                                "fields": [
+                                                                    {
+                                                                        "name": "VAR",
+                                                                        "value": "item"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "value",
+                                                            "name": "B",
+                                                            "block": {
+                                                                "type": "variables_get",
+                                                                "id": "17",
+                                                                "fields": [
+                                                                    {
+                                                                        "name": "VAR",
+                                                                        "value": "item"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ],
+                                                    "inline": true
+                                                }
+                                            }
+                                        ],
+                                        "inline": true
+                                    }
+                                }
+                            ],
+                            "inline": true
+                        }
+                    }
+                ],
+                "inline": false,
+                "movable": false
+            }
+        ]
+    };
+
+
     var categoryArray = [
         {name: "Procedures", title: "Procedures", tooltip: "Hello there"},
         {name: "Math", title: "Math", icon: "sum.png", tooltip: "Hello there math"}
@@ -143,7 +296,7 @@
             listeners: {
                 show: function(w) {
                     var x = blockly.getBlocks(true);
-                    Ext.fly('xmlOutput').update(Ext.String.htmlEncode(x), false);
+                    Ext.fly('xmlOutput').update(Ext.String.htmlEncode(Ext.encode(x)), false);
                 }
             }
         });
@@ -172,7 +325,8 @@
                 toolboxCategories: categoryArray,
                 toolboxTools: toolArray,
                 trashcan: true,
-                blocks: "<xml>" + document.getElementById('go').innerHTML + "</xml>",
+//                blocksXml: "<xml>" + document.getElementById('go').innerHTML + "</xml>",
+                blocksJson: jsonInput,
                 path:"../",
                 listeners: {
                     workspacechanged: function() {
