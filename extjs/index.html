@@ -295,7 +295,7 @@
             html:"<div id='xmlOutput'></div>",
             listeners: {
                 show: function(w) {
-                    var x = blockly.getBlocks(true);
+                    var x = blockly.getBlocks();
                     Ext.fly('xmlOutput').update(Ext.String.htmlEncode(Ext.encode(x)), false);
                 }
             }

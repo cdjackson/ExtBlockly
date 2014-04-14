@@ -150,8 +150,9 @@ Blockly.Json.setWorkspace = function (workspace, json) {
     var width = Blockly.svgSize().width;
     if(json == null || json.block == null)
         return;
-    for (var x = 0; x < json.block.length; x++) {
-        var child = json.block[x];
+    var blocks = [].concat(json.block);
+    for (var x = 0; x < blocks.length; x++) {
+        var child = blocks[x];
         var block = Blockly.Json.domToBlock(workspace, child);
         var blockX = parseInt(block.x, 10);
         var blockY = parseInt(block.y, 10);
@@ -241,24 +242,24 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     }
 
     if (jsonBlock.fields != null) {
-        for (var i = 0; i < jsonBlock.fields.length; i++) {
-            block.setFieldValue(jsonBlock.fields[i].value, jsonBlock.fields[i].name);
+        var fields = [].concat(jsonBlock.fields);
+        for (var i = 0; i < fields.length; i++) {
+            block.setFieldValue(fields[i].value, fields[i].name);
         }
     }
 
     var blockChild = null;
     if(jsonBlock.children != null) {
-        for (var x = 0; x < jsonBlock.children.length; x++) {
-            var child = jsonBlock.children[x];
+        var children = [].concat(jsonBlock.children);
+        for (var x = 0; x < children.length; x++) {
+            var child = children[x];
             var input;
 
             if (child.block != null) {
-//                for (var i = 0; i < child.block.children.length; i++) {
                     input = block.getInput(child.name);
                     if (!input) {
                         throw 'Input ' + child.name + ' does not exist in block ' + prototypeName;
                     }
-//                    if (child.block.children[i].block != null) {
                         blockChild = Blockly.Json.domToBlock(workspace, child.block, opt_reuseBlock);
                         if (blockChild.outputConnection) {
                             input.connection.connect(blockChild.outputConnection);
@@ -267,8 +268,6 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
                         } else {
                             throw 'Child block does not have output or previous statement.';
                         }
-//                    }
-//                }
             }
             /*
              // Next
