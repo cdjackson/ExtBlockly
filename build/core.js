@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-14 */
+/*! ExtBlockly 2014-04-15 */
 /**
  * @license
  * Visual Blocks Editor
@@ -13305,6 +13305,7 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     if (jsonBlock.fields != null) {
         var fields = [].concat(jsonBlock.fields);
         for (var i = 0; i < fields.length; i++) {
+            if(fields[i].value != null && fields[i].name != null)
             block.setFieldValue(fields[i].value, fields[i].name);
         }
     }
@@ -13317,12 +13318,10 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
             var input;
 
             if (child.block != null) {
-//                for (var i = 0; i < child.block.children.length; i++) {
                     input = block.getInput(child.name);
                     if (!input) {
                         throw 'Input ' + child.name + ' does not exist in block ' + prototypeName;
                     }
-//                    if (child.block.children[i].block != null) {
                         blockChild = Blockly.Json.domToBlock(workspace, child.block, opt_reuseBlock);
                         if (blockChild.outputConnection) {
                             input.connection.connect(blockChild.outputConnection);
@@ -13331,8 +13330,6 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
                         } else {
                             throw 'Child block does not have output or previous statement.';
                         }
-//                    }
-//                }
             }
             /*
              // Next

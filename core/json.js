@@ -244,6 +244,7 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     if (jsonBlock.fields != null) {
         var fields = [].concat(jsonBlock.fields);
         for (var i = 0; i < fields.length; i++) {
+            if(fields[i].value != null && fields[i].name != null)
             block.setFieldValue(fields[i].value, fields[i].name);
         }
     }
