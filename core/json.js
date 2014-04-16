@@ -292,7 +292,7 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
 
     var collapsed = jsonBlock.collapsed;
     if (collapsed != null) {
-        block.setCollapsed(collapsed);
+        block.setCollapsed(this.parseBoolean(collapsed));
     }
     var next = block.nextConnection && block.nextConnection.targetBlock();
     if (next) {
