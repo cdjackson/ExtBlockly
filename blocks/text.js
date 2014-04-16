@@ -94,7 +94,14 @@ Blockly.Blocks['text_join'] = {
         for (var x = 0; x < this.itemCount_; x++) {
             this.removeInput('ADD' + x);
         }
-        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'items') {
+                this.itemCount_ = parseInt(elements[x].value, 10);
+            }
+        }
+
         for (var x = 0; x < this.itemCount_; x++) {
             var input = this.appendValueInput('ADD' + x);
             if (x == 0) {
@@ -361,10 +368,12 @@ Blockly.Blocks['text_charAt'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        // Note: Until January 2013 this block did not have mutations,
-        // so 'at' defaults to true.
-        var isAt = (xmlElement.getAttribute('at') != 'false');
-        this.updateAt_(isAt);
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'at') {
+                this.updateAt_(Blockly.Json.parseBoolean(elements[x].value));
+            }
+        }
     },
     /**
      * Create or delete an input for the numeric index.

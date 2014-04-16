@@ -79,7 +79,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     },
     /**
      * Create XML to represent the argument inputs.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
@@ -464,17 +464,18 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     },
     /**
      * Create XML to represent the (non-editable) name and arguments.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        container.setAttribute('name', this.getProcedureCall());
+        var container = [];
         for (var x = 0; x < this.arguments_.length; x++) {
-            var parameter = document.createElement('arg');
-            parameter.setAttribute('name', this.arguments_[x]);
-            container.appendChild(parameter);
+            var parameter = {};
+            parameter.name = 'arg';
+            parameter.value = this.arguments_[x];
+            container.push(parameter);
         }
+
         return container;
     },
     /**
@@ -483,7 +484,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-
         this.arguments_ = [];
         var elements = [].concat(xmlElement);
         for (var x = 0; x < elements.length; x++) {
@@ -491,8 +491,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
                 this.arguments_.push(elements[x].value);
             }
         }
-
-
 
         var name = xmlElement.getAttribute('name');
         this.setFieldValue(name, 'NAME');
@@ -595,12 +593,16 @@ Blockly.Blocks['procedures_ifreturn'] = {
     },
     /**
      * Create XML to represent whether this block has a return value.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        container.setAttribute('value', Number(this.hasReturnValue_));
+        var container = [];
+        var parameter = {};
+        parameter.name = 'arg';
+        parameter.value = Number(this.hasReturnValue_);
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -609,12 +611,17 @@ Blockly.Blocks['procedures_ifreturn'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        var value = xmlElement.getAttribute('value');
-        this.hasReturnValue_ = (value == 1);
-        if (!this.hasReturnValue_) {
-            this.removeInput('VALUE');
-            this.appendDummyInput('VALUE')
-                .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'value') {
+                this.hasReturnValue_ = (elements[x].value == 1);
+                if (!this.hasReturnValue_) {
+                    this.removeInput('VALUE');
+                    this.appendDummyInput('VALUE')
+                        .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+                }
+            }
         }
     },
     /**
