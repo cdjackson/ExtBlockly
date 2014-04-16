@@ -267,13 +267,15 @@
         {name: "Math", title: "Math", icon: "sum.png", tooltip: "Hello there math"}
     ];
     var toolArray = [
-        {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},
-        {category: "Procedures", block: "<xml><block type='procedures_ifreturn'></block></xml>", name: "X"},
+        {category: "Procedures", block: {type: "controls_if"}, name: "X"},
+        {category: "Procedures", block: {type: "controls_if", mutation: {name: "elseif", value: 2}}, name: "X"},
+        {category: "Procedures", block: {type: "procedures_ifreturn"}, name: "X"}/*,
+         {category: "Math", block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
         {category: "Procedures", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
-        {category: "Math", block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
+        {category: "Math", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
         {category: "Procedures", block: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
         {category: "Math", block: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
-        {category: "Math", block: "<xml><block type='variables_set'></block></xml>", name: "X"}
+        {category: "Math", block: "<xml><block type='variables_set'></block></xml>", name: "X"}*/
     ];
 
     Ext.require([
