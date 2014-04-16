@@ -64,8 +64,11 @@ Blockly.Blocks['lists_create_with'] = {
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        container.setAttribute('items', this.itemCount_);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'items';
+        parameter.value = this.itemCount_;
+        container.push(parameter);
         return container;
     },
     /**
@@ -77,7 +80,9 @@ Blockly.Blocks['lists_create_with'] = {
         for (var x = 0; x < this.itemCount_; x++) {
             this.removeInput('ADD' + x);
         }
-        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+        if (elements[0].name.toLowerCase() == 'items') {
+            this.itemCount_ = parseInt(elements[0].value, 10);
+        }
         for (var x = 0; x < this.itemCount_; x++) {
             var input = this.appendValueInput('ADD' + x);
             if (x == 0) {
@@ -321,11 +326,17 @@ Blockly.Blocks['lists_getIndex'] = {
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        var isStatement = !this.outputConnection;
-        container.setAttribute('statement', isStatement);
-        var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
-        container.setAttribute('at', isAt);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'statement';
+        parameter.value = !this.outputConnection;
+        container.push(parameter);
+
+        var parameter = {};
+        parameter.name = 'at';
+        parameter.value = this.getInput('AT').type == Blockly.INPUT_VALUE;
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -336,6 +347,19 @@ Blockly.Blocks['lists_getIndex'] = {
     domToMutation: function (xmlElement) {
         // Note: Until January 2013 this block did not have mutations,
         // so 'statement' defaults to false and 'at' defaults to true.
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'statement') {
+                this.elseCount_ = parseInt(elements[x].value, 10);
+            }
+            if (elements[x].name.toLowerCase() == 'at') {
+                this.elseifCount_ = parseInt(elements[x].value, 10);
+            }
+        }
+sssss FIXME ABOVE!
+
+
         var isStatement = (xmlElement.getAttribute('statement') == 'true');
         this.updateStatement_(isStatement);
         var isAt = (xmlElement.getAttribute('at') != 'false');

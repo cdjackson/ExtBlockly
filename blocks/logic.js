@@ -70,12 +70,19 @@ Blockly.Blocks['controls_if'] = {
         if (!this.elseifCount_ && !this.elseCount_) {
             return null;
         }
-        var container = document.createElement('mutation');
+
+        var container = [];
         if (this.elseifCount_) {
-            container.setAttribute('elseif', this.elseifCount_);
+            var parameter = {};
+            parameter.name = 'elseif';
+            parameter.value = this.elseifCount_;
+            container.push(parameter);
         }
         if (this.elseCount_) {
-            container.setAttribute('else', 1);
+            var parameter = {};
+            parameter.name = 'else';
+            parameter.value = this.elseCount_;
+            container.push(parameter);
         }
         return container;
     },
@@ -85,8 +92,16 @@ Blockly.Blocks['controls_if'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
-        this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10);
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'else') {
+                this.elseCount_ = parseInt(elements[x].value, 10);
+            }
+            if (elements[x].name.toLowerCase() == 'elseif') {
+                this.elseifCount_ = parseInt(elements[x].value, 10);
+            }
+        }
         for (var x = 1; x <= this.elseifCount_; x++) {
             this.appendValueInput('IF' + x)
                 .setCheck('Boolean')

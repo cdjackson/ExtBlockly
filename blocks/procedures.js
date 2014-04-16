@@ -83,11 +83,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
+        var container = [];
         for (var x = 0; x < this.arguments_.length; x++) {
-            var parameter = document.createElement('arg');
-            parameter.setAttribute('name', this.arguments_[x]);
-            container.appendChild(parameter);
+            var parameter = {};
+            parameter.name = 'arg';
+            parameter.value = this.arguments_[x];
+            container.push(parameter);
         }
         return container;
     },
@@ -98,9 +99,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
      */
     domToMutation: function (xmlElement) {
         this.arguments_ = [];
-        for (var x = 0, childNode; childNode = xmlElement.childNodes[x]; x++) {
-            if (childNode.nodeName.toLowerCase() == 'arg') {
-                this.arguments_.push(childNode.getAttribute('name'));
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'arg') {
+                this.arguments_.push(elements[x].value);
             }
         }
         this.updateParams_();
@@ -481,6 +483,17 @@ Blockly.Blocks['procedures_callnoreturn'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
+
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'arg') {
+                this.arguments_.push(elements[x].value);
+            }
+        }
+
+
+
         var name = xmlElement.getAttribute('name');
         this.setFieldValue(name, 'NAME');
         this.setTooltip(

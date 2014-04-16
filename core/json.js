@@ -223,9 +223,9 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
 
     if (jsonBlock.mutation != null) {
         // Custom data for an advanced block.
-//            if (block.domToMutation) {
-//                block.domToMutation(xmlChild);
-//            }
+        if (block.domToMutation) {
+            block.domToMutation(jsonBlock.mutation);
+        }
     }
 
     if (jsonBlock.comment != null) {
