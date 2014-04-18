@@ -69,7 +69,7 @@ Blockly.Json.blockToDom_ = function (block) {
             var container = {};
             container.name = field.name;
             container.value = field.getValue();
-            if(element.fields==null)
+            if (element.fields == null)
                 element.fields = [];
             element.fields.push(container);
         }
@@ -105,7 +105,7 @@ Blockly.Json.blockToDom_ = function (block) {
             container.type = 'statement';
         }
         if (childBlock) {
-            if(element.children == null)
+            if (element.children == null)
                 element.children = [];
             container.name = input.name;
             container.block = Blockly.Json.blockToDom_(childBlock);
@@ -148,7 +148,7 @@ Blockly.Json.blockToDom_ = function (block) {
  */
 Blockly.Json.setWorkspace = function (workspace, json) {
     var width = Blockly.svgSize().width;
-    if(json == null || json.block == null)
+    if (json == null || json.block == null)
         return;
     var blocks = [].concat(json.block);
     for (var x = 0; x < blocks.length; x++) {
@@ -244,31 +244,31 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     if (jsonBlock.fields != null) {
         var fields = [].concat(jsonBlock.fields);
         for (var i = 0; i < fields.length; i++) {
-            if(fields[i].value != null && fields[i].name != null)
-            block.setFieldValue(fields[i].value, fields[i].name);
+            if (fields[i].value != null && fields[i].name != null)
+                block.setFieldValue(fields[i].value, fields[i].name);
         }
     }
 
     var blockChild = null;
-    if(jsonBlock.children != null) {
+    if (jsonBlock.children != null) {
         var children = [].concat(jsonBlock.children);
         for (var x = 0; x < children.length; x++) {
             var child = children[x];
             var input;
 
             if (child.block != null) {
-                    input = block.getInput(child.name);
-                    if (!input) {
-                        throw 'Input ' + child.name + ' does not exist in block ' + prototypeName;
-                    }
-                        blockChild = Blockly.Json.domToBlock(workspace, child.block, opt_reuseBlock);
-                        if (blockChild.outputConnection) {
-                            input.connection.connect(blockChild.outputConnection);
-                        } else if (blockChild.previousConnection) {
-                            input.connection.connect(blockChild.previousConnection);
-                        } else {
-                            throw 'Child block does not have output or previous statement.';
-                        }
+                input = block.getInput(child.name);
+                if (!input) {
+                    throw 'Input ' + child.name + ' does not exist in block ' + prototypeName;
+                }
+                blockChild = Blockly.Json.domToBlock(workspace, child.block, opt_reuseBlock);
+                if (blockChild.outputConnection) {
+                    input.connection.connect(blockChild.outputConnection);
+                } else if (blockChild.previousConnection) {
+                    input.connection.connect(blockChild.previousConnection);
+                } else {
+                    throw 'Child block does not have output or previous statement.';
+                }
             }
             /*
              // Next
@@ -306,9 +306,9 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
 };
 
 Blockly.Json.parseBoolean = function (boolIn) {
-    if(boolIn == true || boolIn == false)
+    if (boolIn == true || boolIn == false)
         return boolIn;
-    if(boolIn == 'true')
+    if (boolIn == 'true')
         return true;
     return false;
 }
@@ -317,11 +317,19 @@ Blockly.Json.parseBoolean = function (boolIn) {
  * Remove any 'next' block (statements in a stack).
  * @param {!Element} xmlBlock XML block element.
  */
-Blockly.Json.deleteNext = function (xmlBlock) {
+Blockly.Json.deleteNext = function (jsonBlock) {
+    if (jsonBlock.children != null) {
+        var children = [].concat(jsonBlock.children);
+        for (var x = 0; x < children.length; x++) {
+        }
+    }
+    return;
+
+/*
     for (var x = 0, child; child = xmlBlock.childNodes[x]; x++) {
         if (child.nodeName.toLowerCase() == 'next') {
             xmlBlock.removeChild(child);
             break;
         }
-    }
+    }*/
 };

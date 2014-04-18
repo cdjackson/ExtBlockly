@@ -336,7 +336,7 @@ Blockly.Flyout.prototype.show = function (xmlList) {
     } else {
         for (var i = 0, xml; xml = xmlList[i]; i++) {
             if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-                var block = Blockly.Xml.domToBlock(
+                var block = Blockly.Json.domToBlock(
                     /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
                 blocks.push(block);
                 gaps.push(margin * 3);
