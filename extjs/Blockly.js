@@ -112,14 +112,13 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         beforecellmousedown: function (grid, td, cellIndex, record, tr, rowIndex, e, eOpts) {
                             // We use this event to record the block that we're potentially about to drag...
                             me.selectedRecord = record;
+                            Blockly.hideChaff(false);
                         },
                         itemdblclick: function (grid, record) {
                             // Double click - just add this block to the workspace
                             if (record == null)
                                 return;
-
-                            var block = Blockly.Xml.textToDom(record.get("block"));
-                            Blockly.Xml.domToBlock(Blockly.getMainWorkspace(), block.childNodes[0]);
+                            Blockly.Json.domToBlock(Blockly.getMainWorkspace(), record.get("block"));
                         }
                     }
                 });
@@ -204,6 +203,15 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         return e.getTarget("#" + blocklyId);
                     },
                     onNodeOver: function (target, dd, e, data) {
+                        // Tell Blockly we have a drag in progress...
+                        if(Blockly.Block.dragMode_ != 2) {
+                            Blockly.onMouseDown_(e);
+                            Blockly.Block.dragMode_ = 2;
+                        }
+                        else{
+                            Blockly.onMouseMove_(e);
+                        }
+
                         // While over a target node, return the default drop allowed class which
                         // places a "tick" icon into the drag proxy.
                         return Ext.dd.DropZone.prototype.dropAllowed;
