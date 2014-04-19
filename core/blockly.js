@@ -230,6 +230,7 @@ Blockly.svgResize = function () {
  * @private
  */
 Blockly.onMouseDown_ = function (e) {
+    console.log("Blockly mouse down");
     Blockly.svgResize();
     Blockly.terminateDrag_(); // In case mouse-up event was lost.
     Blockly.hideChaff();
@@ -273,6 +274,8 @@ Blockly.onMouseUp_ = function (e) {
  * @private
  */
 Blockly.onMouseMove_ = function (e) {
+    console.log("Blockly mouse move");
+
     if (Blockly.mainWorkspace.dragMode) {
         Blockly.removeAllRanges();
         var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;

@@ -464,7 +464,7 @@ Blockly.Block.prototype.getHeightWidth = function () {
  * @private
  */
 Blockly.Block.prototype.onMouseDown_ = function (e) {
-    console.log("Block.prototype.onMouseDown_");
+    console.log("block.onMouseDown " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
 
     if (this.isInFlyout) {
         return;
@@ -526,7 +526,7 @@ Blockly.Block.prototype.onMouseDown_ = function (e) {
  * @private
  */
 Blockly.Block.prototype.onMouseUp_ = function (e) {
-    console.log("mouse up  block.js")
+    console.log("block.onMouseUp " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
 
     var this_ = this;
     Blockly.doCommand(function () {
@@ -811,10 +811,14 @@ Blockly.Block.prototype.setDragging_ = function (adding) {
  * @private
  */
 Blockly.Block.prototype.onMouseMove_ = function (e) {
+    console.log("block.onMouseMove " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
+
     var this_ = this;
     Blockly.doCommand(function () {
+        console.log("block.onMouseMove " + this_.id + " ** 1 **");
         if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
             e.button == 0) {
+            console.log("block.onMouseMove " + this_.id + " ** 2 **");
             /* HACK:
              Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
              on certain touch actions. Ignore events with these signatures.
@@ -838,6 +842,7 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             }
         }
         if (Blockly.Block.dragMode_ == 2) {
+            console.log("block.onMouseMove " + this_.id + " ** 3 **");
             // Unrestricted dragging.
             var x = this_.startDragX + dx;
             var y = this_.startDragY + dy;
@@ -884,9 +889,12 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             if (this_.workspace.trashcan && this_.isDeletable()) {
                 this_.workspace.trashcan.onMouseMove(e);
             }
+            console.log("block.onMouseMove " + this_.id + " ** 9 **");
         }
+        console.log("block.onMouseMove " + this_.id + " ** 10 **");
         // This event has been handled.  No need to bubble up to the document.
         e.stopPropagation();
+        console.log("block.onMouseMove " + this_.id + " ** 11 **");
     });
 };
 

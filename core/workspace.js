@@ -330,6 +330,7 @@ Blockly.Workspace.prototype.fireChangeEvent = function () {
  * Paste the provided block onto the workspace.
  * @param {!Element} xmlBlock XML block element.
  */
+// TODO Convert to JSON
 Blockly.Workspace.prototype.paste = function (xmlBlock) {
     if (xmlBlock.getElementsByTagName('block').length >=
         this.remainingCapacity()) {
