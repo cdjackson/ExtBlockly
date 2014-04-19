@@ -90,12 +90,23 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 // Return a drag data object if so. The data object can contain arbitrary application
                                 // data, but it should also contain a DOM element in the ddel property to provide
                                 // a proxy to drag.
+                                style: {
+                                    'background-color': '#f00',
+                                    'padding-left': '0px'
+                                },
+                                //onStartDrag: function () {
+                                onMouseDown: function (x, y) {
+                                    console.log("startDrag");
+                                    this.setDelta(30,5);
+                                   // this.constrainTo();//"body", {}, false);
+                                },
                                 getDragData: function (e) {
                                     var sourceEl = e.getTarget("svg", 10);
                                     if (sourceEl) {
                                         var dragView = sourceEl.cloneNode(true);
                                         dragView.style.width=dragView.getAttribute("width");
                                         dragView.id = Ext.id();
+                                        grid.dragZone.setDelta(0,0);
                                         return grid.dragData = {
                                             sourceEl: sourceEl,
                                             repairXY: Ext.fly(sourceEl).getXY(),
@@ -115,13 +126,24 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                     }
                                     return this.dragData.repairXY;
                                 }/*,
+                                getProxy: function() {
+                                    return Ext.create('Ext.dd.StatusProxy', {
+                                        style: {
+                                            'padding-left': '0px'
+                                        }
+                                    });
+                                }
+
+                                ,
                                 alignElWithMouse: function(el, iPageX, iPageY) {
                                     var oCoord = this.getTargetCoord(iPageX, iPageY);
                                     //this.cachePosition(oCoord.x, oCoord.y);
-                                    oCoord.x = oCoord.y = 0;
+//                                    oCoord.x = oCoord.y = 0;
                                     return oCoord;
                                 }*/
                             });
+//                            grid.dragZone.setDragElPos(-20,0);
+                            //grid.dragZone.setDelta(0,0);
                         },
                         beforecellmousedown: function (grid, td, cellIndex, record, tr, rowIndex, e, eOpts) {
                             // We use this event to record the block that we're potentially about to drag...
@@ -212,6 +234,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                     // If the mouse is over a target node, return that node.
                     getTargetFromEvent: function (e) {
                         console.log("node in");
+                        //this.constrainTo("#body", {}, false);
                         //    var xx = win.getItems();
                         //win.fireEvent("mousemove", {clientX: e.xy[0], clientY: e.xy[1]});
                         //                    Blockly.fireUiEvent(document, 'mousemove');
@@ -224,8 +247,8 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         if(Blockly.Block.dragMode_ != 2) {
                             // Calculate the absolute position of the Blockly div
                             var o = document.getElementById(blocklyId);
-                            var valTop = -25;
-                            var valLeft = -40;
+                            var valTop = -0;
+                            var valLeft = -0;
                             while ( o.nodeName != "BODY" ) {
                                 valTop += parseInt( o.offsetTop );
                                 valLeft += parseInt( o.offsetLeft );
