@@ -93,57 +93,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 getDragData: function (e) {
                                     var sourceEl = e.getTarget("svg", 10);
                                     if (sourceEl) {
-
-/*
-
-                                        // Create the drag block
-                                        dragBlock = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), me.selectedRecord.get("block"));
-                                        var metrics = Blockly.getMainWorkspace().getMetrics();
-
-
-
-                                        var o = document.getElementById(blocklyId);
-                                        var valTop = -25;
-                                        var valLeft = -40;
-                                        while ( o.nodeName != "BODY" ) {
-                                            valTop += parseInt( o.offsetTop );
-                                            valLeft += parseInt( o.offsetLeft );
-                                            o = o.parentNode;
-                                        }
-
-                                        dragBlock.moveBy(metrics.viewLeft + xy[0] - valLeft, metrics.viewTop + xy[1] - valTop);
-                                        // Push this block to the very top of the stack.
-//                            dragBlock.setParent(null);
-//                            dragBlock.setDragging_(true);
-//                            dragBlock.draggedBubbles_ = [];
-//                            dragBlock.startDragX = 110;
-//                            dragBlock.startDragY = 220;
-
-
-                                        var event = {};
-                                        event.clientX = xy[0];
-                                        event.clientY = xy[1];
-                                        event.button = 0;
-                                        event.stopPropagation = e.stopPropagation;
-
-                                        dragBlock.onMouseDown_(event);
-                                        Blockly.Block.dragMode_ = 2;
-
-
-*/
-
-                                        // Create the drag block
-/*                                        dragBlock = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), me.selectedRecord.get("block"));
-                                        Blockly.Block.dragMode_ = 2;
-                                        // Push this block to the very top of the stack.
-                                        dragBlock.setParent(null);
-                                        dragBlock.setDragging_(true);
-                                        dragBlock.draggedBubbles_ = [];
-                                        dragBlock.startDragX = 0;
-                                        dragBlock.startDragY = 0;
-
-*/
-
                                         var dragView = sourceEl.cloneNode(true);
                                         dragView.style.width=dragView.getAttribute("width");
                                         dragView.id = Ext.id();
@@ -273,13 +222,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         console.log("Node mouse move");
                         // Tell Blockly we have a drag in progress...
                         if(Blockly.Block.dragMode_ != 2) {
-
-                            // Create the drag block
-                            dragBlock = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), me.selectedRecord.get("block"));
-                            var metrics = Blockly.getMainWorkspace().getMetrics();
-
-
-
+                            // Calculate the absolute position of the Blockly div
                             var o = document.getElementById(blocklyId);
                             var valTop = -25;
                             var valLeft = -40;
@@ -289,27 +232,21 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 o = o.parentNode;
                             }
 
+                            // Create and position the drag block
+                            dragBlock = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), me.selectedRecord.get("block"));
+                            var metrics = Blockly.getMainWorkspace().getMetrics();
                             dragBlock.moveBy(metrics.viewLeft + e.xy[0] - valLeft, metrics.viewTop + e.xy[1] - valTop);
-                            // Push this block to the very top of the stack.
-//                            dragBlock.setParent(null);
-//                            dragBlock.setDragging_(true);
-//                            dragBlock.draggedBubbles_ = [];
-//                            dragBlock.startDragX = 110;
-//                            dragBlock.startDragY = 220;
 
-
+                            // Create the event for passing to Blockly
                             var event = {};
                             event.clientX = e.xy[0];
                             event.clientY = e.xy[1];
                             event.button = 0;
                             event.stopPropagation = e.stopPropagation;
+                            dragBlock.onMouseDown_(event);
 
-                                dragBlock.onMouseDown_(event);
                             Blockly.Block.dragMode_ = 2;
                         }
-//                        else{
- //                           dragBlock.onMouseMove_(e);
- //                       }
 
                         // While over a target node, return the default drop allowed class which
                         // places a "tick" icon into the drag proxy.
@@ -326,8 +263,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         if(dragBlock != null) {
                             dragBlock = null;
                         }
-  //                      Blockly.terminateDrag_();
-
                         return true;
                     }
                 });
