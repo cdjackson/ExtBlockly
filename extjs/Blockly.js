@@ -23,6 +23,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
         var dragBlock = null;
         var blocklyId = null;
         var xy = null;
+        var scrollbar = null;
 
         // Avoid undeclared error
         if(me.blockly == null)
@@ -97,8 +98,15 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 //onStartDrag: function () {
                                 onMouseDown: function (x, y) {
                                     console.log("startDrag");
+
+                                    // Align the pointers
                                     this.setDelta(30,5);
-                                   // this.constrainTo();//"body", {}, false);
+
+                                    // Disable scrolling during the drag and drop
+                                    me.scrollbar = Blockly.mainWorkspace.scrollbar;
+                                    Blockly.mainWorkspace.scrollbar = false;
+
+                                    // this.constrainTo();//"body", {}, false);
                                 },
                                 getDragData: function (e) {
                                     var sourceEl = e.getTarget("svg", 10);
@@ -119,31 +127,17 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 // Provide coordinates for the proxy to slide back to on failed drag.
                                 // This is the original XY coordinates of the draggable element.
                                 getRepairXY: function () {
+                                    // Restore the scrollbars
+                                    Blockly.mainWorkspace.scrollbar = me.scrollbar;
+
                                     // Remove the block since the DnD was not successful
                                     if(dragBlock != null) {
                                         dragBlock.dispose();
                                         dragBlock = null;
                                     }
                                     return this.dragData.repairXY;
-                                }/*,
-                                getProxy: function() {
-                                    return Ext.create('Ext.dd.StatusProxy', {
-                                        style: {
-                                            'padding-left': '0px'
-                                        }
-                                    });
                                 }
-
-                                ,
-                                alignElWithMouse: function(el, iPageX, iPageY) {
-                                    var oCoord = this.getTargetCoord(iPageX, iPageY);
-                                    //this.cachePosition(oCoord.x, oCoord.y);
-//                                    oCoord.x = oCoord.y = 0;
-                                    return oCoord;
-                                }*/
                             });
-//                            grid.dragZone.setDragElPos(-20,0);
-                            //grid.dragZone.setDelta(0,0);
                         },
                         beforecellmousedown: function (grid, td, cellIndex, record, tr, rowIndex, e, eOpts) {
                             // We use this event to record the block that we're potentially about to drag...
@@ -254,13 +248,13 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 valLeft += parseInt( o.offsetLeft );
                                 o = o.parentNode;
                             }
-
-                            // Create and position the drag block
-                            dragBlock = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), me.selectedRecord.get("block"));
                             var metrics = Blockly.getMainWorkspace().getMetrics();
+
+                            // Create the dragged block
+                            dragBlock = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), me.selectedRecord.get("block"));
                             dragBlock.moveBy(metrics.viewLeft + e.xy[0] - valLeft, metrics.viewTop + e.xy[1] - valTop);
 
-                            // Create the event for passing to Blockly
+                            // Create the mouse down event for passing to Blockly
                             var event = {};
                             event.clientX = e.xy[0];
                             event.clientY = e.xy[1];
@@ -276,6 +270,9 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         return Ext.dd.DropZone.prototype.dropAllowed;
                     },
                     onNodeDrop: function (target, dd, e, data) {
+                        // Restore the scrollbars
+                        Blockly.mainWorkspace.scrollbar = me.scrollbar;
+
                         // On node drop, we can interrogate the target node to find the underlying
                         // application object that is the real target of the dragged data.
                         // We can use the data set up by the DragZone's getDragData method to read
@@ -298,8 +295,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
                             console.log("Unable to load block '" + record.get("block") + "'.");
                         }
                         else {
-//                            var block = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), blockXml.childNodes[0]);
-
                             var svg = '<svg height="' + block.getHeightWidth().height + '" width="' + (block.getHeightWidth().width + 10) + '"><g transform=\"translate(10)\">' + block.getSvgRoot().outerHTML + "</g></svg>";
                             record.set('svg', svg);
 
