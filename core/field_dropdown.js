@@ -95,6 +95,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function () {
 //                var override = thisField.changeHandler_(value);
                 thisField.changeHandler_(value);
             }
+            else if (value !== null) {
+                thisField.setValue(value);
+            }
         }
     };
 

@@ -137,7 +137,8 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
         oldVar = this.getText();
     }
     else if (inputText != Blockly.Msg.NEW_VARIABLE) {
-        return undefined;
+        this.setText(inputText);
+        return;
     }
 
     var thisField = this;
