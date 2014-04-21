@@ -244,6 +244,8 @@ Blockly.FieldDropdown.prototype.setText = function (text) {
     var textNode = document.createTextNode(text);
     this.textElement_.appendChild(textNode);
 
+    this.updateTextNode_();
+
     // Insert dropdown arrow.
     if (Blockly.RTL) {
         this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
