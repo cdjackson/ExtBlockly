@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-17 */
+/*! ExtBlockly 2014-04-21 */
 /**
  * @license
  * Visual Blocks Editor
@@ -231,6 +231,7 @@ Blockly.svgResize = function () {
  * @private
  */
 Blockly.onMouseDown_ = function (e) {
+    console.log("Blockly mouse down");
     Blockly.svgResize();
     Blockly.terminateDrag_(); // In case mouse-up event was lost.
     Blockly.hideChaff();
@@ -274,7 +275,10 @@ Blockly.onMouseUp_ = function (e) {
  * @private
  */
 Blockly.onMouseMove_ = function (e) {
+    console.log("Blockly mouse move (" + Blockly.mainWorkspace.dragMode + ")");
+
     if (Blockly.mainWorkspace.dragMode) {
+        console.log("Dragging!!!");
         Blockly.removeAllRanges();
         var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;
         var dy = e.clientY - Blockly.mainWorkspace.startDragMouseY;
@@ -1186,7 +1190,7 @@ Blockly.Block.prototype.getHeightWidth = function () {
  * @private
  */
 Blockly.Block.prototype.onMouseDown_ = function (e) {
-    console.log("Block.prototype.onMouseDown_");
+    console.log("block.onMouseDown " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
 
     if (this.isInFlyout) {
         return;
@@ -1248,7 +1252,7 @@ Blockly.Block.prototype.onMouseDown_ = function (e) {
  * @private
  */
 Blockly.Block.prototype.onMouseUp_ = function (e) {
-    console.log("mouse up  block.js")
+    console.log("block.onMouseUp " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
 
     var this_ = this;
     Blockly.doCommand(function () {
@@ -1533,10 +1537,14 @@ Blockly.Block.prototype.setDragging_ = function (adding) {
  * @private
  */
 Blockly.Block.prototype.onMouseMove_ = function (e) {
+    console.log("block.onMouseMove " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
+
     var this_ = this;
     Blockly.doCommand(function () {
+        console.log("block.onMouseMove " + this_.id + " ** 1 **");
         if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
             e.button == 0) {
+            console.log("block.onMouseMove " + this_.id + " ** 2 **");
             /* HACK:
              Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
              on certain touch actions. Ignore events with these signatures.
@@ -1560,6 +1568,7 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             }
         }
         if (Blockly.Block.dragMode_ == 2) {
+            console.log("block.onMouseMove " + this_.id + " ** 3 **");
             // Unrestricted dragging.
             var x = this_.startDragX + dx;
             var y = this_.startDragY + dy;
@@ -1606,9 +1615,12 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             if (this_.workspace.trashcan && this_.isDeletable()) {
                 this_.workspace.trashcan.onMouseMove(e);
             }
+            console.log("block.onMouseMove " + this_.id + " ** 9 **");
         }
+        console.log("block.onMouseMove " + this_.id + " ** 10 **");
         // This event has been handled.  No need to bubble up to the document.
         e.stopPropagation();
+        console.log("block.onMouseMove " + this_.id + " ** 11 **");
     });
 };
 
@@ -7317,12 +7329,10 @@ Blockly.FieldDropdown.prototype.showEditor_ = function () {
             var value = item.getId();
             if (thisField.changeHandler_) {
                 // Call any change handler, and allow it to override.
-                var override = thisField.changeHandler_(value);
-                if (override !== undefined) {
-                    value = override;
-                }
+//                var override = thisField.changeHandler_(value);
+                thisField.changeHandler_(value);
             }
-            if (value !== null) {
+            else if (value !== null) {
                 thisField.setValue(value);
             }
         }
@@ -7880,37 +7890,89 @@ Blockly.FieldVariable.dropdownCreate = function () {
  *     handled (rename), or undefined if an existing variable was chosen.
  * @this {!Blockly.FieldVariable}
  */
-Blockly.FieldVariable.dropdownChange = function (text) {
-    function promptName(promptText, defaultText) {
-        Blockly.hideChaff();
-        // TODO = change to use Ext.Msg.prompt
-        // TODO = Due to the callback nature of this though, this isn't so simple?
-        var newVar = window.prompt(promptText, defaultText);
-        // Merge runs of whitespace.  Strip leading and trailing whitespace.
-        // Beyond this, all names are legal.
-        return newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+Blockly.FieldVariable.dropdownChange = function (inputText) {
+    Blockly.hideChaff();
+
+    var oldVar = "";
+    if (inputText == Blockly.Msg.RENAME_VARIABLE) {
+        oldVar = this.getText();
+    }
+    else if (inputText != Blockly.Msg.NEW_VARIABLE) {
+        this.setText(inputText);
+        return;
     }
 
-    if (text == Blockly.Msg.RENAME_VARIABLE) {
-        var oldVar = this.getText();
-        text = promptName(Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar),
-            oldVar);
-        if (text) {
-            Blockly.Variables.renameVariable(oldVar, text);
-        }
-        return null;
-    } else if (text == Blockly.Msg.NEW_VARIABLE) {
-        text = promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
-        // Since variables are case-insensitive, ensure that if the new variable
-        // matches with an existing variable, the new case prevails throughout.
-        if (text) {
-            Blockly.Variables.renameVariable(text, text);
-            return text;
-        }
-        return null;
-    }
-    return undefined;
-};
+    var thisField = this;
+
+    var form = Ext.widget('form', {
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
+        border: false,
+        bodyPadding: 10,
+        fieldDefaults: {
+            labelAlign: 'top',
+            labelWidth: 100,
+            labelStyle: 'font-weight:bold'
+        },
+        defaults: {
+            margins: '0 0 10 0'
+        },
+        items: [
+            {
+                margin: '0 0 0 0',
+                xtype: 'textfield',
+                fieldLabel: inputText,
+                itemId: 'variable',
+                name: 'variable',
+                value: oldVar
+            }
+        ],
+        buttons: [
+            {
+                text: "cancel",
+                handler: function () {
+                    this.up('window').destroy();
+                }
+            },
+            {
+                text: "Ok",
+                handler: function () {
+                    if (this.up('form').getForm().isValid()) {
+                        // Read the variable name
+                        var newVar = form.getForm().findField('variable').getSubmitValue();
+
+                        // Merge runs of whitespace.  Strip leading and trailing whitespace.
+                        // Beyond this, all names are legal.
+                        newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+
+                        Blockly.Variables.renameVariable(oldVar, newVar);
+                        thisField.setText(newVar);
+
+                        this.up('window').destroy();
+                    }
+                }
+            }
+        ]
+    });
+
+    var saveWin = Ext.widget('window', {
+        title: inputText,
+        closeAction: 'destroy',
+        width: 225,
+        resizable: false,
+        draggable: false,
+        modal: true,
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
+        items: [form]
+    });
+
+    saveWin.show();
+}
 
 /**
  * @license
@@ -12616,6 +12678,7 @@ Blockly.Workspace.prototype.fireChangeEvent = function () {
  * Paste the provided block onto the workspace.
  * @param {!Element} xmlBlock XML block element.
  */
+// TODO Convert to JSON
 Blockly.Workspace.prototype.paste = function (xmlBlock) {
     if (xmlBlock.getElementsByTagName('block').length >=
         this.remainingCapacity()) {
@@ -12991,11 +13054,11 @@ Blockly.Json.deleteNext = function (jsonBlock) {
     }
     return;
 
-
+/*
     for (var x = 0, child; child = xmlBlock.childNodes[x]; x++) {
         if (child.nodeName.toLowerCase() == 'next') {
             xmlBlock.removeChild(child);
             break;
         }
-    }
+    }*/
 };
