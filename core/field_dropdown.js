@@ -233,17 +233,6 @@ Blockly.FieldDropdown.prototype.setText = function (text) {
         return;
     }
     this.text_ = text;
-    // Empty the text element.
-    Blockly.removeChildren(this.textElement_);
-    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-    text = text.replace(/\s/g, Blockly.Field.NBSP);
-    if (!text) {
-        // Prevent the field from disappearing if empty.
-        text = Blockly.Field.NBSP;
-    }
-    var textNode = document.createTextNode(text);
-    this.textElement_.appendChild(textNode);
-
     this.updateTextNode_();
 
     // Insert dropdown arrow.
