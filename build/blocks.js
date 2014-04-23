@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-21 */
+/*! ExtBlockly 2014-04-23 */
 /**
  * @license
  * Visual Blocks Editor
@@ -3228,93 +3228,6 @@ Blockly.Blocks['text_prompt'] = {
 'use strict';
 
 Blockly.Blocks.variables = {};
-
-
-Blockly.Blocks['openhab_persistence_get'] = {
-    /*    init: function () {
-     this.setHelpUrl("Blockly.Msg");
-     this.setColour(330);
-     this.interpolateMsg(
-     // TODO: Combine these messages instead of using concatenation.
-     Blockly.Msg.VARIABLES_SET_TITLE + ' %1 ' +
-     Blockly.Msg.VARIABLES_SET_TAIL + ' %2',
-     ['VAR', new Blockly.FieldVariable(Blockly.Msg.VARIABLES_SET_ITEM)],
-     ['VALUE', null, Blockly.ALIGN_RIGHT],
-     Blockly.ALIGN_RIGHT);
-     this.setPreviousStatement(true);
-     this.setNextStatement(true);
-     this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
-     this.contextMenuMsg_ = "XXX";
-     this.contextMenuType_ = 'variables_get';
-     }*/
-    init: function() {
-        this.setHelpUrl('http://www.example.com/');
-        this.setColour(290);
-        this.appendDummyInput()
-//            .setCheck("String")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField(new Blockly.FieldDropdown([["state", "STATE"], ["average", "AVERAGE"], ["minimum", "MINIMUM"], ["maximum", "MAXIMUM"]]), "TYPE")
-            .appendField("of item")//,//;
-//        this.appendDummyInput("ITEM")
-            //        .setCheck("String")
-//            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField(new Blockly.FieldVariable("TRYPE"), "VAR")
-        this.appendValueInput("DAYS")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("days");
-        this.appendValueInput("HOURS")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("hours");
-        this.appendValueInput("MINUTES")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("minutes");
-        this.appendValueInput("SECONDS")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("seconds");
-        this.setOutput(true, ["Number", "String"]);
-        this.setTooltip('');
-    },
-    /**
-     * Return all variables referenced by this block.
-     * @return {!Array.<string>} List of variable names.
-     * @this Blockly.Block
-     */
-    getVars: function () {
-        return [this.getFieldValue('VAR')];
-    },
-    /**
-     * Notification that a variable is renaming.
-     * If the name matches one of this block's variables, rename it.
-     * @param {string} oldName Previous name of variable.
-     * @param {string} newName Renamed variable.
-     * @this Blockly.Block
-     */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
-        }
-    },
-    /**
-     * Add menu option to create getter/setter block for this setter/getter.
-     * @param {!Array} options List of menu options to add to.
-     * @this Blockly.Block
-     */
-    customContextMenu: function (options) {
-        var option = {enabled: true};
-        var name = this.getFieldValue('VAR');
-        option.text = this.contextMenuMsg_.replace('%1', name);
-        var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
-        xmlField.setAttribute('name', 'VAR');
-        var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
-        xmlBlock.setAttribute('type', this.contextMenuType_);
-        option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
-        options.push(option);
-    }
-};
 
 
 Blockly.Blocks['variables_get'] = {
