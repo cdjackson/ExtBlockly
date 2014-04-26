@@ -101,7 +101,7 @@ Blockly.FieldVariable.prototype.setValue = function (text) {
  * @this {!Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function () {
-    var variableList = Blockly.Variables.allVariables();
+    var variableList = Blockly.Variables.allVariables(this.name);
     // Ensure that the currently selected variable is an option.
     var name = this.getText();
     if (name && variableList.indexOf(name) == -1) {
@@ -170,7 +170,7 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
         ],
         buttons: [
             {
-                text: "cancel",
+                text: "Cancel",
                 handler: function () {
                     this.up('window').destroy();
                 }
@@ -186,7 +186,7 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
                         // Beyond this, all names are legal.
                         newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
 
-                        Blockly.Variables.renameVariable(oldVar, newVar);
+                        Blockly.Variables.renameVariable("VAR", oldVar, newVar);
                         thisField.setText(newVar);
 
                         this.up('window').destroy();

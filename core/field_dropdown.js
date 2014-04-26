@@ -130,9 +130,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function () {
     var borderBBox = this.borderRect_.getBBox();
 
     Blockly.openMenu = new Ext.menu.Menu(menuCfg);
-//    Blockly.openMenu.alignTo(Ext.get(Blockly.DIV), 'tl',[xy.x-Blockly.clientX,xy.y -Blockly.clientY+ borderBBox.height]);
-//    Blockly.openMenu.alignTo(Ext.get(Blockly.DIV), 'tl-tl');
-
     Blockly.openMenu.showAt(xy.x, xy.y + borderBBox.height);
 };
 

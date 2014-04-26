@@ -47,22 +47,26 @@ Blockly.Blocks['variables_get'] = {
     },
     /**
      * Return all variables referenced by this block.
+     * @param {string} varType Type of variable. Uses field name.
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars: function () {
-        return [this.getFieldValue('VAR')];
+    getVars: function (varType) {
+        if(varType == null)
+            return [this.getFieldValue('VAR')];
+        return [this.getFieldValue(varType)];
     },
     /**
      * Notification that a variable is renaming.
      * If the name matches one of this block's variables, rename it.
+     * @param {string} varType Type of variable. Uses field name.
      * @param {string} oldName Previous name of variable.
      * @param {string} newName Renamed variable.
      * @this Blockly.Block
      */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
         }
     },
     /**
@@ -106,22 +110,24 @@ Blockly.Blocks['variables_set'] = {
     },
     /**
      * Return all variables referenced by this block.
+     * @param {string} varType Type of variable. Uses field name.
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars: function () {
-        return [this.getFieldValue('VAR')];
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
     },
     /**
      * Notification that a variable is renaming.
      * If the name matches one of this block's variables, rename it.
+     * @param {string} varType Type of variable. Uses field name.
      * @param {string} oldName Previous name of variable.
      * @param {string} newName Renamed variable.
      * @this Blockly.Block
      */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
         }
     },
     customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
