@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                     'core/tooltip.js',
                     'core/trashcan.js', 'core/utils.js', 'core/variables.js', 'core/warning.js', 'core/widgetdiv.js',
                     'core/workspace.js',
-                    'core/json.js'
+                    'core/json.js', 'core/xml.js'
                 ],
                 dest: 'build/core.js'
             },
