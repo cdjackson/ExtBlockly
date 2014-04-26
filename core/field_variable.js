@@ -186,7 +186,7 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
                         // Beyond this, all names are legal.
                         newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
 
-                        Blockly.Variables.renameVariable("VAR", oldVar, newVar);
+                        Blockly.Variables.renameVariable(thisField.name, oldVar, newVar);
                         thisField.setText(newVar);
 
                         this.up('window').destroy();
