@@ -1217,8 +1217,10 @@ Blockly.Block.prototype.getTitleValue = function (name) {
  */
 Blockly.Block.prototype.setFieldValue = function (newValue, name) {
     var field = this.getField_(name);
-    if (typeof(field) !== "object")
+    if (field == null) {
         console.log('Field "%s" not found.', name);
+        return;
+    }
     field.setValue(newValue);
 };
 
