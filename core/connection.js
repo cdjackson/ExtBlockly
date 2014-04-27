@@ -502,15 +502,18 @@ Blockly.Connection.prototype.closest = function (maxLimit, dx, dy) {
 Blockly.Connection.prototype.checkType_ = function (otherConnection) {
     if (!this.check_ || !otherConnection.check_) {
         // One or both sides are promiscuous enough that anything will fit.
+        console.log("checkType: promiscuous");
         return true;
     }
     // Find any intersection in the check lists.
     for (var x = 0; x < this.check_.length; x++) {
         if (otherConnection.check_.indexOf(this.check_[x]) != -1) {
+            console.log("checkType: Yes");
             return true;
         }
     }
     // No intersection.
+    console.log("checkType: Nope");
     return false;
 };
 

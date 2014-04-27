@@ -110,46 +110,7 @@
 </xml>
 
 <script>
-    var jsonInput = {
-        "block": [
-            {
-                "type": "controls_if",
-                "id": "4",
-                "children": [
-                    {
-                        "type": "statement",
-                        "name": "DO0",
-                        "block": {
-                            "type": "procedures_ifreturn",
-                            "id": "14",
-                            "mutation": [
-                                {
-                                    "name": "arg",
-                                    "value": 1
-                                }
-                            ],
-                            "inline": true,
-                            "next": {
-                                "type": "procedures_ifreturn",
-                                "id": "15",
-                                "mutation": [
-                                    {
-                                        "name": "arg",
-                                        "value": 1
-                                    }
-                                ],
-                                "inline": true
-                            }
-                        }
-                    }
-                ],
-                "inline": false,
-                "movable": false,
-                "x": 0,
-                "y": 0
-            }
-        ]
-    };
+    var jsonInput = {"block":[{"type":"controls_if","id":"6","children":[{"type":"value","name":"IF0","block":{"type":"logic_operation","id":"9","mutation":[{"name":"operators","value":2}],"fields":[{"name":"OP1","value":"AND"},{"name":"OP2","value":"AND"},{"name":"OP3","value":"AND"}],"inline":true}}],"inline":false,"movable":false,"x":0,"y":0}]};
 
 
     var categoryArray = [
@@ -159,6 +120,7 @@
     var toolArray = [
         {category: "Procedures", block: {type: "controls_if"}, name: "X"},
         {category: "Procedures", block: {type:'variables_get'}},
+        {category: "Procedures", block: {type:'logic_operation'}},
 
         {category: "Procedures", block: {type: "controls_if", mutation: {name: "elseif", value: 2}}, name: "X"},
         {category: "Procedures", block: {type: "procedures_ifreturn"}, name: "X"}/*,
