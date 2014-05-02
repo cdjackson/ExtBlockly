@@ -110,6 +110,142 @@
 </xml>
 
 <script>
+
+    Blockly.Blocks['openhab_persistence_get'] = {
+        init: function () {
+            this.setHelpUrl('http://www.example.com/');
+            this.setColour(290);
+            this.appendDummyInput()
+                    .setAlign(Blockly.ALIGN_LEFT)
+                    .appendField("Get")
+                    .appendField(new Blockly.FieldDropdown([
+                        ["state", "STATE"],
+                        ["average", "AVERAGE"],
+                        ["minimum", "MINIMUM"],
+                        ["maximum", "MAXIMUM"]
+                    ]), "TYPE")
+                    .appendField("of Item")
+                    .appendField(new Blockly.FieldVariable("Item"), "ITEM");
+            this.appendDummyInput()
+                    .setAlign(Blockly.ALIGN_RIGHT)
+                    .appendField("since")
+                    .appendField(new Blockly.FieldDropdown([
+                        ["midnight", "MIDNIGHT"],
+                        ["current time", "TIME"]
+                    ], this.customChangeHandler), "SINCE");
+            this.setOutput(true, ["Number", "String"]);
+        },
+        /**
+         * Return all variables referenced by this block.
+         * @return {!Array.<string>} List of variable names.
+         * @this Blockly.Block
+         */
+        getVars: function (varType) {
+            return [this.getFieldValue(varType)];
+        },
+        /**
+         * Notification that a variable is renaming.
+         * If the name matches one of this block's variables, rename it.
+         * @param {string} oldName Previous name of variable.
+         * @param {string} newName Renamed variable.
+         * @this Blockly.Block
+         */
+        renameVar: function (varType, oldName, newName) {
+            if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+                this.setFieldValue(newName, varType);
+            }
+        },
+        /**
+         * Create XML to represent the number of else-if and else inputs.
+         * @return {Element} XML storage element.
+         * @this Blockly.Block
+         */
+        mutationToDom: function () {
+            var parameter = {};
+            parameter.name = 'SINCE';
+            parameter.value = this.getFieldValue('SINCE');
+            var container = [];
+            container.push(parameter);
+
+            return container;
+        },
+        domToMutation: function (xmlElement) {
+            this.arguments_ = [];
+            var elements = [].concat(xmlElement);
+            for (var x = 0; x < elements.length; x++) {
+                if (elements[x].name.toLowerCase() == 'since' && elements[x].value.toLowerCase() == "time") {
+                    this.sourceBlock_.appendDummyInput("TIME")
+                            .setAlign(Blockly.ALIGN_RIGHT)
+                            .appendField("minus")
+                            .appendField(new Blockly.FieldTextInput('0',
+                                    Blockly.FieldTextInput.numberValidator), 'NUM')
+                            .appendField(new Blockly.FieldDropdown([
+                                ["seconds", "SECONDS"],
+                                ["minutes", "MINUTES"],
+                                ["hours", "HOURS"]
+                            ]), "PERIOD");
+                }
+            }
+        },
+        /**
+         * Add menu option to create getter/setter block for this setter/getter.
+         * @param {!Array} options List of menu options to add to.
+         * @this Blockly.Block
+         */
+        customContextMenu: function (options) {
+            var option = {enabled: true};
+            var name = this.getFieldValue('VAR');
+            option.text = this.contextMenuMsg_.replace('%1', name);
+            var xmlField = Ext.DomHelper.createDom({tag: "field", children: name});
+            xmlField.setAttribute('name', 'VAR');
+            var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField});
+            xmlBlock.setAttribute('type', this.contextMenuType_);
+            option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+            options.push(option);
+        },
+        customChangeHandler: function (option) {
+            this.setValue(option);
+            // Rebuild the block's optional inputs.
+//            var numberBlock = Blockly.Block.obtain(this.sourceBlock_.workspace, this.sourceBlock_.type);
+//            numberBlock.initSvg();
+//            var connection = this.sourceBlock_.outputConnection;
+//            connection.connect(this.sourceBlock_.previousConnection);
+            if(option == 'TIME') {
+//                this.sourceBlock_.appendDummyInput()
+                this.sourceBlock_.appendDummyInput("TIME")
+                        .setAlign(Blockly.ALIGN_RIGHT)
+                        .appendField("minus")
+                        .appendField(new Blockly.FieldTextInput('0',
+                                Blockly.FieldTextInput.numberValidator), 'NUM')
+                        .appendField(new Blockly.FieldDropdown([
+                            ["seconds", "SECONDS"],
+                            ["minutes", "MINUTES"],
+                            ["hours", "HOURS"]
+                        ]), "PERIOD");
+
+            }
+            else {
+                this.sourceBlock_.removeInput("TIME");
+            }
+            this.sourceBlock_.render();
+        }
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     var jsonInput = {"block":[{"type":"controls_if","id":"6","children":[{"type":"value","name":"IF0","block":{"type":"logic_operation","id":"9","mutation":[{"name":"operators","value":2}],"fields":[{"name":"OP1","value":"AND"},{"name":"OP2","value":"AND"},{"name":"OP3","value":"AND"}],"inline":true}}],"inline":false,"movable":false,"x":0,"y":0}]};
 
 
@@ -123,7 +259,7 @@
         {category: "Procedures", block: {type:'logic_operation'}},
 
         {category: "Procedures", block: {type: "controls_if", mutation: {name: "elseif", value: 2}}, name: "X"},
-        {category: "Procedures", block: {type: "procedures_ifreturn"}, name: "X"}/*,
+        {category: "Procedures", block: {type: "openhab_persistence_get"}, name: "X"}/*,
          {category: "Math", block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
          {category: "Procedures", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
          {category: "Math", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
