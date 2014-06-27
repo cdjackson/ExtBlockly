@@ -372,10 +372,10 @@ Blockly.Blocks['logic_operation'] = {
                 this.opCount_ = parseInt(elements[x].value, 10);
             }
 
-            for (var x = this.opCount_; x > 0; x--) {
-                var ifInput = this.appendValueInput('IN' + (this.opCount_ + 1))
+            for (var x = 1; x <= this.opCount_; x++) {
+                this.appendValueInput('IN' + (x+1))
                     .setCheck('Boolean')
-                    .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (this.opCount_ + 1));
+                    .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (x+1));
             }
         }
     },
